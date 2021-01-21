@@ -248,6 +248,15 @@ nav a + a::before {
 	color: #9573d3;
 }
 
+section > h3 {
+	position: sticky;
+	top: 0;
+	z-index: 2;
+	background: #272c45;
+	padding: 0.5em;
+	margin: 0;
+}
+
 
 /* CHIRI OF MANY NAMES */
 #home {
