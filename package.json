@@ -1,0 +1,6 @@
+{
+	"private": true,
+	"scripts": {
+		"server": "npx http-server -c-1"
+	}
+}
