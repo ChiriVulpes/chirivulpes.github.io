@@ -36,9 +36,15 @@ body::before {
 	}
 }
 
-@media (max-width: 1000px) {
+@media (max-width: 1300px) {
 	body {
 		padding: 20px;
+	}
+}
+
+@media (max-width: 700px) {
+	body {
+		padding: 0;
 	}
 }
 
@@ -145,6 +151,7 @@ main > article {
 	padding: 1em;
 	display: inline-block;
 	position: relative;
+	transition: margin .5s ease-out;
 }
 
 @media (min-width: 1901px) {
@@ -161,6 +168,12 @@ main > article {
 @media (max-width: 1900px) {
 	main > article {
 		max-width: initial;
+	}
+}
+
+@media (max-width: 700px) {
+	main > article {
+		margin: 20px 0;
 	}
 }
 
@@ -248,12 +261,16 @@ nav a + a::before {
 	color: #9573d3;
 }
 
+section:first-of-type {
+	margin-top: 1em;
+}
+
 section > h3 {
 	position: sticky;
 	top: 0;
 	z-index: 2;
 	background: #272c45;
-	padding: 0.5em;
+	padding: 0.5em 0;
 	margin: 0;
 }
 
@@ -354,6 +371,8 @@ section > h3 {
 	grid-column: 1;
 	grid-row: 1/10;
 	border: 2px solid #223;
+	width: 200px;
+	transition: width .5s ease-out;
 }
 
 .story:nth-child(2n+1) {
@@ -368,14 +387,29 @@ section > h3 {
 	grid-column: 2;
 }
 
+.story h4 {
+	font-size: 2em;
+	margin: 0;
+	margin-bottom: 0.5em;
+	transition: font-size .5s ease-out;
+}
+
 .story .details {
 	color: #8796b6;
 	font-size: 0.9em;
 	margin-bottom: 0.5em;
 }
 
-.story h4 {
-	font-size: 2em;
-	margin: 0;
-	margin-bottom: 0.5em;
+@media (max-width: 1000px) {
+	.story {
+		column-gap: 1em;
+	}
+	
+	.story > img {
+		width: 100px;
+	}
+	
+	.story h4 {
+		font-size: 1.2em;
+	}
 }
