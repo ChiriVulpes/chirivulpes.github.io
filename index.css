@@ -267,7 +267,7 @@ section:first-of-type {
 
 section > h3 {
 	position: sticky;
-	top: 0;
+	top: -1px;
 	z-index: 2;
 	background: #272c45;
 	padding: 0.5em 0;
@@ -392,6 +392,7 @@ section > h3 {
 	margin: 0;
 	margin-bottom: 0.5em;
 	transition: font-size .5s ease-out;
+	font-weight: normal;
 }
 
 .story .details {
