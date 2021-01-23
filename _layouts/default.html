@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<link rel="stylesheet" href="/css/index.css" />
+	<link rel="shortcut icon" href="/static/image/logo.png" />
+	<title>Chiri Vulpes &nbsp;| &nbsp;Author ∙ Designer ∙ Developer</title>
+	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	<meta property="og:type" content="website" />
+	<meta property="og:title" content="Chiri works! And here's what she creates..." />
+	<meta property="og:description" content="Chiri Vulpes is a prolific creator — an author, a designer, a software developer, an artist, and even a composer! Here's some stuff she's made and ways you can get in contact with her." />
+	<meta property="og:image" content="https://chiri.works/static/image/logo.png" />
+	<meta property="og:url" content="https://chiri.works" />
+	
+	{% if page.css %}
+		{% for css in page.css %}
+			<link rel="stylesheet" href="/css/{{ css }}.css" />
+		{% endfor %}
+	{% endif %}
+	
+</head>
+
+<body>
+
+<header>
+	<h1 id="home"><a href="/">Chiri<span class="names">
+		<span>&nbsp;Vulpes</span>
+		<span aria-hidden="true">chirichiri</span>
+		<span aria-hidden="true">&nbsp;Mystere</span>
+		<span aria-hidden="true">Cuddles</span>
+	</span></a></h1>
+	
+	<nav>
+		<a href="https://github.com/ChiriCuddles">GitHub</a>
+		<a href="https://twitter.com/ChiriMystere">Twitter</a>
+		<a href="https://www.patreon.com/chirichirichiri">Author Patreon</a>
+		<a href="https://discord.gg/XPPvW9F">Discord</a>
+	</nav>
+</header>
+
+<main>
+{{content}}
+</main>
+
+<footer>
+	<p>Thanks for checking out my work!</p>
+	<p>If you'd like to commission story chapters, consider checking out my <a href="https://www.patreon.com/chirichirichiri">Patreon</a>.</p>
+	<p>If you'd like to commission a story cover, stay tuned. I'll find some way to sell commissions for these soon!</p>
+	<p>Just wanna talk? Join my <a href="https://discord.gg/XPPvW9F">Discord</a>!</p>
+	<nav>
+		<a href="https://github.com/ChiriCuddles">GitHub</a>
+		<a href="https://twitter.com/ChiriMystere">Twitter</a>
+		<a href="https://discord.gg/XPPvW9F">Discord</a>
+		<br>
+		<a href="https://www.scribblehub.com/profile/12063/chirichirichiri/">Scribble Hub</a>
+		<a href="https://chirichirichiri.itch.io/">itch.io</a>
+		<a href="https://www.patreon.com/chirichirichiri">Patreon</a>
+		<br>
+		<a href="https://www.youtube.com/channel/UCePEUnShLHdvPfsjkEH5dDA">YouTube</a>
+		<a href="https://www.twitch.tv/chirichirichiri">Twitch</a>
+		<a href="https://soundcloud.com/chirichirichiri">SoundCloud</a>
+		<a href="https://chirichirichiri.bandcamp.com/">Bandcamp</a>
+	</nav>
+</footer>
+
+<script src="/index.js"></script>
+
+</body>
+
+</html>

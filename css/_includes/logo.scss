@@ -1,0 +1,78 @@
+#home {
+	margin-bottom: 0.3em;
+}
+
+#home a {
+	color: inherit;
+	padding: 0;
+	border: none;
+	position: relative;
+	width: 100%;
+	max-width: 10em;
+	transition: color .5s ease-out;
+}
+
+#home a::before {
+	content: "";
+	display: block;
+	position: absolute;
+	width: 0em;
+	height: 1.5em;
+	top: -0.15em;
+	left: -0.5em;
+	transition: width .5s ease-out;
+	background: var(--background-3);
+	z-index: -1;
+}
+
+#home a:hover, #home a:focus {
+	color: #fff;
+	transition-duration: .1s;
+}
+
+#home a:hover::before, #home a:focus::before {
+	width: 10.5em;
+	transition-duration: .1s;
+}
+
+.names {
+	position: relative;
+	display: inline-block;
+	user-select: none;
+	pointer-events: none;
+    width: 200px;
+    height: 1em;
+    vertical-align: text-top;
+}
+
+.names > span {
+	display: inline-block;
+	position: absolute;
+	animation: switch-name 16s linear infinite forwards;
+	top: 100%;
+	opacity: 0;
+	white-space: nowrap;
+}
+
+.names > span:nth-child(2) { animation-delay: 4s; }
+.names > span:nth-child(3) { animation-delay: 8s; }
+.names > span:nth-child(4) { animation-delay: 12s; }
+
+@keyframes switch-name {
+	2.5% {
+		opacity: 0;
+		top: 50%;
+	}
+	5% {
+		opacity: 1;
+		top: 0%;
+	}
+	20% {
+		opacity: 1;
+		top: 0%;
+	}
+	25% {
+		opacity: 0;
+		top: -100%;
+	}
+}

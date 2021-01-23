@@ -1,0 +1,21 @@
+{% assign posts = site.blog | sort: "date" | reverse %}
+{% if include.limit != nil %}
+	{% assign posts = posts | limit: include.limit %}
+{% endif %}
+
+{% for post in posts %}
+	{% if include.smol == true %}
+		
+		<a class="article" href="{{ post.url }}">
+			<b>{{ post.title }}</b> — <span>{{ post.content | strip_html | truncate: 256 }}</span>
+		</a>
+		
+	{% else %}
+	
+		<article>
+			<h2 id="{{ post.id }}"><a href="{{ post.url }}">{{ post.title }}</a></h2>
+			{{ post.content | truncate: 512 }}
+		</article>
+		
+	{% endif %}
+{% endfor %}
