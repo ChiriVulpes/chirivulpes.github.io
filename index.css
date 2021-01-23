@@ -1,6 +1,7 @@
 @import url('https://fonts.googleapis.com/css2?family=Poiret+One&family=Raleway:ital,wght@0,400;0,700;1,400;1,700&display=swap');
 
 :root {
+	--background-drawer: #1b1b27;
 	--background: #223;
 	--background-2: #272c45;
 	--background-3: #2c3250;
@@ -20,6 +21,7 @@
 
 @media (prefers-color-scheme: light) {
 	:root {
+		--background-drawer: var(--background-2);
 		--background: #fff;
 		--background-2: #f3f7ff;
 		--background-3: #e1ebff;
@@ -41,7 +43,10 @@ html {
 }
 
 body {
-	padding: 0 50px 20px;
+	margin: 0;
+	--padding-x: 4em;
+	--padding-b: 2em;
+	padding: 0 var(--padding-x) var(--padding-b);
 	transition: padding .3s ease-in-out;
 	position: relative;
 }
@@ -71,13 +76,13 @@ body::before {
 
 @media (max-width: 1300px) {
 	body {
-		padding: 20px;
+		--padding-x: 2em;
 	}
 }
 
 @media (max-width: 700px) {
 	body {
-		padding: 0;
+		--padding-x: 0em;
 	}
 }
 
@@ -117,8 +122,10 @@ p a:hover, p a:focus {
 }
 
 footer {
-	margin-top: 6em;
+	margin: 3em calc(var(--padding-x) * -1) calc(var(--padding-b) * -1);
+	padding: 3em calc(var(--padding-x) + 2em) var(--padding-b);
 	text-align: right;
+	background: var(--background-drawer);
 }
 
 footer p {
@@ -139,6 +146,11 @@ nav a {
 img:not(.borderless) {
 	border: 2px solid var(--image-border);
 	box-sizing: border-box;
+}
+
+iframe {
+	border: none;
+	width: 100%;
 }
 
 h1, h2, h3 {
@@ -208,45 +220,60 @@ h3 {
 	font-size: 1.5em;
 }
 
-main {
-	display: flex;
-	flex-wrap: wrap;
-	justify-content: center;
-}
-
-main > article {
-	width: 100vw;
-	max-width: 700px;
-	margin: 40px 30px;
+main > aside > article {
+	width: calc(100% - 4em);
+	margin: 2em 2em 4em;
 	background: var(--background-2);
 	padding: 1em;
 	display: inline-block;
 	position: relative;
 	transition: margin .5s ease-out;
-	margin-bottom: auto;
 	box-sizing: border-box;
 }
 
 @media (min-width: 1801px) {
-	main > article:nth-child(2n+1) {
-		max-width: calc(60% - 60px);
+	main {
+		display: grid;
+		grid-template-columns: 3fr 2fr;
+		column-gap: 2em;
 	}
 	
-	main > article:nth-child(2n) {
+	main > aside:nth-child(2) {
 		margin-top: 6em;
-		max-width: calc(40% - 60px);
 	}
 }
 
 @media (max-width: 1800px) {
-	main > article {
-		max-width: initial;
+	main {
+		display: flex;
+		flex-direction: column;
+	}
+	
+	aside {
+		display: contents;
+	}
+	
+	main > aside:nth-child(1) > article:nth-child(1) {
+		order: 1;
+	}
+	
+	main > aside:nth-child(2) > article:nth-child(1) {
+		order: 2;
+	}
+	
+	main > aside:nth-child(1) > article:nth-child(2) {
+		order: 3;
+	}
+	
+	main > aside:nth-child(2) > article:nth-child(2) {
+		order: 4;
 	}
 }
 
 @media (max-width: 700px) {
-	main > article {
-		margin: 20px 0;
+	main > aside > article {
+		margin: 2em 0;
+		width: 100%;
 	}
 }
 
@@ -262,6 +289,7 @@ main > article {
 	height: 100%;
 	transition: width .5s ease-out;
 	z-index: 100;
+	pointer-events: none;
 }
 
 .inactive:hover::before, .inactive:focus-within::before {
@@ -331,16 +359,16 @@ nav a + a::before {
 	width: calc(100% - 4em);
 }
 
-article:nth-child(2n) .article {
+#programming ~ section .article {
 	margin: 1em;
 	width: calc(100% - 2em);
 }
 
-article:nth-child(2n) .article:nth-child(2n+1) {
+#programming ~ section .article:nth-child(2n+1) {
 	text-align: right;
 }
 
-article:nth-child(2n) .article > img {
+#programming ~ section .article > img {
 	max-height: 150px;
 }
 
@@ -496,6 +524,10 @@ section > h3::after {
 	display: grid;
 	grid-template-columns: auto 1fr;
 	column-gap: 2em;
+}
+
+.story:not(:last-child) {
+	margin-bottom: 2em;
 }
 
 .story > * {
