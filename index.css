@@ -138,8 +138,6 @@ footer nav {
 }
 
 nav a {
-	/* line-height: 1.8em;
-	padding-bottom: 0; */
 	margin-bottom: 0.2em;
 }
 
@@ -533,7 +531,6 @@ section > h3::after {
 .story {
 	display: grid;
 	grid-template-columns: auto 1fr;
-	/* column-gap: 2em; */
 }
 
 .story:not(:last-child) {
