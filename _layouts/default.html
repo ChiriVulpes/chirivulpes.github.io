@@ -15,6 +15,9 @@
 	{% if page.title and description and page.url %}
 		<meta property="og:type" content="{{ page.type | default: "website" }}" />
 		<meta property="og:title" content="{{ page.title }}" />
+		{% if page.date %}
+			{% assign description = page.date | date: "%b %d, %Y" | append: " — " | append: description %}
+		{% endif %}
 		<meta property="og:description" content="{{ description }}" />
 		<meta property="og:image" content="https://chiri.works/static/image/logo.png" />
 		<meta property="og:url" content="https://chiri.works{{ page.url }}" />
