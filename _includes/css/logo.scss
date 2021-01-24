@@ -24,7 +24,7 @@
 		}
 		
 		&:hover, &:focus {
-			color: #fff;
+			color: var(--color-active);
 			transition-duration: .1s;
 			
 			&::before {
