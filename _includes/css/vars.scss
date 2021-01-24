@@ -14,8 +14,8 @@
 	--color-length: #af87f8; // #9573d3;
 	--color-date: #bda51e;
 	--color-tag: #cb66b6;
-	--link: #5892ff; // #387eff;
-	--link-active: #69a9fd;
+	--link: #3196ff; // #387eff;
+	--link-active: #5db4ff;
 	--image-border: var(--background);
 	
 	@media (prefers-color-scheme: light) {
@@ -32,6 +32,7 @@
 		--color-date: #9f5800; // #a88f00;
 		--color-active: #000;
 		--link: #1465fd;
+		--link-active: #69a9fd;
 		--color-length: #7f3ef0;
 		--color-price: #0f7b00;
 		--color-tag: #be47a5;
