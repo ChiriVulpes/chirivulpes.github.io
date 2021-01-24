@@ -2,9 +2,11 @@ main {
 	padding: 0;
 }
 
-main > aside > article {
-	width: calc(100% - 4em);
-	max-width: none;
+@media (min-width: 701px) {
+	main > aside > article {
+		width: calc(100% - 4em);
+		max-width: none;
+	}
 }
 
 @media (min-width: 1801px) {

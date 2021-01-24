@@ -2,8 +2,10 @@
 @import "home/art";
 @import "home/blog";
 
-article:nth-child(2n) {
-	margin-left: 2em;
+@media (min-width: 701px) {
+	article:nth-child(2n) {
+		margin-left: 2em;
+	}
 }
 
 .blog-smol {

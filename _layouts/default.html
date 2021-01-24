@@ -8,10 +8,13 @@
 	<link rel="shortcut icon" href="/static/image/logo.png" />
 	<title>Chiri Vulpes &nbsp;| &nbsp;Author ∙ Designer ∙ Developer</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
+	
 	{% assign description = page.description %}
 	{% if page.preview == true %}
 		{% assign description = page.content | strip_html | truncate: 256 %}
 	{% endif %}
+	<meta property="description" content="{{ description }}" />
+
 	{% if page.title and description and page.url %}
 		<meta property="og:type" content="{{ page.type | default: "website" }}" />
 		<meta property="og:title" content="{{ page.title }}" />
