@@ -35,8 +35,13 @@
 	
 	<nav>
 		{% if site.blog.size > 0 %}
-			<a class="local-link" href="/">Portfolio</a>
-			<a class="local-link" href="/blog">Blog</a>
+			{% if page.url != "/" %}
+				<a class="local-link" href="/">Portfolio</a>
+			{% endif %}
+			{% assign url = "/" | append: page.url | append: "/" %}
+			{% if url contains "/blog/" or url contains "/blog.html/" %}{% else %}
+				<a class="local-link" href="/blog">Blog</a>
+			{% endif %}
 		{% endif %}
 		<a href="https://github.com/ChiriCuddles">GitHub</a>
 		<a href="https://twitter.com/ChiriMystere">Twitter</a>
