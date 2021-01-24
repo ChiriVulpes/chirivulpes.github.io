@@ -17,7 +17,7 @@ layout: default
 		{% endif %}
 	{% endfor %}
 	
-	<a class="posts-nav-index local-link" href="{% if index == nil %}/blog/all{% else %}.{% endif %}">All</a>
+	<a class="posts-nav-index local-link" href="{% if index == nil %}/blog/all{% else %}/blog{% endif %}">All</a>
 	
 	{% if page.next.url %}
 		<a class="posts-nav-next local-link" href="{{ page.next.url }}"><span class="details">Next</span> &nbsp; {{ page.next.title }}</a>
