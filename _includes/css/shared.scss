@@ -19,6 +19,18 @@ body {
 	flex-direction: column;
 	min-height: 100vh;
 	box-sizing: border-box;
+	
+	> header {
+		p {
+			margin-bottom: 1em;
+			padding-left: 1em;
+		}
+		
+		.tagline {
+			font-style: italic;
+			color: var(--color-2);
+		}
+	}
 
 	@media (max-width: 700px) {
 		> header {

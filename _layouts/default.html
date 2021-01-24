@@ -46,12 +46,28 @@
 <body>
 
 <header>
-	<h1 id="home"><a href="/">Chiri<span class="names">
-		<span>&nbsp;Vulpes</span>
-		<span aria-hidden="true">chirichiri</span>
-		<span aria-hidden="true">&nbsp;Mystere</span>
-		<span aria-hidden="true">Cuddles</span>
-	</span></a></h1>
+	<h1 id="home">
+		{% if page.homelink %}
+			{% if page.homelink.custom %}
+				{% include {{ page.homelink.custom }} %}
+			{% else %}
+				<a href="{{ page.homelink.url }}">{{ page.homelink.text }}</a>
+			{% endif %}
+		
+		{% else %}
+			<a href="/">
+				Chiri<span class="names">
+					<span>&nbsp;Vulpes</span>
+					<span aria-hidden="true">chirichiri</span>
+					<span aria-hidden="true">&nbsp;Mystere</span>
+					<span aria-hidden="true">Cuddles</span>
+				</span>
+			</a>
+		{% endif %}
+	</h1>
+	{% if page.homelink and page.homelink.tagline %}
+		<p class="tagline">{{ page.homelink.tagline }}</p>
+	{% endif %}
 	
 	<nav>
 		{% if site.blog.size > 0 %}

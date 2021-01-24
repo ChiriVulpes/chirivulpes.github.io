@@ -1,0 +1,32 @@
+#home {
+	position: relative;
+	
+	div {
+		position: absolute;
+		top: 0;
+		display: grid;
+		grid-template-columns: auto 1fr;
+		pointer-events: none;
+	}
+	
+	span {
+		opacity: 0;
+		user-select: none;
+	}
+	
+	.rss-link {
+		width: 1em;
+		height: 1em;
+		pointer-events: all;
+		
+		&::before {
+			top: 0;
+			left: 0;
+			height: 100%;
+		}
+		
+		&:hover::before {
+			width: 100%;
+		}
+	}
+}

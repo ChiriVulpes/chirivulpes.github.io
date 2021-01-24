@@ -1,7 +1,3 @@
-{% if include.smol != true %}
-	{% include page/blog/header.html %}
-{% endif %}
-
 {% assign posts = site.blog | sort: "date" | reverse %}
 {% assign limit = 9999999 %}
 {% if include.limit != nil %}

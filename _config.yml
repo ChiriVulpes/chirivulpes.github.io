@@ -10,6 +10,11 @@ defaults:
       layout: "blog"
       preview: true
       type: article
+      homelink:
+        custom: page/blog/homelink.html
+        tagline: Where a fox goes to ramble!
+      css:
+        - page/blog
 
 collections_dir: _collections
 collections:
