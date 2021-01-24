@@ -1,3 +1,10 @@
+{% if include.smol != true %}
+	<header>	
+		<h2>Chiri's Blog <a class="rss-link" aria-label="RSS Feed" href="/rss/blog.xml">{% include resource/rss.svg %}</a></h2>
+		<p>Where a fox goes to ramble!</p>
+	</header>
+{% endif %}
+
 {% assign posts = site.blog | sort: "date" | reverse %}
 {% assign limit = 9999999 %}
 {% if include.limit != nil %}
