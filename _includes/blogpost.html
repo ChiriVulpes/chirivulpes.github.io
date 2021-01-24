@@ -7,7 +7,7 @@
 	{% assign href = post.url %}
 {% endif %}
 
-<article>
+<article class="blogpost">
 	<h2 id="{{ post.id }}"><a href="{{ href }}" class="{{ class }}">{{ post.title }}</a></h2>
 
 	{% if include.truncate != nil %}

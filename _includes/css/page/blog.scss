@@ -30,3 +30,11 @@
 		}
 	}
 }
+
+.blogpost {
+	p:not(.details), li {
+		margin: 1em 0;
+		line-height: 1.6em;
+		font-size: 1.1em;
+	}
+}
