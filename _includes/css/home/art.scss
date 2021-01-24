@@ -14,6 +14,13 @@
 	
 	a {
 		padding: 0.25em;
+		height: 100%;
+		box-sizing: border-box;
+	}
+	
+	img {
+		min-width: 100px;
+		min-height: 100px;
 	}
 	
 	h4 {
