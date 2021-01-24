@@ -120,6 +120,10 @@ a {
 	
 	&.isnav {
 		@include arrow;
+		
+		&.article {
+			padding-right: 2em;
+		}
 	}
 }
 
@@ -140,10 +144,18 @@ article {
 	}
 	
 	> footer {
+		display: grid;
+		grid-template-columns: 1fr auto;
+		column-gap: 1em;
 		margin-bottom: -0.7em;
 		
-		&, & p {
-			text-align: right;
+		// &, & p {
+		// 	text-align: right;
+		// }
+		
+		.local-link {
+			margin-top: auto;
+			margin-bottom: auto;
 		}
 	}
 	
@@ -412,6 +424,21 @@ h3 {
 
 .date {
 	color: var(--color-date);
+}
+
+.tag {
+	color: var(--color-tag);
+	position: relative;
+	padding-right: 0.2em;
+}
+
+.tag + .tag::before {
+	position: absolute;
+	content: ",";
+	pointer-events: none;
+	color: var(--color-3);
+	left: -0.5em;
+	top: -0.05em;
 }
 
 section {

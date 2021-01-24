@@ -7,7 +7,7 @@
 	{% if include.smol == true %}
 		
 		<a class="article isnav blog-smol" href="{{ post.url }}">
-			<span class="date" data-date="{{ post.date }}">{{ post.date | date: "%b %d, %Y" }}</span> <b>{{ post.title }}</b> — <span>{{ post.content | strip_html | truncate: 256 }}</span>
+			<span class="date" data-date="{{ post.date }}">{{ post.date | date: "%b %d, %Y" }}</span> <b>{{ post.title }}</b> — <span>{{ post.content | strip_html | truncate: 128 }}</span>
 		</a>
 		
 	{% else %}

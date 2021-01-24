@@ -17,6 +17,19 @@
 	{% endif %}
 
 	<footer>
-		<p class="details">Posted <span class="date"><span data-date="{{ post.date }}">{{ post.date | date: "%b %d, %Y" }}</span></span></p>
+		<p class="details">
+			Posted <span class="date"><span data-date="{{ post.date }}">{{ post.date | date: "%b %d, %Y" }}</span></span>
+			<br>
+			{% if post.tags.size %}
+				Tagged as 
+					{% assign tags = post.tags | sort %}
+					{% for tag in tags %}
+						<span class="tag">{{ tag }}</span>
+					{% endfor %}
+			{% endif %}
+		</p>
+		{% if include.truncate != nil %}
+			<a class="local-link" href="{{ href }}">Read More</a>
+		{% endif %}
 	</footer>
 </article>
