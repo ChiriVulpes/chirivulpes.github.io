@@ -1,5 +1,5 @@
 ---
-title: chiri.works
+title: I has website now!
 tags:
   - programming
   - update

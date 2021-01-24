@@ -8,6 +8,8 @@ defaults:
       type: "blog"
     values:
       layout: "blog"
+      preview: true
+      type: article
 
 collections_dir: _collections
 collections:
