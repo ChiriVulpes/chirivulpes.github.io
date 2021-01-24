@@ -1,0 +1,54 @@
+#art ~ section {
+	display: flex;
+	flex-wrap: wrap;
+	width: 100%;
+	justify-content: space-around;
+	
+	h3 {
+		flex-basis: 100%;
+	}
+}
+
+.art {
+	position: relative;
+	
+	a {
+		padding: 0.25em;
+	}
+	
+	h4 {
+		position: absolute;
+		bottom: 0em;
+		width: calc(100% - 1em);
+		padding: 0.5em 0.25em;
+		box-sizing: border-box;
+		margin: 0.5em;
+		text-align: center;
+		opacity: 0;
+		transition: opacity .5s ease-out;
+		pointer-events: none;
+		
+		&::before {
+			content: "";
+			display: block;
+			position: absolute;
+			top: 0;
+			left: 0;
+			width: 100%;
+			height: 100%;
+			background: var(--background-2);
+			opacity: 0.98;
+		}
+		
+		a {
+			pointer-events: all;
+		}
+	}
+
+	&:hover, &:focus-within {
+		h4 {
+			opacity: 1;
+			transition-duration: .1s;
+		}
+	}
+}

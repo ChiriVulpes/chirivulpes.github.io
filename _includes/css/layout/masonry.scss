@@ -1,0 +1,63 @@
+main {
+	padding: 0;
+}
+
+main > aside > article {
+	width: calc(100% - 4em);
+	max-width: none;
+}
+
+@media (min-width: 1801px) {
+	main {
+		display: grid;
+		grid-template-columns: 3fr 2fr;
+		column-gap: 2em;
+	}
+	
+	main > aside:nth-child(2) {
+		margin-top: 6em;
+	}
+}
+
+@media (max-width: 1800px) {
+	main {
+		display: flex;
+		flex-direction: column;
+	}
+	
+	aside {
+		display: contents;
+	}
+
+	$columns: 2;
+	@for $i from 1 through 5 {
+		@for $c from 1 through $columns {
+			main > aside:nth-child(#{$c}) > article:nth-child(#{$i}) {
+				order: $i * $columns + $c + 1;
+			}
+		}
+	}
+}
+
+.no-alternating-articles .article,
+aside:nth-child(2) .article {
+	margin: 1em;
+	width: calc(100% - 2em);
+}
+
+aside:nth-child(2) .article:nth-child(2n+1) {
+	text-align: right;
+}
+
+aside:nth-child(2) .article > img {
+	max-height: 150px;
+}
+
+aside .no-alternating-articles .article:nth-child(2n+1) {
+	text-align: left;
+	
+	&::before {
+		right: auto;
+		left: 0;
+	}
+}

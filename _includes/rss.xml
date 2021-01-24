@@ -1,0 +1,28 @@
+{%- assign updates = "1970-01-01T00:00:00.000Z" -%}
+{%- capture out -%}
+	{%- assign entries = include.entries | sort: "date" | reverse -%}
+	
+	{%- assign max = include.max | default: 5 -%}
+	
+	{%- for entry in entries limit: max -%}
+		<entry>
+			<title>{{ entry.title }}</title>
+			<link href="{{ entry.url }}"/>
+			<id>{{ entry.url }}</id>
+			{%- assign updates = updates | append: "," | append: entry.date -%}
+			<updated>{{ entry.date }}</updated>
+		</entry>
+	{%- endfor -%}
+{%- endcapture -%}
+
+{%- assign latest_update = updates | split: "," | sort | last -%}
+
+<title>{{ include.title }}</title>
+<link href="{{ include.url }}"/>
+<updated>{{ latest_update }}</updated>
+<id>{{ include.url }}</id>
+<author>
+	<name>Chiri Vulpes</name>
+</author>
+
+{{ out }}

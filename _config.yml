@@ -1,0 +1,25 @@
+defaults:
+  - scope:
+      path: ""
+    values:
+      layout: "default"
+  - scope:
+      path: ""
+      type: "blog"
+    values:
+      layout: "blog"
+
+collections_dir: _collections
+collections:
+  blog:
+    output: true
+
+sass:
+  sass_dir: _includes/css
+
+future: true
+theme: null
+exclude:
+  - scss
+
+# detach: false

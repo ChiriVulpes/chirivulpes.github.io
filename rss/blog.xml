@@ -1,0 +1,8 @@
+---
+layout: rss
+---
+
+{% include rss.xml 
+	entries=site.blog
+	title="Chiri's Blog"
+	url="/blog" %}
