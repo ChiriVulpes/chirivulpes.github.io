@@ -1,0 +1,88 @@
+#home {
+	margin-bottom: 0.3em;
+	
+	a {
+		color: inherit;
+		padding: 0;
+		border: none;
+		position: relative;
+		width: 100%;
+		max-width: 10em;
+		transition: color .5s ease-out;
+		
+		&::before {
+			content: "";
+			display: block;
+			position: absolute;
+			width: 0em;
+			height: 1.5em;
+			top: -0.15em;
+			left: -0.5em;
+			transition: width .5s ease-out;
+			background: var(--background-3);
+			z-index: -1;
+		}
+		
+		&:hover, &:focus {
+			color: #fff;
+			transition-duration: .1s;
+			
+			&::before {
+				width: 10.5em;
+				transition-duration: .1s;
+			}
+		}
+	}
+}
+
+.names {
+	position: relative;
+	display: inline-block;
+	user-select: none;
+	pointer-events: none;
+    width: 200px;
+    height: 1em;
+	vertical-align: text-top;
+	
+	$delay: 4s;
+	$count: 4;
+	
+	> span {
+		display: inline-block;
+		position: absolute;
+		animation: switch-name ($delay * $count) linear infinite forwards;
+		top: 100%;
+		opacity: 0;
+		white-space: nowrap;
+		
+		@for $i from 2 through $count {
+			&:nth-child(#{$i}) { 
+				animation-delay: $delay * ($i - 1); 
+			}
+		}
+	}
+	
+	$animation-duration: 100% / $count;
+	$shown-end: $animation-duration * 0.8;
+	$shown-start: $animation-duration * 0.2;
+	$animation-start: $shown-start / 2;
+
+	@keyframes switch-name {
+		#{$animation-start} {
+			opacity: 0;
+			top: 50%;
+		}
+		#{$shown-start} {
+			opacity: 1;
+			top: 0%;
+		}
+		#{$shown-end} {
+			opacity: 1;
+			top: 0%;
+		}
+		#{$animation-duration} {
+			opacity: 0;
+			top: -100%;
+		}
+	}
+}

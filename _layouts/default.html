@@ -2,7 +2,9 @@
 <html lang="en">
 
 <head>
-	<link rel="stylesheet" href="/css/index.css" />
+	{% include scss href="css/index.scss" %}
+	<link rel="preconnect" href="https://fonts.gstatic.com">
+	<link href="https://fonts.googleapis.com/css2?family=Poiret+One&family=Raleway:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
 	<link rel="shortcut icon" href="/static/image/logo.png" />
 	<title>Chiri Vulpes &nbsp;| &nbsp;Author ∙ Designer ∙ Developer</title>
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -14,7 +16,8 @@
 	
 	{% if page.css %}
 		{% for css in page.css %}
-			<link rel="stylesheet" href="/css/{{ css }}.css" />
+			{% assign filename = "css/" | append: css | append: ".scss" %}
+			{% include scss href=filename %}
 		{% endfor %}
 	{% endif %}
 	
@@ -31,6 +34,10 @@
 	</span></a></h1>
 	
 	<nav>
+		{% if site.blog.size > 0 %}
+			<a class="local-link" href="/">Portfolio</a>
+			<a class="local-link" href="/blog">Blog</a>
+		{% endif %}
 		<a href="https://github.com/ChiriCuddles">GitHub</a>
 		<a href="https://twitter.com/ChiriMystere">Twitter</a>
 		<a href="https://www.patreon.com/chirichirichiri">Author Patreon</a>
@@ -43,10 +50,14 @@
 </main>
 
 <footer>
-	<p>Thanks for checking out my work!</p>
-	<p>If you'd like to commission story chapters, consider checking out my <a href="https://www.patreon.com/chirichirichiri">Patreon</a>.</p>
-	<p>If you'd like to commission a story cover, stay tuned. I'll find some way to sell commissions for these soon!</p>
-	<p>Just wanna talk? Join my <a href="https://discord.gg/XPPvW9F">Discord</a>!</p>
+	{% if page.footer != false %}
+		{% if page.footer %}
+			{% include {{ page.footer }} %}
+			
+		{% else %}
+			
+		{% endif %}
+	{% endif %}
 	<nav>
 		<a href="https://github.com/ChiriCuddles">GitHub</a>
 		<a href="https://twitter.com/ChiriMystere">Twitter</a>

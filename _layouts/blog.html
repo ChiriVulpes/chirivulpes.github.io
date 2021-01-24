@@ -2,5 +2,18 @@
 layout: default
 ---
 
-<h2>{{ page.title }}</h2>
-{{content}}
+{% include blogpost.html post=page %}
+
+<nav class="posts-nav">
+	
+	{% if page.previous.url %}
+		<a class="posts-nav-prev local-link" href="{{ page.previous.url }}">{{ page.previous.title }} &nbsp; <span class="details">Previous</span></a>
+	{% endif %}
+	
+	<a class="posts-nav-index local-link" href=".">All</a>
+	
+	{% if page.next.url %}
+		<a class="posts-nav-next local-link" href="{{ page.next.url }}"><span class="details">Next</span> &nbsp; {{ page.next.title }}</a>
+	{% endif %}
+	
+</nav>

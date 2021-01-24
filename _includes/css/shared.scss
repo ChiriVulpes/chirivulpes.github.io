@@ -1,0 +1,496 @@
+html {
+	background: var(--background);
+	color: var(--color);
+	font-family: 'Raleway', sans-serif;
+}
+
+body {
+	margin: 0;
+	--padding-x: 4em;
+	@media (max-width: 1300px) { body { --padding-x: 2em; } }
+	@media (max-width: 700px) { body { --padding-x: 0em; } }
+	--padding-b: 2em;
+	padding: 0 var(--padding-x) var(--padding-b);
+	transition: padding .3s ease-in-out;
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	min-height: 100vh;
+	box-sizing: border-box;
+
+	@media (max-width: 700px) {
+		> header {
+			padding-left: 0.5em;
+			box-sizing: border-box;
+		}
+	}
+}
+
+main {
+	padding: 2em;
+	flex-grow: 1;
+}
+
+// body::before {
+// 	content: "";
+// 	display: block;
+// 	position: fixed;
+// 	bottom: 0;
+// 	left: 0;
+// 	z-index: 1000;
+// 	height: 100%;
+// 	width: 100%;
+// 	background:var(--background);
+// 	animation: swipe-in .5s ease-in forwards;
+// 	animation-delay: 0.2s;
+// }
+
+// @keyframes swipe-in {
+// 	from {
+// 		height: 100%;
+// 	}
+// 	to {
+// 		height: 0%;
+// 	}
+// }
+
+p, li, summary {
+	letter-spacing: 0.01em;
+	line-height: 1.5em;
+	margin: 0.4em 0;
+	text-align: justify;
+}
+
+@mixin arrow($direction: right) {
+	$other-direction: if($direction == right, left, right);
+	
+	&::after {
+		@if $direction == none {
+			content: none;
+		} @else {
+			content: "";
+			display: block;
+			position: absolute;
+			top: 50%;
+			#{$direction}: 0;
+			#{$other-direction}: auto;
+			transform: translateY(-50%);
+			border: 0.5em solid transparent;
+			border-#{$other-direction}-color: var(--background-5);
+			transition: all .5s ease-out;
+			transition-property: #{$direction}, border-#{$other-direction}-color;
+		}
+	}
+	
+	&:hover, &:focus {
+		&::after {
+			transition-duration: .1s;
+			border-#{$other-direction}-color: var(--background-6);
+			#{$direction}: -0.25em;
+		}
+	}
+}
+
+a {
+	font-weight: bold;
+	color: var(--link);
+	padding: 0.1em 0.4em;
+	text-decoration: none;
+	border-radius: 3px;
+	border: 1px solid transparent;
+	display: inline-block;
+	user-select: none;
+	position: relative;
+	margin: 0 0.2em;
+	
+	&:hover, &:focus {
+		color: var(--link-active);
+		border-color: currentColor;
+	}
+	
+	p & {
+		border: none;
+		padding: 0;
+		margin: 0;
+		
+		&:hover, &:focus {
+			text-decoration: underline;
+		}
+	}
+	
+	&.isnav {
+		@include arrow;
+	}
+}
+
+article {
+	width: calc(100% - 4em);
+	max-width: 900px;
+	margin: 2em 2em 4em;
+	background: var(--background-2);
+	padding: 1em;
+	display: inline-block;
+	box-sizing: border-box;
+	position: relative;
+	transition: margin .5s ease-out;
+
+	@media (max-width: 700px) {
+		margin: 2em 0;
+		width: 100%;
+	}
+	
+	> footer {
+		margin-bottom: -0.7em;
+		
+		&, & p {
+			text-align: right;
+		}
+	}
+	
+	&:first-of-type:last-of-type {
+		background: none;
+		margin: 0;
+		
+		> footer {
+			&, & p {
+				text-align: justify;
+			}
+		}
+	}
+}
+
+body > footer {
+	margin: 3em calc(var(--padding-x) * -1) calc(var(--padding-b) * -1);
+	padding: 3em calc(var(--padding-x) + 2em) var(--padding-b);
+	text-align: right;
+	background: var(--background-drawer);
+	
+	p {
+		text-align: right;
+	}
+	
+	nav {
+		margin-top: 1em;
+		border-right: 2px solid var(--background-4);
+	}
+	
+	a {
+		margin-bottom: 0.2em;
+	}
+}
+
+img:not(.borderless) {
+	border: 2px solid var(--image-border);
+	box-sizing: border-box;
+}
+
+iframe {
+	border: none;
+	width: 100%;
+}
+
+h1, h2, h3 {
+	font-family: 'Poiret One', sans-serif;
+	
+	a {
+		margin: 0;
+	}
+	
+	&, & a {
+		font-weight: normal;
+	}
+}
+
+h1 {
+	font-size: 3em;
+}
+
+@mixin background-slide-animation(
+	$background: var(--background-3), 
+	$background-hover: var(--background-4), 
+	$color: inherit,
+	$color-hover: var(--color-active),
+	$display: block,
+	$padding: 0.1em 0.3em 0.2em,
+	$from: left) {
+
+	color: $color;
+	display: $display;
+	padding: $padding;
+	background: $background;
+	transition: color .5s ease-out;
+	
+	&::before {
+		content: "";
+		display: block;
+		position: absolute;
+		top: 0;
+		left: 0;
+		background: $background-hover;
+		transition: all .5s ease-out;
+		transition-property: width, height;
+		z-index: -1;
+		
+		@if $from == right {
+			left: auto;
+			right: 0;
+		}
+		@if $from == bottom {
+			top: auto;
+			bottom: 0;
+		}
+		
+		@if $from == top or $from == bottom {
+			height: 0%;
+		} @else {
+			height: 100%;
+		}
+		@if $from == left or $from == right {
+			width: 0%;
+		} @else {
+			width: 100%;
+		}
+	}
+	
+	&:hover, &:focus {
+		transition-duration: .1s;
+		color: var(--color-active);
+		
+		&::before {
+			transition-duration: .1s;
+			@if $from == left or $from == right {
+				width: 100%;
+			} @else {
+				height: 100%;
+			}
+		}
+	}
+}
+
+h2 {
+	margin: 0;
+	
+	article > & {
+		margin: -0.5em;
+		position: sticky;
+		top: -1px;
+		z-index: 3;
+	}
+	
+	&, article > & {
+		font-size: 2em;
+		margin-bottom: 0.25em;
+	}
+	
+	a {
+		text-decoration: none;
+		font-weight: normal;
+		border: none;
+		border-radius: 0;
+		z-index: 0;
+		@include background-slide-animation;
+	}
+}
+
+h3 {
+	font-size: 1.5em;
+}
+
+.inactive {
+	&::before {
+		content: "";
+		display: block;
+		position: absolute;
+		top: 0;
+		right: 0;
+		background: var(--background);
+		opacity: 0.7;
+		width: 100%;
+		height: 100%;
+		transition: width .5s ease-out;
+		z-index: 100;
+		pointer-events: none;
+	}
+	
+	&:hover, &:focus-within {
+		&::before {
+			width: 0%;
+			transition-duration: .1s;
+		}
+	}
+}
+
+.article {
+	background: var(--background-3);
+	padding: 1em;
+	margin: 1em;
+	font-weight: normal;
+	color: inherit;
+	border: none;
+	position: relative;
+	z-index: 1;
+	transition: color .5s ease-out;
+	box-sizing: border-box;
+	width: calc(100% - 2em);
+	border-radius: 0;
+	
+	&::before {
+		content: "";
+		display: block;
+		position: absolute;
+		top: 0;
+		left: 0;
+		width: 0%;
+		height: 100%;
+		background: var(--background-4);
+		z-index: -1;
+		transition: width .5s ease-out;
+	}
+	
+	&:hover, &:focus {
+		color: var(--color-active);
+		transition-duration: .1s;
+		
+		&::before {
+			width: 100%;
+			transition-duration: .1s;
+		}
+	}
+
+	@media (min-width: 700px) {
+		&:nth-child(2n+1) {
+			margin-left: 3em;
+			width: calc(100% - 4em);
+		}
+		
+		&:nth-child(2n) {
+			margin-right: 3em;
+			width: calc(100% - 4em);
+		}
+	}
+
+	&:nth-child(2n+1)::before {
+		left: auto;
+		right: 0;
+	}
+
+	> img {
+		min-width: 0;
+		max-width: 100%;
+	}
+
+	h4 {
+		font-size: 2em;
+		margin: 0;
+		margin-bottom: 0.5em;
+		transition: font-size .5s ease-out;
+		font-weight: normal;
+		
+		@media (max-width: 1000px) {
+			font-size: 1.2em;
+		}
+	}
+}
+	
+.details {
+	color: var(--color-2);
+	font-size: 0.9em;
+	margin-bottom: 0.5em;
+	
+	span {
+		font-weight: bold;
+	}
+}
+
+.price {
+	color: var(--color-price);
+}
+
+.length {
+	color: var(--color-length);
+}
+
+.date {
+	color: var(--color-date);
+}
+
+section {
+	&:first-of-type {
+		margin-top: 1em;
+	}
+	
+	> h3 {
+		position: sticky;
+		top: 1.9em;
+		z-index: 2;
+		background: var(--background-2);
+		padding: 0.5em 0;
+		margin: 0;
+		display: grid;
+		grid-template-columns: auto 1fr;
+		user-select: none;
+		
+		&::after {
+			content: "";
+			height: 1px;
+			background: var(--background-5);
+			position: relative;
+			top: 50%;
+			margin-left: 1em;
+		}
+	}
+}
+
+$local-link-padding: 0.5em 1.5em 0.6em 0.6em;
+
+.local-link {
+	border-radius: 0;
+	border: none;
+	font-weight: normal;
+	z-index: 0;
+	@include background-slide-animation($padding: $local-link-padding, $display: inline-block);
+	@include arrow;
+}
+
+nav a:not(.local-link) + a:not(.local-link)::before {
+	position: absolute;
+	content: "∙";
+	pointer-events: none;
+	color: var(--color-3);
+	left: -0.5em;
+	top: -0.05em;
+}
+
+.posts-nav {
+	margin-top: 2em;
+	display: grid;
+	grid-template-columns: 2fr 1fr 2fr;
+	max-width: 900px;
+	
+	a {
+		border-radius: 0;
+		border: none;
+		font-weight: normal;
+		z-index: 0;
+	}
+	
+	.posts-nav-prev {
+		@include background-slide-animation($from: right, $padding: $local-link-padding);
+		@include arrow(left);
+		padding-left: 1.5em;
+	}
+
+	.posts-nav-next {
+		text-align: right;
+		grid-column: 3;
+		@include background-slide-animation($padding: $local-link-padding);
+		@include arrow;
+	}
+
+	.posts-nav-index {
+		grid-column: 2;
+		text-align: center;
+		@include background-slide-animation($from: top, $padding: $local-link-padding);
+		@include arrow(none);
+	}
+}

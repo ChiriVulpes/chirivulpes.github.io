@@ -6,16 +6,13 @@
 {% for post in posts %}
 	{% if include.smol == true %}
 		
-		<a class="article" href="{{ post.url }}">
-			<b>{{ post.title }}</b> — <span>{{ post.content | strip_html | truncate: 256 }}</span>
+		<a class="article isnav blog-smol" href="{{ post.url }}">
+			<span class="date" data-date="{{ post.date }}">{{ post.date | date: "%b %d, %Y" }}</span> <b>{{ post.title }}</b> — <span>{{ post.content | strip_html | truncate: 256 }}</span>
 		</a>
 		
 	{% else %}
 	
-		<article>
-			<h2 id="{{ post.id }}"><a href="{{ post.url }}">{{ post.title }}</a></h2>
-			{{ post.content | truncate: 512 }}
-		</article>
+		{% include blogpost.html post=post truncate=512 %}
 		
 	{% endif %}
 {% endfor %}

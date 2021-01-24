@@ -15,7 +15,7 @@ collections:
     output: true
 
 sass:
-  sass_dir: css/_includes
+  sass_dir: _includes/css
 
 future: true
 theme: null

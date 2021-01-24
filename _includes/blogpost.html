@@ -1,0 +1,22 @@
+{% assign post=include.post %}
+
+{% assign class = "" %}
+{% assign href = "#" %}
+{% if post.url != page.url %}
+	{% assign class="isnav" %}
+	{% assign href = post.url %}
+{% endif %}
+
+<article>
+	<h2 id="{{ post.id }}"><a href="{{ href }}" class="{{ class }}">{{ post.title }}</a></h2>
+
+	{% if include.truncate != nil %}
+		{{ post.content | truncate: include.truncate }}
+	{% else %}
+		{{ post.content }}
+	{% endif %}
+
+	<footer>
+		<p class="details">Posted <span class="date"><span data-date="{{ post.date }}">{{ post.date | date: "%b %d, %Y" }}</span></span></p>
+	</footer>
+</article>
