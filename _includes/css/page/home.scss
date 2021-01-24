@@ -2,6 +2,10 @@
 @import "home/art";
 @import "home/blog";
 
+article:nth-child(2n) {
+	margin-left: 2em;
+}
+
 .blog-smol {
 	.date {
 		padding-right: 0.5em;
