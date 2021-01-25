@@ -102,8 +102,8 @@ pre {
 		gl:  (inherit, inherit), // generic.lineno
 	);
 	
-	@mixin color($name, $color) {
-		@if $color != inherit {
+	@mixin color($name, $color, $force: false) {
+		@if $color != inherit or $force {
 			@at-root & .#{$name}, code.#{$name} {
 				color: $color;
 			}
@@ -116,7 +116,7 @@ pre {
 
 	@media (prefers-color-scheme: light) {
 		@each $name, $colors in $syntax-highlighting {
-			@include color($name, nth($colors, 2));
+			@include color($name, nth($colors, 2), nth($colors, 1) != inherit);
 		}
 	}
 }
