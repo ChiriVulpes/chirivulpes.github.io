@@ -156,6 +156,7 @@ a {
 		border: none;
 		padding: 0;
 		margin: 0;
+		display: inline;
 		
 		&:hover, &:focus {
 			text-decoration: underline;
@@ -497,26 +498,30 @@ section {
 	&:first-of-type {
 		margin-top: 1em;
 	}
+}
+
+h3 {
+	position: sticky;
+	top: 1.9em;
+	z-index: 2;
+	padding: 0.5em 0;
+	margin: 0;
+	display: grid;
+	grid-template-columns: auto 1fr;
+	user-select: none;
+	background: var(--background-2);
+
+	&::after {
+		content: "";
+		height: 1px;
+		background: var(--background-5);
+		position: relative;
+		top: 50%;
+		margin-left: 1em;
+	}
 	
-	> h3 {
-		position: sticky;
-		top: 1.9em;
-		z-index: 2;
-		background: var(--background-2);
-		padding: 0.5em 0;
-		margin: 0;
-		display: grid;
-		grid-template-columns: auto 1fr;
-		user-select: none;
-		
-		&::after {
-			content: "";
-			height: 1px;
-			background: var(--background-5);
-			position: relative;
-			top: 50%;
-			margin-left: 1em;
-		}
+	article:first-of-type:last-of-type & {
+		background: var(--background);
 	}
 }
 
