@@ -47,7 +47,7 @@ One impact that this system had on the existing tooltips is that a lot of them w
 Wayward's event systems have gone through a few iterations:
 1. Hooks
 	- 2.0-2.5 — A hook system where mod classes contain hardcoded hook names that can be overridden, and any place where the hooks are called needs to reference the mod system. Mods need to opt into which hooks they're using by listing them in their `mod.json` file.
-	- 2.6 — A new hook system that centralises hook definitions and supports more kinds of hooks. (More than just calling them and getting an array of results.) Mods no longer have the hook names baked into themselves, instead they're baked into an `IHookHost`{.nc} which any class can hook into.
+	- 2.6 — A new hook system that centralises hook definitions and supports more kinds of hooks. (More than just calling them and getting an array of results.) Mods no longer have the hook names baked into themselves, instead they're baked into an `IHookHost`{:.nc} which any class can hook into.
 2. Other internal event emitters
 	- 2.5-2.7 — A simplistic emitter system for emitting and subscribing to events. This wasn't used in too many places, but enough that it was an important part of the game's backend.
 
