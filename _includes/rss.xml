@@ -4,7 +4,19 @@
 	
 	{%- assign max = include.max | default: 5 -%}
 	
-	{%- for entry in entries limit: max -%}
+	{%- assign included = 0 -%}
+	{%- for entry in entries -%}
+		{%- if include.filterkey -%}
+			{%- if include.filtervalue -%}
+				{%- if entry.[include.filterkey] != include.filtervalue -%}
+					{%- continue -%}
+				{%- endif -%}
+			{%- elsif include.filtervaluecontains -%}
+				{%- if entry.[include.filterkey] contains include.filtervaluecontains -%}{%- else -%}
+					{%- continue -%}
+				{%- endif -%}
+			{%- endif -%}
+		{%- endif -%}
 		<entry>
 			<title>{{ entry.title }}</title>
 			<link href="{{ entry.url }}"/>
@@ -12,6 +24,10 @@
 			{%- assign updates = updates | append: "," | append: entry.date -%}
 			<updated>{{ entry.date }}</updated>
 		</entry>
+		{%- assign included = included | plus: 1 -%}
+		{%- if included >= max -%}
+			{%- break -%}
+		{%- endif -%}
 	{%- endfor -%}
 {%- endcapture -%}
 

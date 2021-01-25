@@ -15,6 +15,7 @@ defaults:
         tagline: Where a fox goes to ramble!
       css:
         - page/blog
+      pagetitle: "<title> &nbsp;| &nbsp;Chiri's Blog"
   - scope:
       path: ""
       type: tags
@@ -25,6 +26,8 @@ defaults:
         tagline: Where a fox goes to ramble!
       css:
         - page/blog
+      pagetitle: "Chiri's Blog: Posts tagged with <title>"
+      description: "See the blog posts tagged with <title>"
 
 collections_dir: _collections
 collections:

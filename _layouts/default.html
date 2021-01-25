@@ -5,18 +5,31 @@
 	<link rel="preconnect" href="https://fonts.gstatic.com">
 	{% include scss href="css/index.scss" %}
 	<link rel="shortcut icon" href="/static/image/logo.png" />
-	<title>Chiri Vulpes &nbsp;| &nbsp;Author ∙ Designer ∙ Developer</title>
+	{% if page.pagetitle %}
+		<title>{{ page.pagetitle | replace: "<title>", page.title }}</title>
+	{% else %}
+		<title>Chiri Vulpes &nbsp;| &nbsp;Author ∙ Designer ∙ Developer</title>
+	{% endif %}
 	<meta name="viewport" content="width=device-width, initial-scale=1" />
 	
 	{% assign description = page.description %}
+	{% if description %}
+		{% assign description = description | replace: "<title>", page.title %}
+	{% endif %}
+	
+	{% assign title = page.pagetitle %}
+	{% if title %}
+		{% assign title = title | replace: "<title>", page.title %}
+	{% endif %}
+	
 	{% if page.preview == true %}
 		{% assign description = page.content | strip_html | truncate: 256 %}
 	{% endif %}
-	<meta name="description" content="{{ description }}" />
+	<meta name="description" content="{{ title }} | {{ description }}" />
 
-	{% if page.title and description and page.url %}
+	{% if description and page.url and title or page.title %}
 		<meta property="og:type" content="{{ page.type | default: "website" }}" />
-		<meta property="og:title" content="{{ page.title }}" />
+		<meta property="og:title" content="{{ title | default: page.title }}" />
 		{% if page.date %}
 			{% assign description = page.date | date: "%b %d, %Y" | append: " — " | append: description %}
 		{% endif %}

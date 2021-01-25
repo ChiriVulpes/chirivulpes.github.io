@@ -1,0 +1,10 @@
+---
+layout: rss
+---
+
+{% include rss.xml 
+	entries=site.blog
+	filterkey="tags"
+	filtervaluecontains="wayward"
+	title="Chiri's Blog: Wayward"
+	url="/blog/tags/wayward.html" %}
