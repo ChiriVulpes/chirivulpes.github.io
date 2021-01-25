@@ -2,14 +2,24 @@ defaults:
   - scope:
       path: ""
     values:
-      layout: "default"
+      layout: default
   - scope:
       path: ""
-      type: "blog"
+      type: blog
     values:
-      layout: "blog"
+      layout: blog
       preview: true
       type: article
+      homelink:
+        custom: page/blog/homelink.html
+        tagline: Where a fox goes to ramble!
+      css:
+        - page/blog
+  - scope:
+      path: ""
+      type: tags
+    values:
+      layout: tag
       homelink:
         custom: page/blog/homelink.html
         tagline: Where a fox goes to ramble!
@@ -20,6 +30,9 @@ collections_dir: _collections
 collections:
   blog:
     output: true
+  tags:
+    output: true
+    permalink: /blog/:collection/:path:output_ext
 
 sass:
   sass_dir: _includes/css

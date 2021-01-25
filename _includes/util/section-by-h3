@@ -1,0 +1,24 @@
+<!-- Replace all heading starts with ones that end and start section tags -->
+{% assign content = include.content | replace: "<h3", "</section><section><h3" | lstrip %}
+
+<!-- If starts with a </section>, delete it, it's unnecessary -->
+{% assign start = content | slice: 0, 10 %}
+{% if start == "</section>" %}
+	{% assign content = content | slice: 10, content.size %}
+{% endif %}
+
+{%- for i in (0..content.size) -%}
+	{%- assign substring = content | slice: i, 9 -%}
+	{%- if substring == "<section>" -%}
+		{%- break -%}
+	{%- endif -%}
+	{%- if substring == "</section" -%}
+		{%- assign content = "<section>" | append: content -%}
+		{%- break -%}
+	{%- endif -%}
+{%- endfor -%}
+
+{{ content | lstrip }}
+{% if content contains "<section>" %}
+	</section>
+{% endif %}

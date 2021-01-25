@@ -11,42 +11,10 @@
 	<h2 id="{{ post.id }}"><a href="{{ href }}" class="{{ class }}">{{ post.title }}</a></h2>
 
 	{% if include.truncate != nil %}
-		{{ post.content | truncate: include.truncate }}
+		{% include util/truncate truncate=include.truncate content=post.content %}
 	{% else %}
-		{% capture content %}
-		{{ post.content }}
-		{% endcapture %}
-		
-		<!-- Replace all heading starts with ones that end and start section tags -->
-		{% assign content = content | replace: "<h3", "</section><section><h3" | lstrip %}
-		
-		<!-- If starts with a </section>, delete it, it's unnecessary -->
-		{% assign start = content | slice: 0, 10 %}
-		{% if start == "</section>" %}
-			{% assign content = content | slice: 10, content.size %}
-		{% endif %}
-		
-		{%- for i in (0..content.size) -%}
-			{%- assign substring = content | slice: i, 9 -%}
-			{%- if substring == "<section>" -%}
-				{%- break -%}
-			{%- endif -%}
-			{%- if substring == "</section" -%}
-				{%- assign content = "<section>" | append: content -%}
-				{%- break -%}
-			{%- endif -%}
-		{%- endfor -%}
-		
-		{% assign content = content
-			| replace: "<p>(spoiler)", "<details>" 
-			| replace: "<p>(/spoiler)</p>", "</details>"
-			| replace: "(summary)", "<summary>"
-			| replace: "(/summary)</p>", "</summary>" %}
-		
-		{{ content | lstrip }}
-		{% if content contains "<section>" %}
-			</section>
-		{% endif %}
+		{% capture content %}{% include util/section-by-h3 content=post.content %}{% endcapture %}
+		{% include util/fix-spoilers content=content %}
 	{% endif %}
 
 	<footer>
@@ -57,7 +25,12 @@
 				Tagged as 
 					{% assign tags = post.tags | sort %}
 					{% for tag in tags %}
-						<span class="tag">{{ tag }}</span>
+						{% assign navtag = site.tags | where: "title", tag | first %}
+						{% if navtag %}
+							<a class="tag" href="{{ navtag.url }}">{{ tag }}</a>
+						{% else %}
+							<span class="tag">{{ tag }}</span>
+						{% endif %}
 					{% endfor %}
 			{% endif %}
 		</p>
