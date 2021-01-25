@@ -24,23 +24,23 @@ pre {
 		err: (inherit, inherit), // error
 		x:   (inherit, inherit), // other
 		k:   (#38767c, inherit), // keyword
-		kc:  (inherit, inherit), // keyword.constant
+		kc:  (#0681ff, inherit), // keyword.constant
 		kd:  (#38767c, inherit), // keyword.declaration
 		kn:  (inherit, inherit), // keyword.namespace
 		kp:  (inherit, inherit), // keyword.pseudo
-		kr:  (inherit, inherit), // keyword.reserved
+		kr:  (#0681ff, inherit), // keyword.reserved
 		kt:  (inherit, inherit), // keyword.type
 		kv:  (inherit, inherit), // keyword.variable
 		n:   (inherit, inherit), // name
 		na:  (#8170b8, inherit), // name.attribute
 		nb:  (inherit, inherit), // name.builtin
 		bp:  (inherit, inherit), // name.builtin.pseudo
-		nc:  (inherit, inherit), // name.class
+		nc:  (#82ea4d, inherit), // name.class
 		no:  (inherit, inherit), // name.constant
-		nd:  (inherit, inherit), // name.decorator
+		nd:  (#1a72bd, inherit), // name.decorator
 		ni:  (inherit, inherit), // name.entity
 		ne:  (inherit, inherit), // name.exception
-		nf:  (inherit, inherit), // name.function
+		nf:  (#1a72bd, inherit), // name.function
 		fm:  (inherit, inherit), // name.function.magic
 		py:  (inherit, inherit), // name.property
 		nl:  (inherit, inherit), // name.label
@@ -104,7 +104,7 @@ pre {
 	
 	@mixin color($name, $color) {
 		@if $color != inherit {
-			.#{$name} {
+			@at-root & .#{$name}, code.#{$name} {
 				color: $color;
 			}
 		}

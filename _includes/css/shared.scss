@@ -457,7 +457,7 @@ h3 {
 	}
 }
 	
-.details {
+.details, summary {
 	color: var(--color-2);
 	font-size: 0.9em;
 	margin-bottom: 0.5em;
@@ -465,6 +465,10 @@ h3 {
 	span {
 		font-weight: bold;
 	}
+}
+
+summary {
+	cursor: pointer;
 }
 
 .price {

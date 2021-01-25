@@ -37,6 +37,12 @@
 			{%- endif -%}
 		{%- endfor -%}
 		
+		{% assign content = content
+			| replace: "<p>(spoiler)", "<details>" 
+			| replace: "<p>(/spoiler)</p>", "</details>"
+			| replace: "(summary)", "<summary>"
+			| replace: "(/summary)</p>", "</summary>" %}
+		
 		{{ content | lstrip }}
 		{% if content contains "<section>" %}
 			</section>
