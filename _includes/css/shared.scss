@@ -241,9 +241,15 @@ body > footer {
 	}
 }
 
-img:not(.borderless) {
-	border: 2px solid var(--image-border);
-	box-sizing: border-box;
+img {
+	&:not(.borderless) {
+		border: 2px solid var(--image-border);
+		box-sizing: border-box;
+	}
+	
+	p & {
+		max-width: 100%;
+	}
 }
 
 iframe {
