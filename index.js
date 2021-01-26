@@ -1,13 +1,15 @@
 document.querySelectorAll("article")
 	.forEach(articleElement => articleElement
-		.addEventListener("click", event => !event.target.closest("a, iframe")
-			&& articleElement.querySelector("h2 a")?.focus()));
+		.addEventListener("click", event => {
+			const articleh2 = !event.target.closest("a, iframe") && articleElement.querySelector("h2 a");
+			if (articleh2) articleh2.focus();
+		}));
 
 ////////////////////////////////////
 // Dates
 //
 
-const RelativeTime = new Intl.RelativeTimeFormat("en");
+const RelativeTime = Intl && Intl.RelativeTimeFormat && new Intl.RelativeTimeFormat("en");
 
 function refreshDates () {
 	for (const element of document.querySelectorAll("[data-date]")) {
@@ -49,8 +51,10 @@ function ago (date) {
 	];
 
 	for (const [name, timescale] of timescales) {
-		const interval = Math.floor(seconds / timescale);
-		if (interval) return RelativeTime.format(-interval, name);
+		const interval = Math[seconds < 0 ? "ceil" : "floor"](seconds / timescale);
+		if (interval) return RelativeTime ? RelativeTime.format(-interval, name)
+			: interval < 0 ? `in ${-interval} ${name}${interval === 1 ? "" : "s"}`
+				: `${interval} ${name}${interval === 1 ? "" : "s"} ago`;
 	}
 
 	return "now";
