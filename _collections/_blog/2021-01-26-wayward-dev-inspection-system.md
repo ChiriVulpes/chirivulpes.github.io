@@ -13,9 +13,8 @@ Also, if you stick around to the end, some fun new features will be shown off. G
 ### The inception of "world tooltips"
 World tooltips were first introduced in Wayward Beta 2.1 "Appearance", allowing you to hover over doodads, creatures, corpses, and more. Here's a couple examples of tooltips from back then:
 
-![Wayward Beta 2.1 "Appearance" Berry Bush tooltip](/static/image/article/2021-01-26/wayward-2.1-doodad-inspection.webp)
-![Wayward Beta 2.1 "Appearance" Rabbit and An Animal Skull tooltip](/static/image/article/2021-01-26/wayward-2.1-creature-inspection.webp)
-<!-- ![Wayward Beta 2.1 "Appearance" Thistle Seeds tooltip](/static/image/article/2021-01-26/wayward-2.1-item-inspection.webp) -->
+{% include util/webp src="article/2021-01-26/wayward-2.1-doodad-inspection" alt="Wayward Beta 2.1 &quot;Appearance&quot; Berry Bush tooltip" %}
+{% include util/webp src="article/2021-01-26/wayward-2.1-creature-inspection" alt="Wayward Beta 2.1 &quot;Appearance&quot; Rabbit and An Animal Skull tooltip" %}
 
 The way tooltips were implemented back then was basically hardcoded text interpolated with specific values where necessary. Think like `"You dropped the {0}."`{:.language-js} being interpolated with `"branch"`{:.language-js} to form `"You dropped the branch."`{:.language-js}
 
@@ -63,7 +62,7 @@ In Wayward 2.7 "Deserted Trials" I tackled an "inspections" system for the first
 
 The way I implemented the system was vague in that it supported any number of "inspection" types on any given tile, and it would show them all separately in the tooltip.
 
-![Wayward Beta 2.7 "Deserted Trials" Rabbit and An Animal Skull tooltip](/static/image/article/2021-01-26/wayward-2.7-creature-inspection.webp)
+{% include util/webp src="article/2021-01-26/wayward-2.7-creature-inspection" alt="Wayward Beta 2.7 &quot;Deserted Trials&quot; Rabbit and An Animal Skull tooltip" %}
 
 It also was written in a way which supported modders creating their own inspection types, which was something I thought would be helpful for more technical mods. Back then the example I gave was to imagine a "heat" mod which added heat to every tile, and they could register an inspection type which showed the heat of each tile.
 
@@ -130,13 +129,13 @@ What this means is that I can incredibly easily just throw together an `InfoProv
 
 Oh, and the appearance of tooltips was also improved in 2.9 — but that's less related to the tech.
 
-![Wayward Beta 2.9 "Seafarer" Rabbit and An Animal Skull tooltip](/static/image/article/2021-01-26/wayward-2.9-creature-inspection.webp)
+{% include util/webp src="article/2021-01-26/wayward-2.9-creature-inspection" alt="Wayward Beta 2.9 &quot;Seafarer&quot; Rabbit and An Animal Skull tooltip" %}
 
 #### Inspect Dialog
 
 2.9 also saw the introduction of the "Inspect" dialog. This dialog allows inspecting a tile to see the details as you move the mouse to other places. It's useful for keeping track of the status of doodads, for example. The dialog actually uses the same system as the tooltip, internally.
 
-![Wayward Beta 2.9 "Seafarer" Rabbit and An Animal Skull in inspect dialog](/static/image/article/2021-01-26/wayward-2.9-creature-inspection-dialog.webp)
+{% include util/webp src="article/2021-01-26/wayward-2.9-creature-inspection-dialog" alt="Wayward Beta 2.9 &quot;Seafarer&quot; Rabbit and An Animal Skull in inspect dialog" %}
 
 ### New UI inspection 2.10 updates
 
@@ -157,8 +156,8 @@ However, I had a use case for a system that allowed keeping track of all objects
 
 So the purpose of the reference system was something called "reference tooltips". Remember how earlier I mentioned that the translation system supports special kinds of interpolations? Well, the purpose was this. At this point, all translations can reference specific game objects, which means...
 
-![Wayward Beta 2.10 "Seafarer+" Giant Rat reference tooltip](/static/image/article/2021-01-26/wayward-2.10-creature-inspection-reference.webp)
-![Wayward Beta 2.10 "Seafarer+" Swimming reference tooltip](/static/image/article/2021-01-26/wayward-2.10-skill-inspection-reference.webp)
+{% include util/webp src="article/2021-01-26/wayward-2.10-creature-inspection-reference" alt="Wayward Beta 2.10 &quot;Seafarer+&quot; Giant Rat reference tooltip" %}
+{% include util/webp src="article/2021-01-26/wayward-2.10-skill-inspection-reference" alt="Wayward Beta 2.10 &quot;Seafarer+&quot; Swimming reference tooltip" %}
 
 Support has been added to hover over tons of different things in messages to get more information about them! This includes items, creatures, doodads, players, NPCs, and even skills! More will be added in the future, too.
 
@@ -170,7 +169,7 @@ Any reference tooltip can now be inspected in the inspect dialog, which means yo
 
 And this is paired with another work-in-progress improvement that's happening to the inspect dialog...
 
-![Wayward Beta 2.10 "Seafarer+" Item Stack inspect dialog](/static/image/article/2021-01-26/wayward-2.10-item-stack-inspection-dialog.webp)
+{% include util/webp src="article/2021-01-26/wayward-2.10-item-stack-inspection-dialog" alt="Wayward Beta 2.10 &quot;Seafarer+&quot; Item Stack inspect dialog" %}
 
 When standing next to a stack of items, you can now inspect the tile with the stack to get details on all of the items!
 
@@ -178,6 +177,6 @@ Note that this is a work-in-progress feature — these item inspections are not 
 
 Anyway, since the new item tooltips are inspections they can take advantage of tooltip support, so tons of stuff in here will have tooltips. Here's an example:
 
-![Wayward Beta 2.10 "Seafarer+" Item Stack inspect dialog with tooltip over usage](/static/image/article/2021-01-26/wayward-2.10-item-stack-inspection-dialog-2.webp)
+{% include util/webp src="article/2021-01-26/wayward-2.10-item-stack-inspection-dialog-2" alt="Wayward Beta 2.10 &quot;Seafarer+&quot; Item Stack inspect dialog with tooltip over usage" %}
 
 And I guess that's about all I have to share! Sorry this post has been so wordy... I had a lot more to talk about than I realised I did. For anyone who managed to stick through this whole thing, thank you! I'll see if I can make another post soon talking about some more Wayward things.

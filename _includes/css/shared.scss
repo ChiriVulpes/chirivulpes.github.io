@@ -1,8 +1,8 @@
 @import "gfonts";
 
 html {
-	background: var(--background);
-	color: var(--color);
+	@include resolve(background, var(--background));
+	@include resolve(color, var(--color));
 	font-family: 'Raleway', sans-serif;
 }
 
@@ -28,7 +28,7 @@ body {
 		
 		.tagline {
 			font-style: italic;
-			color: var(--color-2);
+			@include resolve(color, var(--color-2));
 		}
 	}
 
@@ -51,7 +51,7 @@ main {
 		max-width: 700px;
 		margin: 2em;
 		padding-bottom: 1em;
-		border-bottom: 2px solid var(--background-3);
+		@include resolve(border-bottom, 2px solid var(--background-3));
 	}
 	
 	> footer {
@@ -63,7 +63,7 @@ main {
 		max-width: 700px;
 		margin-top: 2em;
 		padding-top: 1em;
-		border-top: 2px solid var(--background-3);
+		@include resolve(border-top, 2px solid var(--background-3));
 		text-align: right;
 	}
 }
@@ -72,7 +72,7 @@ main {
 	font-weight: bold;
 	text-align: inherit;
 	font-size: 0.9em;
-	color: var(--color-3);
+	@include resolve(color, var(--color-3));
 }
 
 // body::before {
@@ -120,7 +120,7 @@ p, li, summary {
 			#{$other-direction}: auto;
 			transform: translateY(-50%);
 			border: 0.5em solid transparent;
-			border-#{$other-direction}-color: var(--background-5);
+			@include resolve(border-#{$other-direction}-color, var(--background-5));
 			transition: all .5s ease-out;
 			transition-property: #{$direction}, border-#{$other-direction}-color;
 		}
@@ -129,7 +129,7 @@ p, li, summary {
 	&:hover, &:focus {
 		&::after {
 			transition-duration: .1s;
-			border-#{$other-direction}-color: var(--background-6);
+			@include resolve(border-#{$other-direction}-color, var(--background-6));
 			#{$direction}: -0.25em;
 		}
 	}
@@ -137,7 +137,7 @@ p, li, summary {
 
 a {
 	font-weight: bold;
-	color: var(--link);
+	@include resolve(color, var(--link));
 	padding: 0.1em 0.4em;
 	text-decoration: none;
 	border-radius: 3px;
@@ -148,7 +148,7 @@ a {
 	margin: 0 0.2em;
 	
 	&:hover, &:focus {
-		color: var(--link-active);
+		@include resolve(color, var(--link-active));
 		border-color: currentColor;
 	}
 	
@@ -176,7 +176,7 @@ article {
 	width: calc(100% - 4em);
 	max-width: 900px;
 	margin: 2em 2em;
-	background: var(--background-2);
+	@include resolve(background, var(--background-2));
 	padding: 1em;
 	display: inline-block;
 	box-sizing: border-box;
@@ -225,7 +225,7 @@ body > footer {
 	margin: 3em calc(var(--padding-x) * -1) calc(var(--padding-b) * -1);
 	padding: 3em calc(var(--padding-x) + 2em) var(--padding-b);
 	text-align: right;
-	background: var(--background-drawer);
+	@include resolve(background, var(--background-drawer));
 	
 	p {
 		text-align: right;
@@ -233,7 +233,7 @@ body > footer {
 	
 	nav {
 		margin-top: 1em;
-		border-right: 2px solid var(--background-4);
+		@include resolve(border-right, 2px solid var(--background-4));
 	}
 	
 	a {
@@ -243,13 +243,17 @@ body > footer {
 
 img {
 	&:not(.borderless) {
-		border: 2px solid var(--image-border);
+		@include resolve(border, 2px solid var(--image-border));
 		box-sizing: border-box;
 	}
 	
 	p & {
 		max-width: 100%;
 	}
+}
+
+picture {
+	display: contents;
 }
 
 iframe {
@@ -282,10 +286,10 @@ h1 {
 	$padding: 0.1em 0.3em 0.2em,
 	$from: left) {
 
-	color: $color;
-	display: $display;
-	padding: $padding;
-	background: $background;
+	@include resolve(color, $color);
+	@include resolve(display, $display);
+	@include resolve(padding, $padding);
+	@include resolve(background, $background);
 	transition: color .5s ease-out;
 	
 	&::before {
@@ -294,7 +298,7 @@ h1 {
 		position: absolute;
 		top: 0;
 		left: 0;
-		background: $background-hover;
+		@include resolve(background, $background-hover);
 		transition: all .5s ease-out;
 		transition-property: width, height;
 		z-index: -1;
@@ -322,7 +326,7 @@ h1 {
 	
 	&:hover, &:focus {
 		transition-duration: .1s;
-		color: var(--color-active);
+		@include resolve(color, var(--color-active));
 		
 		&::before {
 			transition-duration: .1s;
@@ -374,7 +378,7 @@ h3 {
 		position: absolute;
 		top: 0;
 		right: 0;
-		background: var(--background);
+		@include resolve(background, var(--background));
 		opacity: 0.7;
 		width: 100%;
 		height: 100%;
@@ -392,7 +396,7 @@ h3 {
 }
 
 .article {
-	background: var(--background-3);
+	@include resolve(background, var(--background-3));
 	padding: 1em;
 	margin: 1em;
 	font-weight: normal;
@@ -413,13 +417,13 @@ h3 {
 		left: 0;
 		width: 0%;
 		height: 100%;
-		background: var(--background-4);
+		@include resolve(background, var(--background-4));
 		z-index: -1;
 		transition: width .5s ease-out;
 	}
 	
 	&:hover, &:focus {
-		color: var(--color-active);
+		@include resolve(color, var(--color-active));
 		transition-duration: .1s;
 		
 		&::before {
@@ -445,7 +449,7 @@ h3 {
 		right: 0;
 	}
 
-	> img {
+	> img, > picture > img {
 		min-width: 0;
 		max-width: 100%;
 	}
@@ -464,7 +468,7 @@ h3 {
 }
 	
 .details, summary {
-	color: var(--color-2);
+	@include resolve(color, var(--color-2));
 	font-size: 0.9em;
 	margin-bottom: 0.5em;
 	
@@ -478,19 +482,19 @@ summary {
 }
 
 .price {
-	color: var(--color-price);
+	@include resolve(color, var(--color-price));
 }
 
 .length {
-	color: var(--color-length);
+	@include resolve(color, var(--color-length));
 }
 
 .date {
-	color: var(--color-date);
+	@include resolve(color, var(--color-date));
 }
 
 .tag {
-	color: var(--color-tag);
+	@include resolve(color, var(--color-tag));
 	position: relative;
 	padding-right: 0.2em;
 }
@@ -499,7 +503,7 @@ summary {
 	position: absolute;
 	content: ",";
 	pointer-events: none;
-	color: var(--color-3);
+	@include resolve(color, var(--color-3));
 	left: -0.5em;
 	top: -0.05em;
 }
@@ -519,19 +523,19 @@ h3 {
 	display: grid;
 	grid-template-columns: auto 1fr;
 	user-select: none;
-	background: var(--background-2);
+	@include resolve(background, var(--background-2));
 
 	&::after {
 		content: "";
 		height: 1px;
-		background: var(--background-5);
+		@include resolve(background, var(--background-5));
 		position: relative;
 		top: 50%;
 		margin-left: 1em;
 	}
 	
 	article:first-of-type:last-of-type & {
-		background: var(--background);
+		@include resolve(background, var(--background));
 	}
 }
 
@@ -551,7 +555,7 @@ nav {
 		position: absolute;
 		content: "∙";
 		pointer-events: none;
-		color: var(--color-3);
+		@include resolve(color, var(--color-3));
 		left: -0.5em;
 		top: -0.05em;
 	}

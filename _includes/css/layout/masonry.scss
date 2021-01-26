@@ -51,8 +51,10 @@ aside:nth-child(2) .article:nth-child(2n+1) {
 	text-align: right;
 }
 
-aside:nth-child(2) .article > img {
-	max-height: 150px;
+aside:nth-child(2) .article {
+	> img, > picture > img {
+		max-height: 150px;
+	}
 }
 
 aside .no-alternating-articles .article:nth-child(2n+1) {

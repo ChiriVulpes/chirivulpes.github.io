@@ -1,0 +1,7 @@
+<picture>
+	<source srcset="{{ "/static/image/" | append: include.src | append: ".webp" }}" type="image/webp" />
+	<img src="{{ "/static/image/" | append: include.src | append: ".png" }}"
+		{% if include.loading == "lazy" %}loading="lazy"{% endif %}
+		{% if include.aria-hidden == true %}aria-hidden="true"{% endif %}
+		{% if include.alt %}alt="{{ include.alt }}"{% endif %} />
+</picture>
