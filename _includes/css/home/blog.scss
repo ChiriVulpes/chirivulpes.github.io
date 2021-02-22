@@ -1,9 +1,0 @@
-#blog ~ .article {
-	&:not(:first-of-type) {
-		margin-top: 0.2em;
-	}
-	
-	&:not(:last-of-type) {
-		margin-bottom: 0.2em;
-	}
-}

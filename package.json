@@ -1,6 +1,22 @@
 {
 	"private": true,
 	"scripts": {
-		"server": "bundle exec jekyll serve"
+		"build": "npx ts-node src/tasks/utilities/TaskRunner.ts build",
+		"rebuild": "npx ts-node src/tasks/utilities/TaskRunner.ts clean build",
+		"watch": "npx ts-node src/tasks/utilities/TaskRunner.ts clean build watch",
+		"clean": "npx ts-node src/tasks/utilities/TaskRunner.ts clean"
+	},
+	"devDependencies": {
+		"ts-node": "9.1.1",
+		"typescript": "4.1.5",
+		"sass": "1.32.8",
+		"mkdirp": "1.0.4",
+		"@types/mkdirp": "1.0.1",
+		"chokidar": "3.5.1",
+		"del": "6.0.0",
+		"ansicolor": "1.1.93",
+		"@types/ansicolors": "0.0.33",
+		"mz": "2.7.0",
+		"@types/mz": "2.7.3"
 	}
 }

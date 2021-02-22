@@ -1,5 +1,0 @@
-{{ include.content
-	| replace: "<p>(spoiler)", "<details>" 
-	| replace: "<p>(/spoiler)</p>", "</details>"
-	| replace: "(summary)", "<summary>"
-	| replace: "(/summary)</p>", "</summary>" }}

@@ -1,6 +1,0 @@
-{% capture styles %}
-{% include {{ include.href }} %}
-{% endcapture %}
-<style>
-	{{ styles | scssify }}
-</style>

@@ -10,7 +10,7 @@
 				"kind": "build",
 				"isDefault": true
 			},
-			"command": "bundle exec jekyll serve",
+			"command": "npm run watch",
 			"problemMatcher": []
 		}
 	]
