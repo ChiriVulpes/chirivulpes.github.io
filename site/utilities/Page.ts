@@ -4,7 +4,7 @@ export default class Page extends Element {
 
 	public head = new Element("head")
 		.appendTo(this);
-	public body = new Element("head")
+	public body = new Element("body")
 		.appendTo(this);
 
 	protected appendsTo = this.body.children;
