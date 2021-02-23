@@ -1,45 +1,7 @@
-import ansi, { AnsicolorMethods } from "ansicolor";
-import { performance } from "perf_hooks";
+import ansi from "ansicolor";
+import Log from "./Log";
 import { TaskFunction } from "./Task";
-
-////////////////////////////////////
-// Util
-//
-
-function stopwatch () {
-	const start = performance.now();
-	function elapsed () {
-		const now = performance.now();
-		const elapsed = now - start;
-		if (elapsed < 1)
-			return `${Math.floor(elapsed * 1_000)} μs`
-		if (elapsed < 1_000)
-			return `${Math.floor(elapsed)} ms`;
-		if (elapsed < 60_000)
-			return `${+(elapsed / 1_000).toFixed(2)} s`;
-		return `${+(elapsed / 60_000).toFixed(2)} m`;
-	}
-	return {
-		time: () => ansi.magenta(elapsed()),
-	};
-}
-
-let format = new Intl.DateTimeFormat("en-GB", { hour: "numeric", minute: "numeric", second: "numeric", hour12: false, timeZone: "Australia/Melbourne" });
-function timestamp (color: keyof AnsicolorMethods = "darkGray") {
-	return ansi[color](format.format(new Date()));
-}
-
-function log (...what: any[]) {
-	console.log(timestamp(), ...what);
-}
-
-function warn (...what: any[]) {
-	console.warn(timestamp("yellow"), ...what);
-}
-
-function error (...what: any[]) {
-	console.error(timestamp("red"), ...what);
-}
+import { stopwatch } from "./Time";
 
 export interface ITaskApi {
 	series (...tasks: TaskFunction<any>[]): Promise<void>;
@@ -55,7 +17,7 @@ const taskApi: ITaskApi = {
 		let result: any;
 		const taskName = ansi.cyan(task.name);
 
-		log(`Starting ${taskName}...`);
+		Log.info(`Starting ${taskName}...`);
 		const watch = stopwatch();
 
 		let err: Error | undefined;
@@ -65,11 +27,22 @@ const taskApi: ITaskApi = {
 			err = caught;
 		}
 
-		const time = watch.time();
-		if (err)
-			error(`Task ${taskName} errored after ${time}.`, err);
-		else
-			log(`Finished ${taskName} in ${time}.`);
+		function logResult () {
+			const time = watch.time();
+			if (err)
+				Log.error(`Task ${taskName} errored after ${time}.`, err);
+			else
+				Log.info(`Finished ${taskName} in ${time}.`);
+		}
+
+		if (result instanceof Promise) {
+			result = result.then(r2 => {
+				logResult();
+				return r2;
+			});
+		} else {
+			logResult();
+		}
 
 		return result;
 	},
@@ -90,7 +63,7 @@ const [, , ...tasks] = process.argv;
 			await taskApi.run(taskFunction);
 
 		} catch (err) {
-			error(err);
+			Log.error(err);
 		}
 	}
 })();

@@ -3,6 +3,8 @@
 		"strict": true,
 		"esModuleInterop": true,
 		"allowJs": true,
-		"noEmit": true
+		"noEmit": true,
+		"target": "ES2019",
+		"moduleResolution": "node"
 	}
 }
