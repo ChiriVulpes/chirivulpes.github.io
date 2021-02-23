@@ -1,0 +1,17 @@
+@import "home/stories";
+@import "home/art";
+@import "home/blog";
+
+@media (min-width: 701px) {
+	article:nth-child(2n) {
+		margin-left: 2em;
+	}
+}
+
+.blog-smol {
+	.date {
+		padding-right: 0.5em;
+		margin-right: 0.2em;
+		border-right: 1px solid var(--color-3);
+	}
+}
