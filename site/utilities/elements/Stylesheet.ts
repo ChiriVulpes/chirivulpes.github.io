@@ -18,15 +18,21 @@ async function compileStylesheet (file: string, indent?: boolean) {
 	const compileWatch = stopwatch();
 	const result = await new Promise<Result | null>(resolve => {
 		sass.render({ file: resolvedFile, outputStyle: indent ? "expanded" : "compressed" }, (exception, result) => {
-			if (exception)
-				Log.error(`Sass file ${ansi.cyan(relativeFile)} errored after ${compileWatch.time()}:`, exception.formatted);
+			if (exception) {
+				const position = typeof exception.line === "number" ? ansi.yellow(`[${exception.line}:${exception.column}]`) : "";
+				let message = exception.message;
+				const fileLabel = `${relativeFile}: `;
+				if (message.startsWith(fileLabel))
+					message = message.slice(fileLabel.length);
+				Log.error(`Sass file ${ansi.cyan(relativeFile.prettyFile())}${position} errored after ${compileWatch.time()}:`, ansi.red(message.sentence()));
+			}
 			resolve(result);
 		});
 	});
 	compileWatch.stop();
 
 	if (result !== null) {
-		Log.info("Compiled", ansi.cyan(relativeFile), "in", compileWatch.time());
+		Log.info("Compiled", ansi.cyan(relativeFile.prettyFile()), "in", compileWatch.time());
 
 		compiled = `/* ${relativeFile} */` + (indent ? "\n" : "") + result.css.toString("utf8");
 		if (indent)
@@ -55,8 +61,11 @@ export default class Stylesheet extends Element {
 		const newline = indent ? "\n" : "";
 
 		let result = "";
-		for (const file of this.files)
-			result += newline + await compileStylesheet(file, indent) + newline;
+		for (const file of this.files) {
+			const compiled = await compileStylesheet(file, indent);
+			if (compiled.length > 0)
+				result += newline + compiled + newline;
+		}
 
 		return result;
 	}

@@ -44,7 +44,10 @@ export default class Element extends Node {
 	private classes: string[] = [];
 	private attributes: Record<string, string> = {};
 	private _isInline?: boolean;
-	protected appendsTo = this.children;
+	protected appendsTo: Element = this;
+	private _parent?: Element;
+	public get parent () { return this._parent; }
+	public requiredStylesheets?: string[] = [];
 
 	public constructor (public type = "div") {
 		super();
@@ -64,8 +67,17 @@ export default class Element extends Node {
 		return this;
 	}
 
+	public requireStyles (...files: string[]) {
+		this.requiredStylesheets ??= [];
+		this.requiredStylesheets?.push(...files);
+		return this;
+	}
+
 	public append (...children: UnresolvedChild[]) {
-		this.appendsTo.push(...children.map(resolveChild));
+		children = children.map(resolveChild);
+		this.appendsTo.children.push(...children as Node[]);
+		for (const child of children)
+			(child as Element)._parent = this;
 		return this;
 	}
 
@@ -75,7 +87,10 @@ export default class Element extends Node {
 	}
 
 	public prepend (...children: UnresolvedChild[]) {
-		this.appendsTo.unshift(...children.map(resolveChild));
+		children = children.map(resolveChild);
+		this.appendsTo.children.unshift(...children as Node[]);
+		for (const child of children)
+			(child as Element)._parent = this;
 		return this;
 	}
 
@@ -85,7 +100,10 @@ export default class Element extends Node {
 	}
 
 	public insert (at: number, ...children: UnresolvedChild[]) {
-		this.appendsTo.splice(at, 0, ...children.map(resolveChild));
+		children = children.map(resolveChild);
+		this.appendsTo.children.splice(at, 0, ...children as Node[]);
+		for (const child of children)
+			(child as Element)._parent = this;
 		return this;
 	}
 
@@ -112,6 +130,76 @@ export default class Element extends Node {
 	public text (text: string) {
 		this.append(new Text(text));
 		return this;
+	}
+
+	public find<NODE extends Node> (predicate: (node: Node) => node is NODE): NODE | undefined;
+	public find (predicate: (node: Node) => any): Node | undefined;
+	public find (predicate: (node: Node) => any) {
+		for (const child of this.children) {
+			if (predicate(child))
+				return child;
+
+			if (child instanceof Element) {
+				const found = child.find(predicate);
+				if (found)
+					return found;
+			}
+		}
+
+		return undefined;
+	}
+
+	public findAll<NODE extends Node> (predicate: (node: Node) => node is NODE): NODE[];
+	public findAll (predicate: (node: Node) => any): Node[];
+	public findAll (predicate: (node: Node) => any) {
+		let result: Node[] = [];
+		for (const child of this.children) {
+			if (predicate(child))
+				result.push(child);
+
+			else if (child instanceof Element)
+				result.push(...child.findAll(predicate));
+		}
+
+		return result;
+	}
+
+	public findElement<ELEMENT extends Element> (predicate: (node: Element) => node is ELEMENT): ELEMENT | undefined;
+	public findElement (predicate: (node: Element) => any): Element | undefined;
+	public findElement (predicate: (node: Element) => any) {
+		for (const child of this.children) {
+			if (!(child instanceof Element))
+				continue;
+
+			if (predicate(child))
+				return child;
+
+			if (child instanceof Element) {
+				const found = child.findElement(predicate);
+				if (found)
+					return found;
+			}
+		}
+
+		return undefined;
+	}
+
+	public findAllElements<ELEMENT extends Element> (predicate: (element: Element) => element is ELEMENT): ELEMENT[];
+	public findAllElements (predicate: (element: Element) => any): Element[];
+	public findAllElements (predicate: (element: Element) => any) {
+		let result: Element[] = [];
+		for (const child of this.children) {
+			if (!(child instanceof Element))
+				continue;
+
+			if (predicate(child))
+				result.push(child);
+
+			else if (child instanceof Element)
+				result.push(...child.findAllElements(predicate));
+		}
+
+		return result;
 	}
 
 	public async compile (indent = false) {

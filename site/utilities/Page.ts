@@ -1,4 +1,5 @@
 import Element from "./Element";
+import Stylesheet from "./elements/Stylesheet";
 
 export default class Page extends Element {
 
@@ -7,7 +8,7 @@ export default class Page extends Element {
 	public body = new Element("body")
 		.appendTo(this);
 
-	protected appendsTo = this.body.children;
+	protected appendsTo = this.body;
 
 	public constructor () {
 		super("html");
@@ -15,6 +16,17 @@ export default class Page extends Element {
 	}
 
 	public async compile (indent?: boolean) {
+		const stylesheets = new Set<string>();
+
+		const elementsWithStylesheets = this.findAllElements(descendant => descendant.requiredStylesheets?.length);
+		if (this.requiredStylesheets !== undefined)
+			elementsWithStylesheets.push(this);
+		for (const elementWithStylesheets of elementsWithStylesheets)
+			for (const stylesheet of elementWithStylesheets.requiredStylesheets!)
+				stylesheets.add(stylesheet);
+
+		this.head.append(new Stylesheet(...stylesheets));
+
 		return `<!DOCTYPE html>${indent ? "\n" : ""}${await super.compile(indent)}`;
 	}
 }
