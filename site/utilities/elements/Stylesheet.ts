@@ -1,6 +1,6 @@
 import ansi from "ansicolor";
 import path from "path";
-import sass, { Result } from "sass";
+import sass, { Options, Result } from "sass";
 import Log from "../../../shared/utilities/Log";
 import { stopwatch } from "../../../shared/utilities/Time";
 import Element from "../Element";
@@ -17,7 +17,11 @@ async function compileStylesheet (file: string, indent?: boolean) {
 
 	const compileWatch = stopwatch();
 	const result = await new Promise<Result | null>(resolve => {
-		sass.render({ file: resolvedFile, outputStyle: indent ? "expanded" : "compressed" }, (exception, result) => {
+		const renderOptions: Options = {
+			file: resolvedFile,
+			outputStyle: indent ? "expanded" : "compressed", indentType: "tab", indentWidth: 1,
+		};
+		sass.render(renderOptions, (exception, result) => {
 			if (exception) {
 				const position = typeof exception.line === "number" ? ansi.yellow(`[${exception.line}:${exception.column}]`) : "";
 				let message = exception.message;
@@ -32,9 +36,10 @@ async function compileStylesheet (file: string, indent?: boolean) {
 	compileWatch.stop();
 
 	if (result !== null) {
-		Log.info("Compiled", ansi.cyan(relativeFile.prettyFile()), "in", compileWatch.time());
+		const prettyFile = relativeFile.prettyFile();
+		Log.info("Compiled", ansi.cyan(prettyFile), "in", compileWatch.time());
 
-		compiled = `/* ${relativeFile} */` + (indent ? "\n" : "") + result.css.toString("utf8");
+		compiled = `/* ${prettyFile} */` + (indent ? "\n" : "") + result.css.toString("utf8");
 		if (indent)
 			compiled = compiled.indent();
 		compiledStylesheets.set(resolvedFile, compiled);
