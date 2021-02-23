@@ -47,6 +47,12 @@ export default class Element extends Node {
 	protected appendsTo: Element = this;
 	private _parent?: Element;
 	public get parent () { return this._parent; }
+	public get root () {
+		let element: Element = this;
+		while (element._parent !== undefined)
+			element = element._parent;
+		return element;
+	}
 	public requiredStylesheets?: string[] = [];
 
 	public constructor (public type = "div") {

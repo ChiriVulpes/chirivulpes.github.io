@@ -1,7 +1,9 @@
 import DefaultLayout from "../layout/DefaultLayout";
-import Element from "../utilities/Element";
+import Heading from "../utilities/elements/Heading";
 
 export default new DefaultLayout()
-	.append(new Element("h1")
+	.append(new Heading(3)
 		.text("Hi there!")
-		.requireStyles("test"));
+		.requireStyles("test"))
+	.append(new Heading(2)
+		.text("wow"));

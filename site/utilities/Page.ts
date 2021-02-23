@@ -1,3 +1,4 @@
+import Log from "../../shared/utilities/Log";
 import Element from "./Element";
 import Stylesheet from "./elements/Stylesheet";
 
@@ -9,6 +10,7 @@ export default class Page extends Element {
 		.appendTo(this);
 
 	protected appendsTo = this.body;
+	private alreadyCompiled?: true;
 
 	public constructor () {
 		super("html");
@@ -16,6 +18,11 @@ export default class Page extends Element {
 	}
 
 	public async compile (indent?: boolean) {
+		if (this.alreadyCompiled === true) {
+			Log.error("Tried to recompile a page. Pages can only be compiled once.");
+			return "";
+		}
+
 		const stylesheets = new Set<string>();
 
 		const elementsWithStylesheets = this.findAllElements(descendant => descendant.requiredStylesheets?.length);
