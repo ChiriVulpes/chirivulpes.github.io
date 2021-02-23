@@ -14,7 +14,7 @@ export default class Page extends Element {
 		this.attribute("lang", "en");
 	}
 
-	public compile (indent?: boolean) {
-		return `<!DOCTYPE html>${indent ? "\n" : ""}${super.compile(indent)}`;
+	public async compile (indent?: boolean) {
+		return `<!DOCTYPE html>${indent ? "\n" : ""}${await super.compile(indent)}`;
 	}
 }

@@ -30,7 +30,7 @@ const inlineElements = new Set([
 
 export abstract class Node {
 	abstract isInline (): boolean;
-	abstract compile (indent?: boolean): string;
+	abstract compile (indent?: boolean): string | Promise<string>;
 }
 
 type UnresolvedChild = Node | ((element: Element) => Node);
@@ -114,35 +114,40 @@ export default class Element extends Node {
 		return this;
 	}
 
-	public compile (indent = false) {
+	public async compile (indent = false) {
 		const type = this.type;
 		const isVoid = voidElements.has(type);
 		let postTag = isVoid ? "" : `</${type}>`;
-
-		const childElements = this.children;
-		if (childElements.length > 0) {
-			if (isVoid)
-				throw new Error(`Void element "${type}" cannot have children`);
-
-			let actuallyIndent = true;
-			const compiledChildren = childElements.map(element => {
-				if (element.isInline())
-					actuallyIndent = false;
-				return element.compile(indent);
-			});
-
-			const newline = indent && actuallyIndent ? "\n" : "";
-			const contents = compiledChildren.join(newline);
-
-			postTag = `${newline}${indent && actuallyIndent ? contents.indent() : contents}${newline}${postTag}`;
-		}
 
 		const classes = this.classes.length === 0 ? "" : ` class="${this.classes.join(" ")}"`;
 		const attributes = Object.entries(this.attributes)
 			.map(([name, value]) => ` ${name}="${value}"`)
 			.join("");
 
-		return `<${type}${classes}${attributes}${isVoid ? "/" : ""}>${postTag}`
+		return `<${type}${classes}${attributes}${isVoid ? "/" : ""}>${await this.compileChildren(indent, isVoid) ?? ""}${postTag}`
+	}
+
+	protected async compileChildren (indent: boolean, isVoid: boolean) {
+		const childElements = this.children;
+		if (childElements.length === 0)
+			return undefined;
+
+		if (isVoid)
+			throw new Error(`Void element "${this.type}" cannot have children`);
+
+		let childrenAllowIndent = true;
+		const compiledChildren = await Promise.all(childElements.map(element => {
+			if (element.isInline())
+				childrenAllowIndent = false;
+			return element.compile(indent);
+		}));
+
+		const actuallyIndent = indent && childrenAllowIndent;
+
+		const newline = actuallyIndent ? "\n" : "";
+		const contents = compiledChildren.join(newline);
+
+		return `${newline}${actuallyIndent ? contents.indent() : contents}${newline}`;
 	}
 }
 

@@ -67,7 +67,7 @@ module Site {
 			const newFile = path.basename(path.relative(root, file), ".ts").toLowerCase();
 			try {
 				const compileWatch = stopwatch();
-				const compiled = potentialPage.compile(!!process.env.indent);
+				const compiled = await potentialPage.compile(!!process.env.indent);
 				compileWatch.stop();
 
 				const writeWatch = stopwatch();
