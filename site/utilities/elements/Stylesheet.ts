@@ -39,7 +39,12 @@ async function compileStylesheet (file: string, indent?: boolean) {
 		const prettyFile = relativeFile.prettyFile();
 		Log.info("Compiled", ansi.cyan(prettyFile), "in", compileWatch.time());
 
-		compiled = `/* ${prettyFile} */` + (indent ? "\n" : "") + result.css.toString("utf8");
+		compiled = result.css.toString("utf8");
+		if (compiled.startsWith("\ufeff"))
+			// strip BOM
+			compiled = compiled.slice(1);
+
+		compiled = `/* ${prettyFile} */` + (indent ? "\n" : "") + compiled;
 		if (indent)
 			compiled = compiled.indent();
 		compiledStylesheets.set(resolvedFile, compiled);
