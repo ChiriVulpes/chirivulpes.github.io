@@ -1,7 +1,7 @@
 import ansi from "ansicolor";
-import Log from "./Log";
+import Log from "../../shared/utilities/Log";
+import { stopwatch } from "../../shared/utilities/Time";
 import { TaskFunction } from "./Task";
-import { stopwatch } from "./Time";
 
 export interface ITaskApi {
 	series (...tasks: TaskFunction<any>[]): Promise<void>;

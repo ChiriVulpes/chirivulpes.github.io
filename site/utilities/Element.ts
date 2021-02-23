@@ -44,6 +44,7 @@ export default class Element extends Node {
 	private classes: string[] = [];
 	private attributes: Record<string, string> = {};
 	private _isInline?: boolean;
+	protected appendsTo = this.children;
 
 	public constructor (public type = "div") {
 		super();
@@ -64,7 +65,7 @@ export default class Element extends Node {
 	}
 
 	public append (...children: UnresolvedChild[]) {
-		this.children.push(...children.map(resolveChild));
+		this.appendsTo.push(...children.map(resolveChild));
 		return this;
 	}
 
@@ -74,7 +75,7 @@ export default class Element extends Node {
 	}
 
 	public prepend (...children: UnresolvedChild[]) {
-		this.children.unshift(...children.map(resolveChild));
+		this.appendsTo.unshift(...children.map(resolveChild));
 		return this;
 	}
 
@@ -84,7 +85,7 @@ export default class Element extends Node {
 	}
 
 	public insert (at: number, ...children: UnresolvedChild[]) {
-		this.children.splice(at, 0, ...children.map(resolveChild));
+		this.appendsTo.splice(at, 0, ...children.map(resolveChild));
 		return this;
 	}
 
