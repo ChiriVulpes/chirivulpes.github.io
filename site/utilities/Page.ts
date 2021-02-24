@@ -42,9 +42,11 @@ export default class Page extends Element {
 			for (const stylesheet of elementWithStylesheets.requiredStylesheets!)
 				stylesheets.add(stylesheet);
 
-		await new Stylesheet(...stylesheets)
-			.appendTo(this.head)
-			.precompile(indent);
+		new Stylesheet(...stylesheets)
+			.appendTo(this.head);
+
+		for (const elementNeedingPrecompilation of this.findAllElements(descendant => descendant.precompile !== undefined))
+			await elementNeedingPrecompilation.precompile!(indent);
 	}
 
 	public async compile (indent: boolean) {

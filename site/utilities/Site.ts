@@ -14,8 +14,11 @@ function outPath (file: string) {
 
 export default new class {
 
-	public root (path: string) {
-		_root = path;
+	public root (path?: string) {
+		if (path !== undefined)
+			_root = path;
+
+		return _root;
 	}
 
 	public async static (dir: string) {

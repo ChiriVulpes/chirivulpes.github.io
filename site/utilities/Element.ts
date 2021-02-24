@@ -45,7 +45,7 @@ export default class Element extends Node {
 
 	public readonly children: Node[] = [];
 	private classes: string[] = [];
-	private attributes: Record<string, string> = {};
+	private _attributes: Record<string, string> = {};
 	private _isInline?: boolean;
 	protected appendsTo: Element = this;
 	private _parent?: Element;
@@ -145,7 +145,13 @@ export default class Element extends Node {
 	}
 
 	public attribute (name: string, value: string) {
-		this.attributes[name] = value;
+		this._attributes[name] = value;
+		return this;
+	}
+
+	public attributes (source: Element) {
+		for (const [name, value] of Object.entries(source._attributes))
+			this._attributes[name] = value;
 		return this;
 	}
 
@@ -232,7 +238,7 @@ export default class Element extends Node {
 		const postTag = isVoid ? "" : `</${type}>`;
 
 		const classes = this.classes.length === 0 ? "" : ` class="${this.classes.join(" ")}"`;
-		const attributes = Object.entries(this.attributes)
+		const attributes = Object.entries(this._attributes)
 			.map(([name, value]) => ` ${name}="${value}"`)
 			.join("");
 
@@ -245,12 +251,12 @@ export default class Element extends Node {
 
 		if (childElements.length === 0) {
 			if (requiresTextChild)
-				Log.get(this.root).error(this.getId(), "should contain text");
+				this.getLog().error(this.getId(), "should contain text");
 			return undefined;
 		}
 
 		if (isVoid) {
-			Log.get(this.root).error(this.getId(), "is a void element and cannot contain children");
+			this.getLog().error(this.getId(), "is a void element and cannot contain children");
 			return undefined;
 		}
 
@@ -262,7 +268,7 @@ export default class Element extends Node {
 				childrenAllowIndent = false;
 
 			if (noElementChildren && element instanceof Element) {
-				Log.get(this.root).error(this.getId(), "cannot contain child element", element.getId());
+				this.getLog().error(this.getId(), "cannot contain child element", element.getId());
 				return undefined;
 			}
 
@@ -273,7 +279,7 @@ export default class Element extends Node {
 		}));
 
 		if (requiresTextChild)
-			Log.get(this.root).error(this.getId(), "should contain text");
+			this.getLog().error(this.getId(), "should contain text");
 
 		const actuallyIndent = indent && childrenAllowIndent;
 
@@ -284,6 +290,10 @@ export default class Element extends Node {
 				contents += newline + compiledChild;
 
 		return `${actuallyIndent ? contents.indent(false) : contents}${newline}`;
+	}
+
+	protected getLog () {
+		return Log.get(this.root);
 	}
 
 	private getId () {
