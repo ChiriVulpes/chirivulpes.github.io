@@ -2,9 +2,10 @@ import Define from "./Define";
 
 declare global {
 	interface String {
-		indent (count?: number): string;
-		indent (indent: string): string;
-		indent (count: number, indent: string): string;
+		indent (indentStart?: false): string;
+		indent (count?: number, indentStart?: false): string;
+		indent (indent: string, indentStart?: false): string;
+		indent (count: number, indent: string, indentStart?: false): string;
 
 		prettyFile (): string;
 
@@ -13,13 +14,26 @@ declare global {
 }
 
 export default function () {
-	Define(String.prototype, "indent", function (this: string, countOrIndent: number | string = 1, indent?: string) {
+	Define(String.prototype, "indent", function (this: string, countOrIndent?: number | string | boolean, indent?: string | boolean, indentStart?: boolean) {
+		if (typeof countOrIndent === "boolean")
+			indentStart = countOrIndent, countOrIndent = undefined;
+
+		if (typeof indent === "boolean")
+			indentStart = indent, indent = undefined;
+
 		if (typeof countOrIndent === "string")
 			indent = countOrIndent;
 		else
-			indent = (indent ?? "\t").repeat(countOrIndent);
+			indent = (indent ?? "\t").repeat(countOrIndent ?? 1);
 
-		return this.replace(/(^|\n)/g, `$1${indent}`);
+		const length = this.length;
+		let result = indentStart === false ? "" : indent;
+		for (let i = 0; i < length; i++) {
+			const char = this[i];
+			result += char === "\n" ? "\n" + indent : char;
+		}
+
+		return result;
 	});
 
 	Define(String.prototype, "prettyFile", function (this: string) {

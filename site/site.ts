@@ -7,6 +7,8 @@ ApplyStringPrototypes();
 
 Site.root("build");
 
+Site.static("static");
+
 Site.write("CNAME", "chiri.works");
 
 Site.addPages("site/page");

@@ -9,12 +9,22 @@ export default class Page extends Element {
 	public body = new Element("body")
 		.appendTo(this);
 
+	public title = new Element("title")
+		.setTextRequired()
+		.appendTo(this.head);
+
 	protected appendsTo = this.body;
 	private alreadyCompiled?: true;
+	public log = Log.new();
 
 	public constructor () {
 		super("html");
 		this.attribute("lang", "en");
+	}
+
+	public setTitle (title: string) {
+		this.title.text(title);
+		return this;
 	}
 
 	public async compile (indent?: boolean) {

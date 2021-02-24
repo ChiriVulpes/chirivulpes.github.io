@@ -1,3 +1,6 @@
+import ansi from "ansicolor";
+import Log from "../../shared/utilities/Log";
+
 const voidElements = new Set([
 	"area",
 	"base",
@@ -54,6 +57,8 @@ export default class Element extends Node {
 		return element;
 	}
 	public requiredStylesheets?: string[] = [];
+	private requiresText?: true;
+	private noElementChildren?: true;
 
 	public constructor (public type = "div") {
 		super();
@@ -70,6 +75,16 @@ export default class Element extends Node {
 
 	public setBlock () {
 		this._isInline = false;
+		return this;
+	}
+
+	public setTextRequired () {
+		this.requiresText = true;
+		return this;
+	}
+
+	public setDoesNotSupportElementChildren () {
+		this.noElementChildren = true;
 		return this;
 	}
 
@@ -223,25 +238,53 @@ export default class Element extends Node {
 
 	protected async compileChildren (indent: boolean, isVoid: boolean) {
 		const childElements = this.children;
-		if (childElements.length === 0)
-			return undefined;
+		let requiresTextChild = this.requiresText === true;
 
-		if (isVoid)
-			throw new Error(`Void element "${this.type}" cannot have children`);
+		if (childElements.length === 0) {
+			if (requiresTextChild)
+				Log.get(this.root).error(this.getId(), "should contain text");
+			return undefined;
+		}
+
+		if (isVoid) {
+			Log.get(this.root).error(this.getId(), "is a void element and cannot contain children");
+			return undefined;
+		}
+
+		const noElementChildren = this.noElementChildren === true;
 
 		let childrenAllowIndent = true;
 		const compiledChildren = await Promise.all(childElements.map(element => {
 			if (element.isInline())
 				childrenAllowIndent = false;
+
+			if (noElementChildren && element instanceof Element) {
+				Log.get(this.root).error(this.getId(), "cannot contain child element", element.getId());
+				return undefined;
+			}
+
+			if (requiresTextChild && element instanceof Text)
+				requiresTextChild = false;
+
 			return element.compile(indent);
 		}));
+
+		if (requiresTextChild)
+			Log.get(this.root).error(this.getId(), "should contain text");
 
 		const actuallyIndent = indent && childrenAllowIndent;
 
 		const newline = actuallyIndent ? "\n" : "";
-		const contents = compiledChildren.join(newline);
+		let contents = "";
+		for (const compiledChild of compiledChildren)
+			if (compiledChild !== undefined)
+				contents += newline + compiledChild;
 
-		return `${newline}${actuallyIndent ? contents.indent() : contents}${newline}`;
+		return `${actuallyIndent ? contents.indent(false) : contents}${newline}`;
+	}
+
+	private getId () {
+		return ansi.green(`${this.constructor.name}<${this.type}>`);
 	}
 }
 

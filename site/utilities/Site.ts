@@ -1,27 +1,33 @@
 import ansi from "ansicolor";
+import fs from "fs-extra";
 import globby from "globby";
-import mkdirp from "mkdirp";
-import fs from "mz/fs";
 import path from "path";
 import Log from "../../shared/utilities/Log";
 import { elapsed, stopwatch } from "../../shared/utilities/Time";
 import Page from "./Page";
 
-module Site {
+let _root = ".";
 
-	let _root = ".";
+function outPath (file: string) {
+	return path.resolve(_root, file);
+}
 
-	export function root (path: string) {
+export default new class {
+
+	public root (path: string) {
 		_root = path;
 	}
 
-	function outPath (file: string) {
-		return path.resolve(_root, file);
+	public async static (dir: string) {
+		const staticWatch = stopwatch();
+		await fs.copy(dir, path.join(_root, dir));
+		staticWatch.stop();
+		Log.info("Copied static directory", ansi.cyan(dir), "in", staticWatch.time());
 	}
 
-	export async function write (name: string, contents: string) {
+	public async write (name: string, contents: string) {
 		name = outPath(name);
-		await mkdirp(path.dirname(name));
+		await fs.mkdirp(path.dirname(name));
 		return fs.writeFile(name, contents);
 	}
 
@@ -38,7 +44,7 @@ module Site {
 	// 	return write(`${page.toLowerCase()}.html`, pageExport.compile(!!process.env.indent));
 	// }
 
-	export async function addPages (root: string) {
+	public async addPages (root: string) {
 		const cwd = process.cwd();
 
 		const globWatch = stopwatch();
@@ -65,13 +71,14 @@ module Site {
 			}
 
 			const newFile = path.basename(path.relative(root, file), ".ts").toLowerCase();
+			potentialPage.log.setSources(ansi.cyan(newFile)); // Add page url to its log 
 			try {
 				const compileWatch = stopwatch();
 				const compiled = await potentialPage.compile(!!process.env.indent);
 				compileWatch.stop();
 
 				const writeWatch = stopwatch();
-				await write(`${newFile}.html`, compiled);
+				await this.write(`${newFile}.html`, compiled);
 				writeWatch.stop();
 
 				Log.info("Loaded page", ansi.cyan(file), "in", loadWatch.time(),
@@ -83,6 +90,4 @@ module Site {
 			}
 		}
 	}
-}
-
-export default Site;
+};

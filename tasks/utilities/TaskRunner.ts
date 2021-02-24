@@ -30,9 +30,9 @@ const taskApi: ITaskApi = {
 		function logResult () {
 			const time = watch.time();
 			if (err)
-				Log.error(`Task ${taskName} errored after ${time}.`, err);
+				Log.error(`Task ${taskName} errored after ${time}`, err);
 			else
-				Log.info(`Finished ${taskName} in ${time}.`);
+				Log.info(`Finished ${taskName} in ${time}`);
 		}
 
 		if (result instanceof Promise) {
