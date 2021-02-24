@@ -6,7 +6,15 @@ import { TaskFunction } from "./Task";
 export interface ITaskApi {
 	series (...tasks: TaskFunction<any>[]): Promise<void>;
 	run<T> (task: TaskFunction<T>): T;
+	debounce<T> (task: TaskFunction<T>): void;
 }
+
+interface IDebouncedTask {
+	promise: Promise<void>;
+	count: number;
+}
+
+const debouncedTasks = new Map<TaskFunction<any>, IDebouncedTask>();
 
 const taskApi: ITaskApi = {
 	async series (...tasks) {
@@ -45,6 +53,24 @@ const taskApi: ITaskApi = {
 		}
 
 		return result;
+	},
+	debounce (task) {
+		let debouncedTask = debouncedTasks.get(task);
+		if (!debouncedTask) {
+			debouncedTask = {
+				promise: Promise.resolve(),
+				count: 0,
+			};
+			debouncedTasks.set(task, debouncedTask);
+		}
+
+		if (debouncedTask.count <= 1) {
+			debouncedTask.count++;
+			debouncedTask.promise = debouncedTask.promise.then(async () => {
+				await task(this);
+				debouncedTask!.count--;
+			});
+		}
 	},
 };
 
