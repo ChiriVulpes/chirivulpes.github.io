@@ -67,6 +67,11 @@ export default class Stylesheet extends Element {
 		return this;
 	}
 
+	public async precompile (indent: boolean) {
+		for (const file of this.files)
+			await compileStylesheet(file, indent);
+	}
+
 	protected async compileChildren (indent: boolean) {
 		const newline = indent ? "\n" : "";
 

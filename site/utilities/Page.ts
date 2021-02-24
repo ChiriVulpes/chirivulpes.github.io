@@ -27,7 +27,7 @@ export default class Page extends Element {
 		return this;
 	}
 
-	public async compile (indent?: boolean) {
+	public async precompile (indent: boolean) {
 		if (this.alreadyCompiled === true) {
 			Log.error("Tried to recompile a page. Pages can only be compiled once.");
 			return "";
@@ -42,8 +42,18 @@ export default class Page extends Element {
 			for (const stylesheet of elementWithStylesheets.requiredStylesheets!)
 				stylesheets.add(stylesheet);
 
-		this.head.append(new Stylesheet(...stylesheets));
+		await new Stylesheet(...stylesheets)
+			.appendTo(this.head)
+			.precompile(indent);
+	}
 
+	public async compile (indent: boolean) {
+		if (this.alreadyCompiled === true) {
+			Log.error("Tried to recompile a page. Pages can only be compiled once.");
+			return "";
+		}
+
+		this.alreadyCompiled = true;
 		return `<!DOCTYPE html>${indent ? "\n" : ""}${await super.compile(indent)}`;
 	}
 }

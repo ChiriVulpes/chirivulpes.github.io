@@ -7,11 +7,10 @@ export default class Heading extends Element {
 		super(`h${level}`);
 	}
 
-	public async compile (indent?: boolean) {
-		////////////////////////////////////
-		// Automatically prevent heading level-skipping
-		//
-
+	/**
+	 * Automatically prevents heading level-skipping
+	 */
+	public precompile () {
 		const root = this.root;
 		let headingLevels = headingLevelsByRoot.get(root);
 		if (!headingLevels) {
@@ -26,7 +25,5 @@ export default class Heading extends Element {
 				level--;
 
 		this.type = `h${level}`;
-
-		return super.compile(indent);
 	}
 }

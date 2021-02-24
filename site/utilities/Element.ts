@@ -224,7 +224,9 @@ export default class Element extends Node {
 		return result;
 	}
 
-	public async compile (indent = false) {
+	public precompile?(indent: boolean): any;
+
+	public async compile (indent: boolean) {
 		const type = this.type;
 		const isVoid = voidElements.has(type);
 		const postTag = isVoid ? "" : `</${type}>`;

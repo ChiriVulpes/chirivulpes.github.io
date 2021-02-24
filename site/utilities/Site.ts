@@ -74,8 +74,13 @@ export default new class {
 			const newFile = path.basename(path.relative(root, file), ".ts").toLowerCase();
 			potentialPage.log.setSources(ansi.cyan(newFile)); // Add page url to its log 
 			try {
+				const indent = !!process.env.indent;
+				const precompileWatch = stopwatch();
+				await potentialPage.precompile(indent);
+				precompileWatch.stop();
+
 				const compileWatch = stopwatch();
-				const compiled = await potentialPage.compile(!!process.env.indent);
+				const compiled = await potentialPage.compile(indent);
 				compileWatch.stop();
 
 				const writeWatch = stopwatch();
@@ -85,7 +90,7 @@ export default new class {
 				Log.info("Loaded page", ansi.cyan(file), "in", loadWatch.time(),
 					"- compiled in", compileWatch.time(),
 					"- written in", writeWatch.time(),
-					"- total time", elapsed(loadWatch.elapsed + compileWatch.elapsed + writeWatch.elapsed));
+					"- total time", elapsed(loadWatch.elapsed + compileWatch.elapsed + writeWatch.elapsed + precompileWatch.elapsed));
 			} catch (err) {
 				Log.error(`Ignoring page ${ansi.cyan(file)}, encountered error in compilation`, err);
 			}
