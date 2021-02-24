@@ -55,8 +55,9 @@ export default new class {
 
 		for (const file of typescriptFiles) {
 			let potentialPage: unknown;
-			let loadWatch = stopwatch();
+			const loadWatch = stopwatch();
 			try {
+				// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-var-requires
 				potentialPage = require(path.join(cwd, file))?.default;
 			} catch (err) {
 				Log.error(`Ignoring file ${ansi.cyan(file)}, encountered error`, err);
@@ -66,7 +67,7 @@ export default new class {
 			loadWatch.stop();
 
 			if (!(potentialPage instanceof Page)) {
-				Log.info(`Ignoring non-page`, ansi.cyan(file));
+				Log.info("Ignoring non-page", ansi.cyan(file));
 				continue;
 			}
 

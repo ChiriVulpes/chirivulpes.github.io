@@ -21,6 +21,7 @@ const taskApi: ITaskApi = {
 		for (const task of tasks)
 			await this.run(task);
 	},
+	/* eslint-disable @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-assignment */
 	run (task) {
 		let result: any;
 		const taskName = ansi.cyan(task.name);
@@ -54,6 +55,7 @@ const taskApi: ITaskApi = {
 
 		return result;
 	},
+	/* eslint-enable @typescript-eslint/no-unsafe-return, @typescript-eslint/no-unsafe-assignment */
 	debounce (task) {
 		let debouncedTask = debouncedTasks.get(task);
 		if (!debouncedTask) {
@@ -79,9 +81,10 @@ const taskApi: ITaskApi = {
 //
 
 const [, , ...tasks] = process.argv;
-(async () => {
+void (async () => {
 	for (const task of tasks) {
 		try {
+			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-var-requires
 			const taskFunction = require(`../${task}.ts`)?.default;
 			if (!taskFunction)
 				throw new Error(`No task function found by name "${task}"`);

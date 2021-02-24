@@ -6,22 +6,31 @@
 		"watch": "npx ts-node tasks/utilities/TaskRunner.ts clean build serve watch",
 		"clean": "npx ts-node tasks/utilities/TaskRunner.ts clean"
 	},
-	"devDependencies": {
+	"dependencies": {
 		"ts-node": "9.1.1",
-		"typescript": "4.1.5",
+		"typescript": "4.2.2",
 		"sass": "1.32.8",
-		"chokidar": "3.5.1",
 		"del": "6.0.0",
 		"ansicolor": "1.1.93",
 		"@types/ansicolors": "0.0.33",
-		"connect": "3.7.0",
-		"@types/connect": "3.4.34",
-		"serve-static": "1.14.1",
-		"@types/serve-static": "1.13.9",
 		"dotenv": "8.2.0",
 		"globby": "11.0.2",
 		"@types/sass": "1.16.0",
 		"fs-extra": "9.1.0",
-		"@types/fs-extra": "9.0.7"
+		"@types/fs-extra": "9.0.7",
+		"jimp": "0.16.1",
+		"webp-converter": "2.3.3"
+	},
+	"devDependencies": {
+		"chokidar": "3.5.1",
+		"connect": "3.7.0",
+		"@types/connect": "3.4.34",
+		"serve-static": "1.14.1",
+		"@types/serve-static": "1.13.9",
+		"eslint": "7.20.0",
+		"@types/eslint": "7.2.6",
+		"@typescript-eslint/eslint-plugin": "4.15.2",
+		"@typescript-eslint/parser": "4.15.2",
+		"eslint-plugin-only-warn": "1.0.2"
 	}
 }

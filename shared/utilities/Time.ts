@@ -38,7 +38,7 @@ function elapsedRaw (elapsed: number) {
 	return `${+(elapsed / 60_000).toFixed(2)} m`;
 }
 
-let format = new Intl.DateTimeFormat("en-GB", { hour: "numeric", minute: "numeric", second: "numeric", hour12: false, timeZone: "Australia/Melbourne" });
+const format = new Intl.DateTimeFormat("en-GB", { hour: "numeric", minute: "numeric", second: "numeric", hour12: false, timeZone: "Australia/Melbourne" });
 export function timestamp (color: keyof AnsicolorMethods = "darkGray") {
 	return ansi[color](format.format(new Date()));
 }

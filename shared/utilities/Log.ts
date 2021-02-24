@@ -10,7 +10,7 @@ interface ILog {
 	setSources (...sources: string[]): ILog;
 }
 
-module ILog {
+namespace ILog {
 	export function is (value: unknown): value is ILog {
 		return typeof value === "object"
 			&& value !== null
@@ -25,7 +25,7 @@ export interface ILogSource {
 	log: ILog;
 }
 
-export module ILogSource {
+export namespace ILogSource {
 	export function is (value: unknown): value is ILogSource {
 		return typeof value === "object"
 			&& value !== null
@@ -33,6 +33,7 @@ export module ILogSource {
 	}
 }
 
+// eslint-disable-next-line prefer-const
 let Log: LogImplementation;
 class LogImplementation implements ILog {
 	private source: string | undefined;

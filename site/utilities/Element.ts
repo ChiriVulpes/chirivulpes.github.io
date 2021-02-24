@@ -51,6 +51,7 @@ export default class Element extends Node {
 	private _parent?: Element;
 	public get parent () { return this._parent; }
 	public get root () {
+		// eslint-disable-next-line @typescript-eslint/no-this-alias
 		let element: Element = this;
 		while (element._parent !== undefined)
 			element = element._parent;
@@ -173,7 +174,7 @@ export default class Element extends Node {
 	public findAll<NODE extends Node> (predicate: (node: Node) => node is NODE): NODE[];
 	public findAll (predicate: (node: Node) => any): Node[];
 	public findAll (predicate: (node: Node) => any) {
-		let result: Node[] = [];
+		const result: Node[] = [];
 		for (const child of this.children) {
 			if (predicate(child))
 				result.push(child);
@@ -208,7 +209,7 @@ export default class Element extends Node {
 	public findAllElements<ELEMENT extends Element> (predicate: (element: Element) => element is ELEMENT): ELEMENT[];
 	public findAllElements (predicate: (element: Element) => any): Element[];
 	public findAllElements (predicate: (element: Element) => any) {
-		let result: Element[] = [];
+		const result: Element[] = [];
 		for (const child of this.children) {
 			if (!(child instanceof Element))
 				continue;
@@ -226,7 +227,7 @@ export default class Element extends Node {
 	public async compile (indent = false) {
 		const type = this.type;
 		const isVoid = voidElements.has(type);
-		let postTag = isVoid ? "" : `</${type}>`;
+		const postTag = isVoid ? "" : `</${type}>`;
 
 		const classes = this.classes.length === 0 ? "" : ` class="${this.classes.join(" ")}"`;
 		const attributes = Object.entries(this.attributes)

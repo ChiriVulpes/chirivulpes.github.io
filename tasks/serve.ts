@@ -11,15 +11,15 @@ export default Task("serve", () => {
 	const root = "build";
 
 	app.use((req, res, next) => {
-		Log.info(ansi.darkGray(`${req.method}`), ansi.cyan(`${req.url}`), req.headers["user-agent"]);
+		Log.info(ansi.darkGray(`${req.method!}`), ansi.cyan(`${req.url!}`), req.headers["user-agent"]);
 		next();
 	});
 
 	app.use(serveStatic(root, { fallthrough: false }));
 
-	app.use(((err, req, res, next) => {
-		Log.error(ansi.darkGray(`${req.method}`), ansi.cyan(`${req.url}`), ansi.red(err.status), ansi.red(err.message));
-		res.write(`Cannot ${req.method} ${req.url}`);
+	app.use(((err: Error & { status: number }, req, res, next) => {
+		Log.error(ansi.darkGray(`${req.method!}`), ansi.cyan(`${req.url!}`), ansi.red(err.status.toString()), ansi.red(err.message));
+		res.write(`Cannot ${req.method!} ${req.url!}`);
 		res.end();
 	}) as ErrorHandleFunction);
 
