@@ -1,4 +1,6 @@
 export type ArrayOr<T> = T | T[];
+export type Variadic<T> = T extends any[] ? T : [T];
+export type ResolveArrayOr<T> = T extends (infer A)[] ? A : T;
 
 export function tuple<TUPLE extends any[]> (...tuple: TUPLE) {
 	return tuple;

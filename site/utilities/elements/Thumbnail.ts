@@ -19,22 +19,20 @@ export default class Thumbnail extends Element {
 	}
 
 	public async precompile () {
-		const file = path.join("static/image", this.image);
-		const newFile = path.join(Site.root(), "static/image/thumb", this.image);
-		const newFilePng = newFile + ".png";
-		const newFileWebp = newFile + ".webp";
+		const newFileWeb = `static/image/thumb/${this.image}`.prettyFile();
 
 		new Element("img")
-			.attribute("srcset", "/" + newFilePng)
+			.attribute("srcset", "/" + newFileWeb + ".png")
 			.attribute("loading", "lazy")
 			.attributes(this)
 			.appendTo(this);
 
 		new Element("source")
-			.attribute("srcset", "/" + newFileWebp)
+			.attribute("srcset", "/" + newFileWeb + ".webp")
 			.attribute("type", "image/webp")
 			.prependTo(this);
 
+		const file = path.join("static/image", this.image);
 		if (alreadyCreatedThumbnails.has(file))
 			return;
 
@@ -54,10 +52,11 @@ export default class Thumbnail extends Element {
 		image.scaleToFit(width, height);
 		scaleWatch.stop();
 
+		const newFile = path.join(Site.root(), newFileWeb);
 		await fs.mkdirp(path.dirname(newFile));
 
 		const writePngWatch = stopwatch();
-		await image.writeAsync(newFilePng);
+		await image.writeAsync(newFile + ".png");
 		writePngWatch.stop();
 
 		const webpWatch = stopwatch();
@@ -69,7 +68,7 @@ export default class Thumbnail extends Element {
 		await fs.mkdirp("node_modules/webp-converter/temp");
 
 		const writeWebpWatch = stopwatch();
-		await fs.writeFile(newFileWebp, buffer);
+		await fs.writeFile(newFile + ".webp", buffer);
 		writeWebpWatch.stop();
 
 		Log.info("Loaded image", ansi.cyan(filePng.prettyFile()), "in", loadWatch.time(),

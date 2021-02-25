@@ -6,10 +6,7 @@ dotenv.config();
 ApplyStringPrototypes();
 
 Site.root("build");
+Site.host("chiri.works");
 
 void Site.static("static")
-	.then(() => {
-		void Site.write("CNAME", "chiri.works");
-
-		void Site.addPages("site/page");
-	});
+	.then(() => Site.addPages("site/page"));

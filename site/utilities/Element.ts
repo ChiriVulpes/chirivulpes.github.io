@@ -31,9 +31,29 @@ const inlineElements = new Set([
 	"a",
 ]);
 
+
+////////////////////////////////////
+// Node
+//
+
 export abstract class Node {
 	abstract isInline (): boolean;
 	abstract compile (indent?: boolean): string | Promise<string>;
+
+	public appendTo (container: NodeContainer) {
+		container.append(this);
+		return this;
+	}
+
+	public prependTo (container: NodeContainer) {
+		container.prepend(this);
+		return this;
+	}
+
+	public insertTo (container: NodeContainer, at: number) {
+		container.insert(at, this);
+		return this;
+	}
 }
 
 type UnresolvedChild = Node | ((element: Element) => Node);
@@ -41,70 +61,32 @@ function resolveChild (child: UnresolvedChild) {
 	return typeof child === "function" ? child(new Element()) : child;
 }
 
-export default class Element extends Node {
+
+////////////////////////////////////
+// Node container
+//
+
+export abstract class NodeContainer extends Node {
 
 	public readonly children: Node[] = [];
-	private classes: string[] = [];
-	private _attributes: Record<string, string> = {};
-	private _isInline?: boolean;
-	protected appendsTo: Element = this;
-	private _parent?: Element;
+
+	protected appendsTo: NodeContainer = this;
+	private _parent?: NodeContainer;
+
 	public get parent () { return this._parent; }
 	public get root () {
 		// eslint-disable-next-line @typescript-eslint/no-this-alias
-		let element: Element = this;
+		let element: NodeContainer = this;
 		while (element._parent !== undefined)
 			element = element._parent;
 		return element;
-	}
-	public requiredStylesheets?: string[] = [];
-	private requiresText?: true;
-	private noElementChildren?: true;
-
-	public constructor (public type = "div") {
-		super();
-	}
-
-	public isInline () {
-		return this._isInline ?? inlineElements.has(this.type);
-	}
-
-	public setInline () {
-		this._isInline = true;
-		return this;
-	}
-
-	public setBlock () {
-		this._isInline = false;
-		return this;
-	}
-
-	public setTextRequired () {
-		this.requiresText = true;
-		return this;
-	}
-
-	public setDoesNotSupportElementChildren () {
-		this.noElementChildren = true;
-		return this;
-	}
-
-	public requireStyles (...files: string[]) {
-		this.requiredStylesheets ??= [];
-		this.requiredStylesheets?.push(...files);
-		return this;
 	}
 
 	public append (...children: UnresolvedChild[]) {
 		children = children.map(resolveChild);
 		this.appendsTo.children.push(...children as Node[]);
 		for (const child of children)
-			(child as Element)._parent = this;
-		return this;
-	}
-
-	public appendTo (element: Element) {
-		element.append(this);
+			(child as NodeContainer)._parent = this;
 		return this;
 	}
 
@@ -112,12 +94,7 @@ export default class Element extends Node {
 		children = children.map(resolveChild);
 		this.appendsTo.children.unshift(...children as Node[]);
 		for (const child of children)
-			(child as Element)._parent = this;
-		return this;
-	}
-
-	public prependTo (element: Element) {
-		element.prepend(this);
+			(child as NodeContainer)._parent = this;
 		return this;
 	}
 
@@ -125,38 +102,7 @@ export default class Element extends Node {
 		children = children.map(resolveChild);
 		this.appendsTo.children.splice(at, 0, ...children as Node[]);
 		for (const child of children)
-			(child as Element)._parent = this;
-		return this;
-	}
-
-	public insertTo (element: Element, at: number) {
-		element.insert(at, this);
-		return this;
-	}
-
-	public id (id: string) {
-		this.attribute("id", id);
-		return this;
-	}
-
-	public class (...classes: string[]) {
-		this.classes.push(...classes);
-		return this;
-	}
-
-	public attribute (name: string, value: string) {
-		this._attributes[name] = value;
-		return this;
-	}
-
-	public attributes (source: Element) {
-		for (const [name, value] of Object.entries(source._attributes))
-			this._attributes[name] = value;
-		return this;
-	}
-
-	public text (text: string) {
-		this.append(new Text(text));
+			(child as NodeContainer)._parent = this;
 		return this;
 	}
 
@@ -229,6 +175,94 @@ export default class Element extends Node {
 
 		return result;
 	}
+}
+
+export class Fragment extends NodeContainer {
+	public isInline () {
+		return this.children.every(node => node.isInline());
+	}
+
+	public async compile (indent: boolean) {
+		const compiledChildren = await Promise.all(this.children
+			.map(element => element.compile(indent)));
+
+		return compiledChildren.join(indent ? "\n" : "");
+	}
+}
+
+
+////////////////////////////////////
+// Element
+//
+
+export default class Element extends NodeContainer {
+
+	private classes: string[] = [];
+	private _attributes: Record<string, string> = {};
+	private _isInline?: boolean;
+	public requiredStylesheets?: string[] = [];
+	private requiresText?: true;
+	private noElementChildren?: true;
+
+	public constructor (public type = "div") {
+		super();
+	}
+
+	public isInline () {
+		return this._isInline ?? inlineElements.has(this.type);
+	}
+
+	public setInline () {
+		this._isInline = true;
+		return this;
+	}
+
+	public setBlock () {
+		this._isInline = false;
+		return this;
+	}
+
+	public setDoesNotSupportElementChildren () {
+		this.noElementChildren = true;
+		return this;
+	}
+
+	public requireStyles (...files: string[]) {
+		this.requiredStylesheets ??= [];
+		this.requiredStylesheets?.push(...files);
+		return this;
+	}
+
+	public id (id: string) {
+		this.attribute("id", id);
+		return this;
+	}
+
+	public class (...classes: string[]) {
+		this.classes.push(...classes);
+		return this;
+	}
+
+	public attribute (name: string, value: string) {
+		this._attributes[name] = value;
+		return this;
+	}
+
+	public attributes (source: Element) {
+		for (const [name, value] of Object.entries(source._attributes))
+			this._attributes[name] = value;
+		return this;
+	}
+
+	public setTextRequired () {
+		this.requiresText = true;
+		return this;
+	}
+
+	public text (text: string) {
+		this.append(new Text(text));
+		return this;
+	}
 
 	public precompile?(indent: boolean): any;
 
@@ -300,6 +334,11 @@ export default class Element extends Node {
 		return ansi.green(`${this.constructor.name}<${this.type}>`);
 	}
 }
+
+
+////////////////////////////////////
+// Text
+//
 
 export class Text extends Node {
 

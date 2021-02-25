@@ -5,8 +5,10 @@ import path from "path";
 import Log from "../../shared/utilities/Log";
 import { elapsed, stopwatch } from "../../shared/utilities/Time";
 import Page from "./Page";
+import { HrefAbsolute } from "./Strings";
 
 let _root = ".";
+let _host: string | undefined;
 
 function outPath (file: string) {
 	return path.resolve(_root, file);
@@ -19,6 +21,19 @@ export default new class {
 			_root = path;
 
 		return _root;
+	}
+
+	public host (host?: string) {
+		if (_host === undefined && host !== undefined) {
+			_host = host;
+			void this.write("CNAME", host);
+		}
+
+		return _host;
+	}
+
+	public getAbsolute (url: string): HrefAbsolute {
+		return `https://${path.join(_host!, url).prettyFile()}` as const;
 	}
 
 	public async static (dir: string) {
@@ -74,8 +89,12 @@ export default new class {
 				continue;
 			}
 
-			const newFile = path.basename(path.relative(root, file), ".ts").toLowerCase();
+			const newFile = path.relative(root, file).slice(0, -3).toLowerCase();
 			potentialPage.log.setSources(ansi.cyan(newFile)); // Add page url to its log 
+
+			const url = newFile.endsWith("index") ? newFile.slice(0, -5) : newFile + ".html";
+			potentialPage.metadata.setURL(`https://${path.join(_host!, url).prettyFile()}` as const);
+
 			try {
 				const indent = !!process.env.indent;
 				const precompileWatch = stopwatch();

@@ -1,17 +1,20 @@
-import MetaLink, { MetaLinkType } from "../utilities/elements/MetaLink";
+import Meta from "../utilities/elements/Meta";
 import Page from "../utilities/Page";
+import Site from "../utilities/Site";
 
-export default class DefaultLayout extends Page {
+export default class DefaultPage extends Page {
 	public constructor () {
 		super();
 		this.requireStyles("index");
 
-		new MetaLink(MetaLinkType.Preconnect, "https://fonts.gstatic.com")
+		new Meta.Preconnect("https://fonts.gstatic.com")
 			.appendTo(this.head);
 
-		new MetaLink(MetaLinkType.SiteIcon, "/static/image/logo.png")
+		new Meta.SiteIcon("/static/image/logo.png")
 			.appendTo(this.head);
 
-		this.setTitle("Chiri Vulpes &nbsp;| &nbsp;Author ∙ Designer ∙ Developer");
+		this.metadata.setTitle("Chiri Vulpes &nbsp;| &nbsp;Author ∙ Designer ∙ Developer");
+		this.metadata.setDescription("Chiri Vulpes is a prolific creator — an author, a designer, a software developer, an artist, and even a composer! Here's some stuff she's made and ways you can get in contact with her.");
+		this.metadata.setImage(Site.getAbsolute("static/image/logo.png"));
 	}
 }

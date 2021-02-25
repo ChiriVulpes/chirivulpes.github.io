@@ -1,6 +1,6 @@
-import Element from "../Element";
+import Element, { NodeContainer } from "../Element";
 
-const headingLevelsByRoot = new Map<Element, Set<number>>();
+const headingLevelsByRoot = new Map<NodeContainer, Set<number>>();
 
 export default class Heading extends Element {
 	public constructor (public readonly level: 1 | 2 | 3 | 4 | 5 | 6) {
