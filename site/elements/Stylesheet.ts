@@ -23,7 +23,7 @@ async function compileStylesheet (file: string, indent?: boolean) {
 		};
 		sass.render(renderOptions, (exception, result) => {
 			if (exception) {
-				const position = typeof exception.line === "number" ? ansi.yellow(`[${exception.line}:${exception.column}]`) : "";
+				const position = typeof exception.line === "number" ? ansi.yellow(`:${exception.line}:${exception.column}`) : "";
 				let message = exception.message;
 				const fileLabel = `${relativeFile}: `;
 				if (message.startsWith(fileLabel))

@@ -9,6 +9,7 @@
 		width: 100%;
 		max-width: 10em;
 		transition: color .5s ease-out;
+		background: none;
 		
 		&::before {
 			content: "";
@@ -31,6 +32,10 @@
 				width: 10.5em;
 				transition-duration: .1s;
 			}
+		}
+		
+		&::after {
+			content: none;
 		}
 	}
 }

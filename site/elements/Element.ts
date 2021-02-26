@@ -1,6 +1,8 @@
 import Log from "@util/Log";
 import ansi from "ansicolor";
 
+export type Initialiser<T> = (thing: T) => any;
+
 const voidElements = new Set([
 	"area",
 	"base",
@@ -39,6 +41,7 @@ const inlineElements = new Set([
 export abstract class Node {
 	abstract isInline (): boolean;
 	abstract compile (indent?: boolean): string | Promise<string>;
+	abstract getId (): string;
 
 	public appendTo (container: NodeContainer) {
 		container.append(this);
@@ -54,11 +57,6 @@ export abstract class Node {
 		container.insert(at, this);
 		return this;
 	}
-}
-
-type UnresolvedChild = Node | ((element: Element) => Node);
-function resolveChild (child: UnresolvedChild) {
-	return typeof child === "function" ? child(new Element()) : child;
 }
 
 
@@ -82,27 +80,29 @@ export abstract class NodeContainer extends Node {
 		return element;
 	}
 
-	public append (...children: UnresolvedChild[]) {
-		children = children.map(resolveChild);
-		this.appendsTo.children.push(...children as Node[]);
+	public append (...children: Node[]) {
+		this.appendsTo.children.push(...children);
 		for (const child of children)
 			(child as NodeContainer)._parent = this;
 		return this;
 	}
 
-	public prepend (...children: UnresolvedChild[]) {
-		children = children.map(resolveChild);
-		this.appendsTo.children.unshift(...children as Node[]);
+	public prepend (...children: Node[]) {
+		this.appendsTo.children.unshift(...children);
 		for (const child of children)
 			(child as NodeContainer)._parent = this;
 		return this;
 	}
 
-	public insert (at: number, ...children: UnresolvedChild[]) {
-		children = children.map(resolveChild);
-		this.appendsTo.children.splice(at, 0, ...children as Node[]);
+	public insert (at: number, ...children: Node[]) {
+		this.appendsTo.children.splice(at, 0, ...children);
 		for (const child of children)
 			(child as NodeContainer)._parent = this;
+		return this;
+	}
+
+	public dump () {
+		this.children.splice(0, Infinity);
 		return this;
 	}
 
@@ -113,7 +113,7 @@ export abstract class NodeContainer extends Node {
 			if (predicate(child))
 				return child;
 
-			if (child instanceof Element) {
+			if (child instanceof NodeContainer) {
 				const found = child.find(predicate);
 				if (found)
 					return found;
@@ -131,7 +131,7 @@ export abstract class NodeContainer extends Node {
 			if (predicate(child))
 				result.push(child);
 
-			else if (child instanceof Element)
+			else if (child instanceof NodeContainer)
 				result.push(...child.findAll(predicate));
 		}
 
@@ -142,13 +142,10 @@ export abstract class NodeContainer extends Node {
 	public findElement (predicate: (node: Element) => any): Element | undefined;
 	public findElement (predicate: (node: Element) => any) {
 		for (const child of this.children) {
-			if (!(child instanceof Element))
-				continue;
-
-			if (predicate(child))
+			if (child instanceof Element && predicate(child))
 				return child;
 
-			if (child instanceof Element) {
+			if (child instanceof NodeContainer) {
 				const found = child.findElement(predicate);
 				if (found)
 					return found;
@@ -163,13 +160,10 @@ export abstract class NodeContainer extends Node {
 	public findAllElements (predicate: (element: Element) => any) {
 		const result: Element[] = [];
 		for (const child of this.children) {
-			if (!(child instanceof Element))
-				continue;
-
-			if (predicate(child))
+			if (child instanceof Element && predicate(child))
 				result.push(child);
 
-			else if (child instanceof Element)
+			if (child instanceof NodeContainer)
 				result.push(...child.findAllElements(predicate));
 		}
 
@@ -188,6 +182,10 @@ export class Fragment extends NodeContainer {
 
 		return compiledChildren.join(indent ? "\n" : "");
 	}
+
+	public getId () {
+		return ansi.green("Fragment");
+	}
 }
 
 
@@ -203,9 +201,15 @@ export default class Element extends NodeContainer {
 	public requiredStylesheets?: string[] = [];
 	private requiresText?: true;
 	private noElementChildren?: true;
+	private _style?: Record<string, string>;
 
 	public constructor (public type = "div") {
 		super();
+	}
+
+	public setType (type: string) {
+		this.type = type;
+		return this;
 	}
 
 	public isInline () {
@@ -227,14 +231,20 @@ export default class Element extends NodeContainer {
 		return this;
 	}
 
+	public setAriaHidden () {
+		this.attribute("aria-hidden", "true");
+		return this;
+	}
+
 	public requireStyles (...files: string[]) {
 		this.requiredStylesheets ??= [];
 		this.requiredStylesheets?.push(...files);
 		return this;
 	}
 
-	public id (id: string) {
-		this.attribute("id", id);
+	public id (id?: string) {
+		if (id !== undefined)
+			this.attribute("id", id);
 		return this;
 	}
 
@@ -251,6 +261,14 @@ export default class Element extends NodeContainer {
 	public attributes (source: Element) {
 		for (const [name, value] of Object.entries(source._attributes))
 			this._attributes[name] = value;
+		return this;
+	}
+
+	public style (rule: string, value: string) {
+		if (this._style === undefined)
+			this._style = {};
+
+		this._style[rule] = value;
 		return this;
 	}
 
@@ -276,7 +294,11 @@ export default class Element extends NodeContainer {
 			.map(([name, value]) => ` ${name}="${value}"`)
 			.join("");
 
-		return `<${type}${classes}${attributes}${isVoid ? "/" : ""}>${await this.compileChildren(indent, isVoid) ?? ""}${postTag}`
+		const style = this._style === undefined ? "" : ' style="' + Object.entries(this._style)
+			.map(([property, value]) => `${property}:${value}`)
+			.join(";") + '"';
+
+		return `<${type}${classes}${attributes}${style}${isVoid ? "/" : ""}>${await this.compileChildren(indent, isVoid) ?? ""}${postTag}`
 	}
 
 	protected async compileChildren (indent: boolean, isVoid: boolean) {
@@ -330,7 +352,7 @@ export default class Element extends NodeContainer {
 		return Log.get(this.root);
 	}
 
-	private getId () {
+	public getId () {
 		return ansi.green(`${this.constructor.name}<${this.type}>`);
 	}
 }
@@ -342,6 +364,7 @@ export default class Element extends NodeContainer {
 
 export class Text extends Node {
 
+	private id?: string;
 	public constructor (private readonly text: string) {
 		super();
 	}
@@ -352,5 +375,14 @@ export class Text extends Node {
 
 	public compile () {
 		return this.text;
+	}
+
+	public getId () {
+		const id = this.id;
+		if (id !== undefined)
+			return id;
+
+		const text = this.text;
+		return this.id = ansi.green(`Text(${text.length > 20 ? text.slice(0, 20) + "..." : text})`);
 	}
 }

@@ -1,7 +1,7 @@
 import Element, { Fragment } from "@element/Element";
 import { Variadic } from "@util/Arrays";
 import { Flatten } from "@util/Objects";
-import { DateISO, Href, HrefAbsolute } from "@util/Strings";
+import { DateISO, HrefAbsolute, HrefFile } from "@util/Strings";
 
 class Meta extends Element {
 	public constructor (type: "meta" | "link") {
@@ -72,7 +72,7 @@ namespace Meta {
 	}
 
 	class MetaLink extends Meta {
-		public constructor (subType: string, href: Href) {
+		public constructor (subType: string, href: HrefFile) {
 			super("link");
 			this.attribute("rel", subType);
 			this.attribute("href", href);
@@ -80,13 +80,13 @@ namespace Meta {
 	}
 
 	export class SiteIcon extends MetaLink {
-		public constructor (href: Href) {
+		public constructor (href: HrefFile) {
 			super("shortcut icon", href);
 		}
 	}
 
 	export class Preconnect extends MetaLink {
-		public constructor (href: Href) {
+		public constructor (href: HrefFile) {
 			super("preconnect", href);
 		}
 	}

@@ -93,7 +93,7 @@ export default class Page extends Element {
 
 		const elementsWithStylesheets = this.findAllElements(descendant => descendant.requiredStylesheets?.length);
 		if (this.requiredStylesheets !== undefined)
-			elementsWithStylesheets.push(this);
+			elementsWithStylesheets.unshift(this);
 		for (const elementWithStylesheets of elementsWithStylesheets)
 			for (const stylesheet of elementWithStylesheets.requiredStylesheets!)
 				stylesheets.add(stylesheet);

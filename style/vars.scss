@@ -21,11 +21,14 @@ $vars: (
 );
 
 :root {
+	color-scheme: dark;
+	
 	@each $var, $val in $vars {
 		#{$var}: $val;
 	}
 	
 	@media (prefers-color-scheme: light) {
+		color-scheme: light;
 		--background-drawer: var(--background-2);
 		--background: #fff;
 		--background-2: #f3f7ff;

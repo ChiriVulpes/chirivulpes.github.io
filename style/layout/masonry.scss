@@ -1,41 +1,40 @@
-main {
-	padding: 0;
-}
+// main {
+// 	padding: 0;
+// }
 
 @media (min-width: 701px) {
-	main > aside > article {
+	.masonry > aside > article {
 		width: calc(100% - 4em);
 		max-width: none;
 	}
 }
 
 @media (min-width: 1801px) {
-	main {
+	.masonry {
 		display: grid;
-		grid-template-columns: 3fr 2fr;
 		column-gap: 2em;
 	}
 	
-	main > aside:nth-child(2) {
+	.masonry > aside:nth-child(2n) {
 		margin-top: 6em;
 	}
 }
 
 @media (max-width: 1800px) {
-	main {
+	.masonry {
 		display: flex;
 		flex-direction: column;
-	}
 	
-	aside {
-		display: contents;
-	}
-
-	$columns: 2;
-	@for $i from 1 through 5 {
-		@for $c from 1 through $columns {
-			main > aside:nth-child(#{$c}) > article:nth-child(#{$i}) {
-				order: $i * $columns + $c + 1;
+		> aside {
+			display: contents;
+			
+			$columns: 2;
+			@for $i from 1 through 5 {
+				@for $c from 1 through $columns {
+					&:nth-child(#{$c}) > article:nth-child(#{$i}) {
+						order: $i * $columns + $c + 1;
+					}
+				}
 			}
 		}
 	}
