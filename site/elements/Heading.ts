@@ -20,7 +20,7 @@ export default class Heading extends Element {
 		const root = this.root;
 		let headingLevels = headingLevelsByRoot.get(root);
 		if (!headingLevels) {
-			headingLevels = new Set(root.findAllElements((element): element is Heading => element instanceof Heading)
+			headingLevels = new Set(root.findAll((element): element is Heading => element instanceof Heading)
 				.filter(element => !element.hasCustomType())
 				.map(heading => heading.level));
 			headingLevelsByRoot.set(root, headingLevels);

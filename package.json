@@ -20,7 +20,9 @@
 		"@types/fs-extra": "9.0.7",
 		"jimp": "0.16.1",
 		"webp-converter": "2.3.3",
-		"tsconfig-paths": "3.9.0"
+		"tsconfig-paths": "3.9.0",
+		"marked": "2.0.0",
+		"@types/marked": "1.2.2"
 	},
 	"devDependencies": {
 		"chokidar": "3.5.1",

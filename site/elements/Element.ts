@@ -1,5 +1,6 @@
 import Log from "@util/Log";
 import ansi from "ansicolor";
+import marked from "marked";
 
 export type Initialiser<T> = (thing: T) => any;
 
@@ -40,7 +41,7 @@ const inlineElements = new Set([
 
 export abstract class Node {
 	abstract isInline (): boolean;
-	abstract compile (indent?: boolean): string | Promise<string>;
+	abstract compile (indent: boolean): string | Promise<string>;
 	abstract getId (): string;
 
 	public appendTo (container: NodeContainer) {
@@ -57,6 +58,23 @@ export abstract class Node {
 		container.insert(at, this);
 		return this;
 	}
+
+	public precompile?(indent: boolean): void;
+
+	private _parent?: NodeContainer;
+
+	public get parent () { return this._parent; }
+	public get root (): NodeContainer {
+		// eslint-disable-next-line @typescript-eslint/no-this-alias
+		let element: Node = this;
+		while (element._parent !== undefined)
+			element = element._parent;
+		return element as NodeContainer;
+	}
+
+	protected getLog () {
+		return Log.get(this.root);
+	}
 }
 
 
@@ -69,36 +87,34 @@ export abstract class NodeContainer extends Node {
 	public readonly children: Node[] = [];
 
 	protected appendsTo: NodeContainer = this;
-	private _parent?: NodeContainer;
-
-	public get parent () { return this._parent; }
-	public get root () {
-		// eslint-disable-next-line @typescript-eslint/no-this-alias
-		let element: NodeContainer = this;
-		while (element._parent !== undefined)
-			element = element._parent;
-		return element;
-	}
 
 	public append (...children: Node[]) {
 		this.appendsTo.children.push(...children);
 		for (const child of children)
-			(child as NodeContainer)._parent = this;
+			child["_parent"] = this;
 		return this;
 	}
 
 	public prepend (...children: Node[]) {
 		this.appendsTo.children.unshift(...children);
 		for (const child of children)
-			(child as NodeContainer)._parent = this;
+			child["_parent"] = this;
 		return this;
 	}
 
 	public insert (at: number, ...children: Node[]) {
 		this.appendsTo.children.splice(at, 0, ...children);
 		for (const child of children)
-			(child as NodeContainer)._parent = this;
+			child["_parent"] = this;
 		return this;
+	}
+
+	public text (text: string) {
+		return this.append(new Text(text));
+	}
+
+	public markdown (markdown: string) {
+		return this.append(new Markdown(markdown));
 	}
 
 	public dump () {
@@ -277,13 +293,6 @@ export default class Element extends NodeContainer {
 		return this;
 	}
 
-	public text (text: string) {
-		this.append(new Text(text));
-		return this;
-	}
-
-	public precompile?(indent: boolean): any;
-
 	public async compile (indent: boolean) {
 		const type = this.type;
 		const isVoid = voidElements.has(type);
@@ -348,10 +357,6 @@ export default class Element extends NodeContainer {
 		return `${actuallyIndent ? contents.indent(false) : contents}${newline}`;
 	}
 
-	protected getLog () {
-		return Log.get(this.root);
-	}
-
 	public getId () {
 		return ansi.green(`${this.constructor.name}<${this.type}>`);
 	}
@@ -384,5 +389,45 @@ export class Text extends Node {
 
 		const text = this.text;
 		return this.id = ansi.green(`Text(${text.length > 20 ? text.slice(0, 20) + "..." : text})`);
+	}
+}
+
+export class Markdown extends Node {
+
+	private id?: string;
+	private text?: string;
+	public constructor (private readonly markdown: string) {
+		super();
+	}
+
+	public isInline () {
+		return false;
+	}
+
+	public async precompile () {
+		return new Promise<void>(resolve => marked(this.markdown, (err, html) => {
+			if (err)
+				this.getLog().warn("Unable to render markdown", this.getId());
+			else
+				this.text = html;
+
+			resolve();
+		}));
+	}
+
+	public compile () {
+		const text = this.text;
+		if (text === undefined)
+			this.getLog().error("No text to render", this.getId());
+		return text ?? "";
+	}
+
+	public getId () {
+		const id = this.id;
+		if (id !== undefined)
+			return id;
+
+		const markdown = this.markdown;
+		return this.id = ansi.green(`Text(${markdown.length > 20 ? markdown.slice(0, 20) + "..." : markdown})`);
 	}
 }
