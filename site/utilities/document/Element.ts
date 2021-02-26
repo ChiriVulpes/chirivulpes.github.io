@@ -1,5 +1,5 @@
 import ansi from "ansicolor";
-import Log from "../../shared/utilities/Log";
+import Log from "../../../shared/utilities/Log";
 
 const voidElements = new Set([
 	"area",

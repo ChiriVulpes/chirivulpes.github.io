@@ -4,7 +4,7 @@ import globby from "globby";
 import path from "path";
 import Log from "../../shared/utilities/Log";
 import { elapsed, stopwatch } from "../../shared/utilities/Time";
-import Page from "./Page";
+import Page from "./document/Page";
 import { HrefAbsolute } from "./Strings";
 
 let _root = ".";

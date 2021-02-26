@@ -1,5 +1,5 @@
-import Meta from "../utilities/elements/Meta";
-import Page from "../utilities/Page";
+import Meta from "../utilities/document/elements/Meta";
+import Page from "../utilities/document/Page";
 import Site from "../utilities/Site";
 
 export default class DefaultPage extends Page {
