@@ -5,6 +5,12 @@
 		"allowJs": true,
 		"noEmit": true,
 		"target": "ES2019",
-		"moduleResolution": "node"
+		"moduleResolution": "node",
+		"baseUrl": ".",
+		"paths": {
+			"@util/*": ["utilities/*"],
+			"@element/*": ["site/elements/*"],
+			"@layout/*": ["site/layout/*"]
+		}
 	}
 }

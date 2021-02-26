@@ -1,15 +1,15 @@
 // eslint-disable-next-line @typescript-eslint/triple-slash-reference
-/// <reference path="../../type/webp-converter.d.ts" />
+/// <reference path="../../utilities/type/webp-converter.d.ts" />
 
+import Element from "@element/Element";
+import Log from "@util/Log";
+import { elapsed, stopwatch } from "@util/Time";
 import ansi from "ansicolor";
 import fs from "fs-extra";
 import jimp from "jimp";
 import path from "path";
 import webp from "webp-converter";
-import Log from "../../../../shared/utilities/Log";
-import { elapsed, stopwatch } from "../../../../shared/utilities/Time";
-import Site from "../../Site";
-import Element from "../Element";
+import Site from "../Site";
 
 const alreadyCreatedThumbnails = new Set<string>();
 

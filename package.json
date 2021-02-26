@@ -1,10 +1,10 @@
 {
 	"private": true,
 	"scripts": {
-		"build": "npx ts-node tasks/utilities/TaskRunner.ts build",
-		"rebuild": "npx ts-node tasks/utilities/TaskRunner.ts clean build",
-		"watch": "npx ts-node tasks/utilities/TaskRunner.ts clean build serve watch",
-		"clean": "npx ts-node tasks/utilities/TaskRunner.ts clean"
+		"build": "npx ts-node -r tsconfig-paths/register tasks/utilities/TaskRunner.ts build",
+		"rebuild": "npx ts-node -r tsconfig-paths/register tasks/utilities/TaskRunner.ts clean build",
+		"watch": "npx ts-node -r tsconfig-paths/register tasks/utilities/TaskRunner.ts clean build serve watch",
+		"clean": "npx ts-node -r tsconfig-paths/register tasks/utilities/TaskRunner.ts clean"
 	},
 	"dependencies": {
 		"ts-node": "9.1.1",
@@ -19,7 +19,8 @@
 		"fs-extra": "9.1.0",
 		"@types/fs-extra": "9.0.7",
 		"jimp": "0.16.1",
-		"webp-converter": "2.3.3"
+		"webp-converter": "2.3.3",
+		"tsconfig-paths": "3.9.0"
 	},
 	"devDependencies": {
 		"chokidar": "3.5.1",

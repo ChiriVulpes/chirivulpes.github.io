@@ -1,8 +1,8 @@
-import Log from "../../../shared/utilities/Log";
-import { DateISO, HrefAbsolute } from "../Strings";
-import Element from "./Element";
-import Meta from "./elements/Meta";
-import Stylesheet from "./elements/Stylesheet";
+import Element from "@element/Element";
+import Meta from "@element/Meta";
+import Stylesheet from "@element/Stylesheet";
+import Log from "@util/Log";
+import { DateISO, HrefAbsolute } from "@util/Strings";
 
 export class Metadata<HOST extends Page> {
 

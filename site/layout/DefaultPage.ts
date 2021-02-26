@@ -1,6 +1,6 @@
-import Meta from "../utilities/document/elements/Meta";
-import Page from "../utilities/document/Page";
-import Site from "../utilities/Site";
+import Meta from "@element/Meta";
+import Page from "../Page";
+import Site from "../Site";
 
 export default class DefaultPage extends Page {
 	public constructor () {

@@ -1,4 +1,4 @@
-import Element, { NodeContainer } from "../Element";
+import Element, { NodeContainer } from "@element/Element";
 
 const headingLevelsByRoot = new Map<NodeContainer, Set<number>>();
 

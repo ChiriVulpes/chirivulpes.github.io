@@ -1,9 +1,9 @@
+import Log from "@util/Log";
 import ansi from "ansicolor";
 import connect, { ErrorHandleFunction } from "connect";
 import http from "http";
 import os from "os";
 import serveStatic from "serve-static";
-import Log from "../shared/utilities/Log";
 import Task from "./utilities/Task";
 
 export default Task("serve", () => {

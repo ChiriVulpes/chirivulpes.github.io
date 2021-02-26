@@ -1,6 +1,6 @@
+import Log from "@util/Log";
+import { stopwatch } from "@util/Time";
 import ansi from "ansicolor";
-import Log from "../../shared/utilities/Log";
-import { stopwatch } from "../../shared/utilities/Time";
 import { TaskFunction } from "./Task";
 
 export interface ITaskApi {

@@ -1,9 +1,9 @@
+import Element from "@element/Element";
+import Log from "@util/Log";
+import { stopwatch } from "@util/Time";
 import ansi from "ansicolor";
 import path from "path";
 import sass, { Options, Result } from "sass";
-import Log from "../../../../shared/utilities/Log";
-import { stopwatch } from "../../../../shared/utilities/Time";
-import Element from "../Element";
 
 const compiledStylesheets = new Map<string, string>();
 

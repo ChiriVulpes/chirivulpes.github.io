@@ -1,6 +1,6 @@
-import DefaultPage from "../layout/DefaultPage";
-import Heading from "../utilities/document/elements/Heading";
-import Thumbnail from "../utilities/document/elements/Thumbnail";
+import Heading from "@element/Heading";
+import Thumbnail from "@element/Thumbnail";
+import DefaultPage from "@layout/DefaultPage";
 
 export default new DefaultPage()
 	.append(new Heading(3)
