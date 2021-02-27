@@ -10,10 +10,10 @@ export default class DefaultPage extends Page {
 
 	protected _header = new Header()
 		.nav(nav => nav
-			.link("GitHub", "https://github.com/ChiriCuddles")
-			.link("Twitter", "https://twitter.com/ChiriMystere")
-			.link("Author Patreon", "https://www.patreon.com/chirichirichiri")
-			.link("Discord", "https://discord.gg/XPPvW9F"))
+			.link("GitHub")
+			.link("Twitter")
+			.link("Patreon", link => link.text(" (Writing)"))
+			.link("Discord"))
 		.appendTo(this);
 
 	protected _main = new Element("main")
@@ -21,18 +21,18 @@ export default class DefaultPage extends Page {
 
 	protected _footer = new Element("footer")
 		.append(new Nav()
-			.link("GitHub", "https://github.com/ChiriCuddles")
-			.link("Twitter", "https://twitter.com/ChiriMystere")
-			.link("Discord", "https://discord.gg/XPPvW9F")
+			.link("GitHub")
+			.link("Twitter")
+			.link("Discord")
 			.break()
-			.link("Scribble Hub", "https://www.scribblehub.com/profile/12063/chirichirichiri/")
-			.link("itch.io", "https://chirichirichiri.itch.io/")
-			.link("Patreon", "https://www.patreon.com/chirichirichiri")
+			.link("Scribble Hub")
+			.link("itch.io")
+			.link("Patreon")
 			.break()
-			.link("YouTube", "https://www.youtube.com/channel/UCePEUnShLHdvPfsjkEH5dDA")
-			.link("Twitch", "https://www.twitch.tv/chirichirichiri")
-			.link("SoundCloud", "https://soundcloud.com/chirichirichiri")
-			.link("Bandcamp", "https://chirichirichiri.bandcamp.com/"))
+			.link("YouTube")
+			.link("Twitch")
+			.link("SoundCloud")
+			.link("Bandcamp"))
 		.appendTo(this);
 
 	public constructor () {

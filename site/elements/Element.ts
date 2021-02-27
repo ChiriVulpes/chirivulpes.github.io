@@ -1,6 +1,7 @@
 import Log from "@util/Log";
 import ansi from "ansicolor";
 import marked from "marked";
+import Links from "site/Links";
 
 export type Initialiser<T> = (thing: T) => any;
 
@@ -147,7 +148,7 @@ export abstract class NodeContainer extends Node {
 			if (predicate(child))
 				result.push(child);
 
-			else if (child instanceof NodeContainer)
+			if (child instanceof NodeContainer)
 				result.push(...child.findAll(predicate));
 		}
 
@@ -196,7 +197,12 @@ export class Fragment extends NodeContainer {
 		const compiledChildren = await Promise.all(this.children
 			.map(element => element.compile(indent)));
 
-		return compiledChildren.join(indent ? "\n" : "");
+		const newline = indent ? "\n" : "";
+		let result = "";
+		for (const child of compiledChildren)
+			if (child.length > 0)
+				result += newline + child;
+		return indent ? result.slice(1) : result;
 	}
 
 	public getId () {
@@ -216,8 +222,9 @@ export default class Element extends NodeContainer {
 	private _isInline?: boolean;
 	public requiredStylesheets?: string[] = [];
 	private requiresText?: true;
-	private noElementChildren?: true;
+	private isFlat?: true;
 	private _style?: Record<string, string>;
+	private onlyRenderWithContent?: true;
 
 	public constructor (public type = "div") {
 		super();
@@ -242,8 +249,11 @@ export default class Element extends NodeContainer {
 		return this;
 	}
 
-	public setDoesNotSupportElementChildren () {
-		this.noElementChildren = true;
+	/**
+	 * Sets this element as unable to have descendants
+	 */
+	public setFlat () {
+		this.isFlat = true;
 		return this;
 	}
 
@@ -293,6 +303,11 @@ export default class Element extends NodeContainer {
 		return this;
 	}
 
+	public setOnlyRenderWithContent () {
+		this.onlyRenderWithContent = true;
+		return this;
+	}
+
 	public async compile (indent: boolean) {
 		const type = this.type;
 		const isVoid = voidElements.has(type);
@@ -307,7 +322,11 @@ export default class Element extends NodeContainer {
 			.map(([property, value]) => `${property}:${value}`)
 			.join(";") + '"';
 
-		return `<${type}${classes}${attributes}${style}${isVoid ? "/" : ""}>${await this.compileChildren(indent, isVoid) ?? ""}${postTag}`
+		const children = await this.compileChildren(indent, isVoid) ?? "";
+		if (this.onlyRenderWithContent === true && children.length === 0)
+			return "";
+
+		return `<${type}${classes}${attributes}${style}${isVoid ? "/" : ""}>${children}${postTag}`
 	}
 
 	protected async compileChildren (indent: boolean, isVoid: boolean) {
@@ -325,16 +344,16 @@ export default class Element extends NodeContainer {
 			return undefined;
 		}
 
-		const noElementChildren = this.noElementChildren === true;
+		const isFlat = this.isFlat === true;
 
 		let childrenAllowIndent = true;
 		const compiledChildren = await Promise.all(childElements.map(element => {
 			if (element.isInline())
 				childrenAllowIndent = false;
 
-			if (noElementChildren && element instanceof Element) {
-				this.getLog().error(this.getId(), "cannot contain child element", element.getId());
-				return undefined;
+			if (isFlat && element instanceof NodeContainer) {
+				this.getLog().error(this.getId(), "cannot contain node container", element.getId());
+				return "";
 			}
 
 			if (requiresTextChild && element instanceof Text)
@@ -351,7 +370,7 @@ export default class Element extends NodeContainer {
 		const newline = actuallyIndent ? "\n" : "";
 		let contents = "";
 		for (const compiledChild of compiledChildren)
-			if (compiledChild !== undefined)
+			if (compiledChild.length > 0)
 				contents += newline + compiledChild;
 
 		return `${actuallyIndent ? contents.indent(false) : contents}${newline}`;
@@ -405,7 +424,31 @@ export class Markdown extends Node {
 	}
 
 	public async precompile () {
-		return new Promise<void>(resolve => marked(this.markdown, (err, html) => {
+		const markdown = this.markdown;
+		let replacementMarkdown = "";
+		for (let i = 0; i < markdown.length; i++) {
+			let char = markdown[i];
+			replacementMarkdown += char;
+
+			if (char === "[") {
+				let linkText = "";
+				for (i++; i < markdown.length; i++) {
+					char = markdown[i];
+					replacementMarkdown += char;
+
+					if (char === "]")
+						break;
+
+					linkText += char;
+				}
+
+				const link = Links[linkText as keyof typeof Links];
+				if (link !== undefined && markdown[i + 1] !== "(")
+					replacementMarkdown += `(${link})`;
+			}
+		}
+
+		return new Promise<void>(resolve => marked(replacementMarkdown, (err, html) => {
 			if (err)
 				this.getLog().warn("Unable to render markdown", this.getId());
 			else
@@ -418,7 +461,7 @@ export class Markdown extends Node {
 	public compile () {
 		const text = this.text;
 		if (text === undefined)
-			this.getLog().error("No text to render", this.getId());
+			this.getLog().error("No compiled markdown text to render", this.getId());
 		return text ?? "";
 	}
 
@@ -428,6 +471,6 @@ export class Markdown extends Node {
 			return id;
 
 		const markdown = this.markdown;
-		return this.id = ansi.green(`Text(${markdown.length > 20 ? markdown.slice(0, 20) + "..." : markdown})`);
+		return this.id = ansi.green(`Markdown(${markdown.length > 20 ? markdown.slice(0, 20) + "..." : markdown})`);
 	}
 }

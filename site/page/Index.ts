@@ -34,8 +34,8 @@ export default new DefaultPage()
 			.markdown(`
 Thanks for checking out my work!
 
-If you'd like to commission story chapters, consider checking out my [Patreon](https://www.patreon.com/chirichirichiri).
+If you'd like to commission story chapters, consider checking out my [Patreon].
 
 If you'd like to commission a story cover, stay tuned. I'll find some way to sell commissions for these soon!
 
-Just wanna talk? Join my [Discord](https://discord.gg/XPPvW9F)!`)));
+Just wanna talk? Join my [Discord]!`)));
