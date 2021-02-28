@@ -32,10 +32,10 @@ export default new DefaultPage()
 	.footer(footer => footer
 		.prepend(new Fragment()
 			.markdown(`
-Thanks for checking out my work!
+				Thanks for checking out my work!
 
-If you'd like to commission story chapters, consider checking out my [Patreon].
+				If you'd like to commission story chapters, consider checking out my [Patreon].
 
-If you'd like to commission a story cover, stay tuned. I'll find some way to sell commissions for these soon!
+				If you'd like to commission a story cover, stay tuned. I'll find some way to sell commissions for these soon!
 
-Just wanna talk? Join my [Discord]!`)));
+				Just wanna talk? Join my [Discord]!`)));

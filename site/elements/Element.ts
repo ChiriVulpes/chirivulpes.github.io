@@ -426,6 +426,8 @@ export class Markdown extends Node {
 	public async precompile () {
 		const markdown = this.markdown;
 		let replacementMarkdown = "";
+		let maxIndent = 0;
+		let indent = 0;
 		for (let i = 0; i < markdown.length; i++) {
 			let char = markdown[i];
 			replacementMarkdown += char;
@@ -446,7 +448,19 @@ export class Markdown extends Node {
 				if (link !== undefined && markdown[i + 1] !== "(")
 					replacementMarkdown += `(${link})`;
 			}
+
+			if (char === "\n")
+				indent = 0;
+			else if (char === "\t" && indent >= 0)
+				indent++;
+			else {
+				maxIndent = Math.max(indent, maxIndent);
+				indent = -1;
+			}
 		}
+
+		if (maxIndent > 0)
+			replacementMarkdown = replacementMarkdown.unindent(maxIndent);
 
 		return new Promise<void>(resolve => marked(replacementMarkdown, (err, html) => {
 			if (err)

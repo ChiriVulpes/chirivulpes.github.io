@@ -7,6 +7,8 @@ declare global {
 		indent (indent: string, indentStart?: false): string;
 		indent (count: number, indent: string, indentStart?: false): string;
 
+		unindent (count: number): string;
+
 		prettyFile (): string;
 
 		sentence (): string;
@@ -34,6 +36,27 @@ export default function () {
 		}
 
 		return result;
+	});
+
+	Define(String.prototype, "unindent", function (this: string, count: number) {
+		const length = this.length;
+		let newString = "";
+		let indent = 0;
+		for (let i = 0; i < length; i++) {
+			const char = this[i];
+			if (char === "\n")
+				indent = 0;
+			else if (char === "\t") {
+				if (indent++ < count)
+					continue;
+			} else
+				indent = Infinity;
+
+			newString += char;
+		}
+
+		console.log([newString]);
+		return newString;
 	});
 
 	Define(String.prototype, "prettyFile", function (this: string) {
