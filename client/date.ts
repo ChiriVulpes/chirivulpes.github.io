@@ -1,19 +1,8 @@
-document.querySelectorAll("article")
-	.forEach(articleElement => articleElement
-		.addEventListener("click", event => {
-			const articleh2 = !event.target.closest("a, iframe") && articleElement.querySelector("h2 a");
-			if (articleh2) articleh2.focus();
-		}));
-
-////////////////////////////////////
-// Dates
-//
-
 const RelativeTime = Intl && Intl.RelativeTimeFormat && new Intl.RelativeTimeFormat("en");
 
 function refreshDates () {
-	for (const element of document.querySelectorAll("[data-date]")) {
-		const date = new Date(element.dataset.date || 0);
+	for (const element of document.querySelectorAll<HTMLElement>("[data-date]")) {
+		const date = new Date(element.dataset.date ?? 0);
 		const isToday = date.toDateString() === new Date().toDateString();
 
 		const tooltip = date.toLocaleString(undefined, {
@@ -28,20 +17,12 @@ function refreshDates () {
 
 refreshDates();
 
-/**
- * @typedef {"year" | "quarter" | "month" | "week" | "day" | "hour" | "minute" | "second"} Timescale
- */
+type Timescale = "year" | "quarter" | "month" | "week" | "day" | "hour" | "minute" | "second";
 
-/**
- * @param {Date} date 
- */
-function ago (date) {
+function ago (date: Date) {
 	const seconds = Math.floor((Date.now() - date.getTime()) / 1000);
 
-	/**
-	 * @type {[Timescale, number][]}
-	 */
-	const timescales = [
+	const timescales: [Timescale, number][] = [
 		["year", 31536000],
 		["month", 2592000],
 		["week", 604800],

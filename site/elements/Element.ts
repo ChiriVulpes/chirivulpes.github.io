@@ -221,6 +221,7 @@ export default class Element extends NodeContainer {
 	private _attributes: Record<string, string> = {};
 	private _isInline?: boolean;
 	public requiredStylesheets?: string[] = [];
+	public requiredScripts?: string[] = [];
 	private requiresText?: true;
 	private isFlat?: true;
 	private _style?: Record<string, string>;
@@ -265,6 +266,12 @@ export default class Element extends NodeContainer {
 	public requireStyles (...files: string[]) {
 		this.requiredStylesheets ??= [];
 		this.requiredStylesheets?.push(...files);
+		return this;
+	}
+
+	public requireScripts (...files: string[]) {
+		this.requiredScripts ??= [];
+		this.requiredScripts?.push(...files);
 		return this;
 	}
 
@@ -423,7 +430,7 @@ export class Markdown extends Node {
 		return false;
 	}
 
-	public async precompile () {
+	public async precompile (shouldIndent: boolean) {
 		const markdown = this.markdown;
 		let replacementMarkdown = "";
 		let maxIndent = 0;

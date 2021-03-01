@@ -55,7 +55,6 @@ export default function () {
 			newString += char;
 		}
 
-		console.log([newString]);
 		return newString;
 	});
 

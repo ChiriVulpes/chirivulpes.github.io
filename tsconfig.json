@@ -12,6 +12,7 @@
 			"@element/*": ["site/elements/*"],
 			"@layout/*": ["site/layout/*"],
 			"@page/*": ["site/page/*"]
-		}
+		},
+		"resolveJsonModule": true
 	}
 }

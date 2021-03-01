@@ -18,6 +18,8 @@ export default class Article extends Element {
 		new Link(link ?? `#${id!}` as const)
 			.text(title)
 			.appendTo(this.heading.id(id));
+
+		this.requireScripts("article");
 	}
 
 	public header (initialiser: Initialiser<ArticleHeader>) {

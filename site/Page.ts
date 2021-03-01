@@ -1,5 +1,6 @@
 import Element from "@element/Element";
 import Meta from "@element/Meta";
+import Script from "@element/Script";
 import Stylesheet from "@element/Stylesheet";
 import Log from "@util/Log";
 import { DateISO, HrefAbsolute } from "@util/Strings";
@@ -100,6 +101,22 @@ export default class Page extends Element {
 
 		new Stylesheet(...stylesheets)
 			.appendTo(this.head);
+
+		////////////////////////////////////
+		// Scripts
+		//
+
+		const scripts = new Set<string>();
+
+		const elementsWithScripts = this.findAllElements(descendant => descendant.requiredScripts?.length);
+		if (this.requiredScripts !== undefined)
+			elementsWithScripts.unshift(this);
+		for (const elementWithScripts of elementsWithScripts)
+			for (const script of elementWithScripts.requiredScripts!)
+				scripts.add(script);
+
+		new Script(...scripts)
+			.appendTo(this.body);
 
 		////////////////////////////////////
 		// Descendant pre-compilation
