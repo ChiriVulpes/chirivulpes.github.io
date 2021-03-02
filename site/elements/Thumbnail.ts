@@ -14,8 +14,12 @@ import Site from "../Site";
 const alreadyCreatedThumbnails = new Set<string>();
 
 export default class Thumbnail extends Element {
-	public constructor (private readonly image: string, private readonly size: number, private readonly axis: "x" | "y" = "x") {
+
+	private readonly image: string;
+
+	public constructor (image: string, private readonly size: number, private readonly axis: "x" | "y" = "x") {
 		super("picture");
+		this.image = image.removeFromStart("static/image/").removeFromEnd(".png");
 	}
 
 	public async precompile () {

@@ -208,6 +208,14 @@ export default class Story implements IHasCard {
 				+ `${Math.round(words / 1000)}k words.`)
 			.appendTo(details);
 
+		const location = this.getLocation();
+		if (location !== undefined) {
+			const price = this.price ?? 0;
+			details.text(" Available for ")
+				.append(new Element("span").class("price").text(price === 0 ? "free" : `${this.currency ?? "$"}${price}`))
+				.text(` on ${location}.`);
+		}
+
 		const status = this.status;
 		if (status === "Hiatus") {
 			const returnAfter = this.returnAfter;
@@ -227,22 +235,14 @@ export default class Story implements IHasCard {
 				if (soon !== undefined)
 					willReturn += soon.toLowerCase();
 
-				if (soon !== undefined && after !== undefined)
+				if (soon !== undefined && after.length > 0)
 					willReturn += ", ";
 
-				if (after !== undefined)
+				if (after.length > 0)
 					willReturn += `after ${after.join(" and ").toLowerCase()}`;
 
 				details.text(willReturn + ".");
 			}
-		}
-
-		const location = this.getLocation();
-		if (location !== undefined) {
-			const price = this.price ?? 0;
-			details.text(" Available for ")
-				.append(new Element("span").class("price").text(price === 0 ? "free" : `${this.currency ?? "$"}${price}`))
-				.text(` on ${location}.`);
 		}
 
 		const needs = this.needs;

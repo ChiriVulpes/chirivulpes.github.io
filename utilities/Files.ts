@@ -5,17 +5,29 @@ import ansi from "ansicolor";
 import globby from "globby";
 import path from "path";
 
+function getDefaultNameOfThings (glob: string) {
+	const indexOfDot = glob.lastIndexOf(".");
+	if (indexOfDot === -1)
+		return "files";
+
+	return ansi.green(glob.slice(indexOfDot)) + " files";
+}
+
 namespace Files {
+	export async function discoverFiles (glob: string, nameOfThings = getDefaultNameOfThings(glob)) {
+		const globWatch = stopwatch();
+		const files = await globby(glob);
+		globWatch.stop();
+
+		Log.info(`Discovered ${ansi.green(`${files.length}`)} potential ${nameOfThings} in`, globWatch.time());
+		return files;
+	}
+
 	export async function discoverClasses<T> (cls: Class<T>, directory: string) {
 		const cwd = process.cwd();
 
-		const globWatch = stopwatch();
-		const typescriptFiles = await globby(`${directory}/**/*.ts`);
-		globWatch.stop();
-
 		const className = ansi.green(cls.name);
-
-		Log.info(`Discovered ${ansi.green(`${typescriptFiles.length}`)} potential ${className} instances in`, globWatch.time());
+		const typescriptFiles = await discoverFiles(`${directory}/**/*.ts`, `${className} instances`);
 
 		const results: { file: string, instance: T, time: Stopwatch }[] = [];
 		const ignored: string[] = [];

@@ -2,7 +2,7 @@ import Article from "@element/Article";
 import { Fragment } from "@element/Element";
 import Story from "site/collections/stories/Story";
 
-export default new Article("Stories")
+export default new Article<Story>("Stories")
 	.header(header => header
 		.setNav(nav => nav
 			.link("Patreon")

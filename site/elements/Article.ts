@@ -13,13 +13,15 @@ export interface IHasCard {
 	getOrder (): number[];
 }
 
-export default class Article extends Element {
+export default class Article<T extends IHasCard = IHasCard> extends Element {
 
 	protected heading = new Heading(2)
 		.appendTo(this);
 
 	protected _header = new ArticleHeader()
 		.appendTo(this);
+
+	public cardSources: T[] = [];
 
 	public constructor (title: string, link?: HrefFile) {
 		super("article");
@@ -42,8 +44,8 @@ export default class Article extends Element {
 		return this;
 	}
 
-	private containsCards?: { cls: Class<IHasCard>, directory: string, sectionProperty: string };
-	public setContainsCards<T extends IHasCard> (cls: Class<T>, directory: string, sectionProperty: Extract<keyof PickValue<T, string>, string>) {
+	private containsCards?: { cls: Class<T>, directory: string, sectionProperty: string };
+	public setContainsCards (cls: Class<T>, directory: string, sectionProperty: Extract<keyof PickValue<T, string>, string>) {
 		this.containsCards = { cls, directory, sectionProperty };
 		return this;
 	}
@@ -53,8 +55,11 @@ export default class Article extends Element {
 		if (containsCards === undefined)
 			return;
 
-		const results = (await Files.discoverClasses(containsCards.cls, containsCards.directory))
-			.map(result => ({ instance: result.instance, order: result.instance.getOrder() }))
+		const cardSources = this.cardSources = (await Files.discoverClasses(containsCards.cls, containsCards.directory))
+			.map(source => source.instance);
+
+		const results = cardSources
+			.map(instance => ({ instance, order: instance.getOrder() }))
 			.sort(sortByOrder);
 
 		const sections: Record<string, ArticleSection | undefined> = {};

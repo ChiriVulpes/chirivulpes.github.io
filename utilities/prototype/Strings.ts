@@ -12,6 +12,9 @@ declare global {
 		prettyFile (): string;
 
 		sentence (): string;
+
+		removeFromStart (substr: string): string;
+		removeFromEnd (substr: string): string;
 	}
 }
 
@@ -71,4 +74,16 @@ export default function () {
 	Define(String.prototype, "sentence", function (this: string) {
 		return this[0].toUpperCase() + this.slice(1);
 	});
+
+	Define(String.prototype, "removeFromStart", function (this: string, substr: string) {
+		if (!this.startsWith(substr))
+			return this;
+		return this.slice(substr.length);
+	});
+
+	Define(String.prototype, "removeFromEnd", function (this: string, substr: string) {
+		if (!this.endsWith(substr))
+			return this;
+		return this.slice(0, -substr.length);
+	})
 }

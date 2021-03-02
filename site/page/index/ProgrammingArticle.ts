@@ -1,7 +1,7 @@
 import Article from "@element/Article";
 import Project from "site/collections/projects/Project";
 
-export default new Article("Programming")
+export default new Article<Project>("Programming")
 	.header(header => header
 		.setNav(nav => nav
 			.link("GitHub")))
