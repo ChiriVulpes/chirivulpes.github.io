@@ -122,8 +122,7 @@ export default class Page extends Element {
 		// Descendant pre-compilation
 		//
 
-		for (const elementNeedingPrecompilation of this.findAll(descendant => descendant.precompile !== undefined))
-			await elementNeedingPrecompilation.precompile!(indent);
+		await this.precompileDescendants(indent);
 
 		////////////////////////////////////
 		// Misc

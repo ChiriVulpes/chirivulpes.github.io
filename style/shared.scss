@@ -165,7 +165,7 @@ a {
 	&.isnav {
 		@include arrow;
 		
-		&.article {
+		&.card {
 			padding-right: 2em;
 		}
 	}
@@ -260,7 +260,7 @@ iframe {
 	width: 100%;
 }
 
-.heading {
+.heading1, .heading2, .heading3 {
 	font-family: 'Poiret One', sans-serif;
 	
 	a {
@@ -396,7 +396,7 @@ iframe {
 	}
 }
 
-.article {
+.card {
 	@include resolve(background, var(--background-3));
 	padding: 1em;
 	margin: 1em;

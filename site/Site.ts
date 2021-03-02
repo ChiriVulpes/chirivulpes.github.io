@@ -1,9 +1,9 @@
+import Files from "@util/Files";
 import Log from "@util/Log";
 import { HrefAbsolute } from "@util/Strings";
 import { elapsed, stopwatch } from "@util/Time";
 import ansi from "ansicolor";
 import fs from "fs-extra";
-import globby from "globby";
 import path from "path";
 import Page from "./Page";
 
@@ -63,46 +63,24 @@ export default new class {
 	// }
 
 	public async addPages (root: string) {
-		const cwd = process.cwd();
+		const pages = await Files.discoverClasses(Page, root);
 
-		const globWatch = stopwatch();
-		const typescriptFiles = await globby(`${root}/**/*.ts`);
-		globWatch.stop();
-
-		Log.info(`Discovered ${ansi.green(`${typescriptFiles.length}`)} potential pages in`, globWatch.time());
-
-		for (const file of typescriptFiles) {
-			let potentialPage: unknown;
-			const loadWatch = stopwatch();
-			try {
-				// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-var-requires
-				potentialPage = require(path.join(cwd, file))?.default;
-			} catch (err) {
-				Log.error(`Ignoring file ${ansi.cyan(file)}, encountered error`, err);
-				continue;
-			}
-
-			loadWatch.stop();
-
-			if (!(potentialPage instanceof Page)) {
-				Log.info("Ignoring non-page", ansi.cyan(file));
-				continue;
-			}
+		for (const { file, instance, time: loadWatch } of pages) {
 
 			const newFile = path.relative(root, file).slice(0, -3).toLowerCase();
-			potentialPage.log.setSources(ansi.cyan(newFile)); // Add page url to its log 
+			instance.log.setSources(ansi.cyan(newFile)); // Add page url to its log 
 
 			const url = newFile.endsWith("index") ? newFile.slice(0, -5) : newFile + ".html";
-			potentialPage.metadata.setURL(`https://${path.join(_host!, url).prettyFile()}` as const);
+			instance.metadata.setURL(`https://${path.join(_host!, url).prettyFile()}` as const);
 
 			try {
 				const indent = !!process.env.indent;
 				const precompileWatch = stopwatch();
-				await potentialPage.precompile(indent);
+				await instance.precompile(indent);
 				precompileWatch.stop();
 
 				const compileWatch = stopwatch();
-				const compiled = await potentialPage.compile(indent);
+				const compiled = await instance.compile(indent);
 				compileWatch.stop();
 
 				const writeWatch = stopwatch();

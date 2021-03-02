@@ -32,6 +32,7 @@ module.exports = /** @type {import("eslint").Linter.BaseConfig & import("@typesc
 		// "@typescript-eslint/no-unsafe-member-access": ["off"],
 		"@typescript-eslint/ban-types": ["off"], // there's actually a lot of useful types in here, add more restrictions back later if need be
 		// "@typescript-eslint/no-misused-promises": ["warn", { "checksVoidReturn": false }], // this prevents hanging promises
-		"@typescript-eslint/unbound-method": ["warn", { "ignoreStatic": true }],
+		// "@typescript-eslint/unbound-method": ["warn", { "ignoreStatic": true }],
+		"@typescript-eslint/unbound-method": ["off"], // we have @Bound for this purpose
 	},
 });

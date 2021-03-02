@@ -114,8 +114,10 @@ export abstract class NodeContainer extends Node {
 		return this.append(new Text(text));
 	}
 
-	public markdown (markdown: string) {
-		return this.append(new Markdown(markdown));
+	public markdown (markdown?: string) {
+		if (markdown !== undefined)
+			new Markdown(markdown).appendTo(this);
+		return this;
 	}
 
 	public dump () {
@@ -185,6 +187,16 @@ export abstract class NodeContainer extends Node {
 		}
 
 		return result;
+	}
+
+	public async precompileDescendants (indent: boolean) {
+		for (const child of this.children) {
+			if (child.precompile !== undefined)
+				await child.precompile(indent);
+
+			if (child instanceof NodeContainer)
+				await child.precompileDescendants(indent);
+		}
 	}
 }
 
@@ -473,7 +485,7 @@ export class Markdown extends Node {
 			if (err)
 				this.getLog().warn("Unable to render markdown", this.getId());
 			else
-				this.text = html;
+				this.text = html.trimEnd();
 
 			resolve();
 		}));
