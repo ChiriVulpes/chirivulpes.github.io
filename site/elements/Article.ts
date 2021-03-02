@@ -10,6 +10,7 @@ import { Class } from "@util/Type";
 
 export interface IHasCard {
 	createCard (): Card;
+	getOrder (): number[];
 }
 
 export default class Article extends Element {
@@ -52,8 +53,12 @@ export default class Article extends Element {
 		if (containsCards === undefined)
 			return;
 
+		const results = (await Files.discoverClasses(containsCards.cls, containsCards.directory))
+			.map(result => ({ instance: result.instance, order: result.instance.getOrder() }))
+			.sort(sortByOrder);
+
 		const sections: Record<string, ArticleSection | undefined> = {};
-		for (const { instance } of await Files.discoverClasses(containsCards.cls, containsCards.directory)) {
+		for (const { instance } of results) {
 			const property = (instance as any as Record<string, string>)[containsCards.sectionProperty];
 			let section = sections[property];
 			if (section === undefined)
@@ -62,6 +67,18 @@ export default class Article extends Element {
 			section!.append(instance.createCard());
 		}
 	}
+}
+
+function sortByOrder ({ order: orderA }: { order: number[] }, { order: orderB }: { order: number[] }) {
+	const length = Math.max(orderA.length, orderB.length);
+	for (let i = 0; i < length; i++) {
+		const oA = orderA[i] ?? 0;
+		const oB = orderB[i] ?? 0;
+		if (oA !== oB)
+			return oB - oA;
+	}
+
+	return 0;
 }
 
 export class ArticleHeader extends Element {

@@ -4,7 +4,7 @@ import Element from "@element/Element";
 import Thumbnail from "@element/Thumbnail";
 import Bound from "@util/decorator/Bound";
 import Log from "@util/Log";
-import { HrefAbsolute } from "@util/Strings";
+import { DateISO, HrefAbsolute } from "@util/Strings";
 import ansi from "ansicolor";
 import Site from "site/Site";
 
@@ -26,6 +26,14 @@ enum ReleaseAfter {
 }
 
 export type StoryReleaseAfter = keyof typeof ReleaseAfter;
+
+enum Needs {
+	Editing,
+	Rewriting,
+	Finishing,
+}
+
+export type StoryNeeds = keyof typeof Needs;
 
 export interface StoryLength {
 	words: number;
@@ -147,6 +155,36 @@ export default class Story implements IHasCard {
 	}
 
 	////////////////////////////////////
+	// Needs
+	//
+
+	public needs?: StoryNeeds[];
+	public setNeeds (...needs: StoryNeeds[]) {
+		this.needs = needs;
+		return this;
+	}
+
+	////////////////////////////////////
+	// Date
+	//
+
+	public date?: Date;
+	public setDate (date: DateISO) {
+		this.date = new Date(date);
+		return this;
+	}
+
+	////////////////////////////////////
+	// Order
+	//
+
+	public order?: number;
+	public setOrder (order: number) {
+		this.order = order;
+		return this;
+	}
+
+	////////////////////////////////////
 	// Card
 	//
 
@@ -158,6 +196,10 @@ export default class Story implements IHasCard {
 			.markdown(this.synopsis);
 	}
 
+	public getOrder () {
+		return [this.order ?? 0, this.date?.getTime() ?? 0];
+	}
+
 	@Bound private createCardDetails (details: Element) {
 		const { chapters, words } = this.length;
 		new Element("span")
@@ -166,15 +208,13 @@ export default class Story implements IHasCard {
 				+ `${Math.round(words / 1000)}k words.`)
 			.appendTo(details);
 
-		details.text(" ");
-
 		const status = this.status;
 		if (status === "Hiatus") {
 			const returnAfter = this.returnAfter;
 			if (returnAfter === undefined)
 				Log.warn("Story", this.getID(), "missing return time");
 			else {
-				let willReturn = "Will return ";
+				let willReturn = " Will return ";
 
 				let soon: keyof typeof ReleaseAfter | undefined = undefined;
 				const after: (keyof typeof ReleaseAfter)[] = [];
@@ -193,17 +233,21 @@ export default class Story implements IHasCard {
 				if (after !== undefined)
 					willReturn += `after ${after.join(" and ").toLowerCase()}`;
 
-				details.text(willReturn + ". ");
+				details.text(willReturn + ".");
 			}
 		}
 
 		const location = this.getLocation();
 		if (location !== undefined) {
 			const price = this.price ?? 0;
-			details.text("Available for ")
+			details.text(" Available for ")
 				.append(new Element("span").class("price").text(price === 0 ? "free" : `${this.currency ?? "$"}${price}`))
 				.text(` on ${location}.`);
 		}
+
+		const needs = this.needs;
+		if (needs !== undefined)
+			details.text(` Needs ${needs.join(", ").toLowerCase()}.`);
 	}
 
 	private getLocation () {

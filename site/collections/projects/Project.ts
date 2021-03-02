@@ -114,6 +114,10 @@ export default class Project implements IHasCard {
 			.markdown(this.description);
 	}
 
+	public getOrder () {
+		return [0];
+	}
+
 	@Bound private createCardDetails (details: Element) {
 		this.details?.(details);
 	}
