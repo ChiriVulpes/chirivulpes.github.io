@@ -32,7 +32,7 @@ const taskApi: ITaskApi = {
 		let err: Error | undefined;
 		try {
 			result = task(this);
-		} catch (caught) {
+		} catch (caught: any) {
 			err = caught;
 		}
 

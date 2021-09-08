@@ -15,6 +15,8 @@ declare global {
 
 		removeFromStart (substr: string): string;
 		removeFromEnd (substr: string): string;
+
+		substringAt (substr: string, index: number): boolean;
 	}
 }
 
@@ -85,5 +87,13 @@ export default function () {
 		if (!this.endsWith(substr))
 			return this;
 		return this.slice(0, -substr.length);
-	})
+	});
+
+	Define(String.prototype, "substringAt", function (this: string, substr, index) {
+		for (let i = 0; i < substr.length; i++)
+			if (this[index + i] !== substr[i])
+				return false;
+
+		return true;
+	});
 }

@@ -1,3 +1,5 @@
+@import "util";
+
 pre, code {
 	background: var(--background-code);
     font-size: 1.1em;
@@ -12,111 +14,58 @@ code {
 pre {
 	padding: 1em 1.5em;
 	overflow-x: auto;
+	color: #659FBF;
 }
 
-.highlighter-rouge {
 
-	// https://github.com/rouge-ruby/rouge/blob/d7b60c06e4e5590c466f9a52d8e801ee9fe0509b/lib/rouge/token.rb
-	$syntax-highlighting: (
-		// ID: (dark, light) // real.name
-		w:   (inherit, inherit), // text.whitespace
-		esc: (inherit, inherit), // escape
-		err: (inherit, inherit), // error
-		x:   (inherit, inherit), // other
-		k:   (#38767c, inherit), // keyword
-		kc:  (#0681ff, inherit), // keyword.constant
-		kd:  (#38767c, inherit), // keyword.declaration
-		kn:  (inherit, inherit), // keyword.namespace
-		kp:  (inherit, inherit), // keyword.pseudo
-		kr:  (#0681ff, inherit), // keyword.reserved
-		kt:  (inherit, inherit), // keyword.type
-		kv:  (inherit, inherit), // keyword.variable
-		n:   (inherit, inherit), // name
-		na:  (#8170b8, inherit), // name.attribute
-		nb:  (inherit, inherit), // name.builtin
-		bp:  (inherit, inherit), // name.builtin.pseudo
-		nc:  (#82ea4d, inherit), // name.class
-		no:  (inherit, inherit), // name.constant
-		nd:  (#1a72bd, inherit), // name.decorator
-		ni:  (inherit, inherit), // name.entity
-		ne:  (inherit, inherit), // name.exception
-		nf:  (#1a72bd, inherit), // name.function
-		fm:  (inherit, inherit), // name.function.magic
-		py:  (inherit, inherit), // name.property
-		nl:  (inherit, inherit), // name.label
-		nn:  (inherit, inherit), // name.namespace
-		nx:  (inherit, inherit), // name.other
-		nt:  (inherit, inherit), // name.tag
-		nv:  (inherit, inherit), // name.variable
-		vc:  (inherit, inherit), // name.variable.class
-		vg:  (inherit, inherit), // name.variable.global
-		vi:  (inherit, inherit), // name.variable.instance
-		vm:  (inherit, inherit), // name.variable.magic
-		l:   (inherit, inherit), // literal
-		ld:  (inherit, inherit), // literal.date
-		s:   (inherit, inherit), // literal.string
-		sa:  (inherit, inherit), // literal.string.affix
-		sb:  (inherit, inherit), // literal.string.backtick
-		sc:  (inherit, inherit), // literal.string.char
-		dl:  (#4bacff, inherit), // literal.string.delimiter
-		sd:  (inherit, inherit), // literal.string.doc
-		s2:  (#4bacff, inherit), // literal.string.double
-		se:  (inherit, inherit), // literal.string.escape
-		sh:  (inherit, inherit), // literal.string.heredoc
-		si:  (inherit, inherit), // literal.string.interpol
-		sx:  (inherit, inherit), // literal.string.other
-		sr:  (inherit, inherit), // literal.string.regex
-		s1:  (inherit, inherit), // literal.string.single
-		ss:  (inherit, inherit), // literal.string.symbol
-		m:   (#75c8b1, inherit), // literal.number
-		mb:  (inherit, inherit), // literal.number.bin
-		mf:  (#75c8b1, inherit), // literal.number.float
-		mh:  (#75c8b1, inherit), // literal.number.hex
-		mi:  (#75c8b1, inherit), // literal.number.integer
-		il:  (#75c8b1, inherit), // literal.number.integer.long
-		mo:  (#75c8b1, inherit), // literal.number.oct
-		mx:  (inherit, inherit), // literal.number.other
-		o:   (var(--color-3), var(--color-3)), // operator
-		ow:  (var(--color-3), var(--color-3)), // operator.word
-		p:   (var(--color-3), var(--color-3)), // punctuation
-		pi:  (inherit, inherit), // punctuation.indicator
-		c:   (#57608b, inherit), // comment
-		ch:  (inherit, inherit), // comment.hashbang
-		cd:  (inherit, inherit), // comment.doc
-		cm:  (#57608b, inherit), // comment.multiline
-		cp:  (inherit, inherit), // comment.preproc
-		cpf: (inherit, inherit), // comment.preprocfile
-		c1:  (#57608b, inherit), // comment.single
-		cs:  (inherit, inherit), // comment.special
-		g:   (inherit, inherit), // generic
-		gd:  (inherit, inherit), // generic.deleted
-		ge:  (inherit, inherit), // generic.emph
-		gr:  (inherit, inherit), // generic.error
-		gh:  (inherit, inherit), // generic.heading
-		gi:  (inherit, inherit), // generic.inserted
-		go:  (inherit, inherit), // generic.output
-		gp:  (inherit, inherit), // generic.prompt
-		gs:  (inherit, inherit), // generic.strong
-		gu:  (inherit, inherit), // generic.subheading
-		gt:  (inherit, inherit), // generic.traceback
-		gl:  (inherit, inherit), // generic.lineno
-	);
-	
-	@mixin color($name, $color, $force: false) {
-		@if $color != inherit or $force {
-			@at-root & .#{$name}, code.#{$name} {
-				color: $color;
+// https://highlightjs.readthedocs.io/en/latest/css-classes-reference.html
+$syntax-highlighting: (
+	// ID: (dark, light) // real.name
+	keyword: (#309eb3, inherit),
+	"constant,builtin,boolean": (#0086FF, inherit),
+	"attr,property,params": (#657dbf, inherit),
+	class: (#5eb593, inherit),
+	"function,decorator": (#207698, inherit),
+	"string,regex": (#0fb1fc, inherit),
+	number: (#75c8b1, inherit),
+	operator: (var(--color-3), var(--color-3)),
+	punctuation: (var(--color-3), var(--color-3)),
+	comment: (#47556e, inherit),
+	doctag: (#1a72bd, inherit),
+);
+
+@mixin color($name, $color, $force: false) {
+	@if $color != inherit or $force {
+		$scopes-list: str-split(unquote($name), ",");
+		$selectors: "";
+		@each $scopes-str in $scopes-list {
+			$classes: "";
+			$scopes: str-split($scopes-str, ".");
+			$i: 0;
+			@each $scope in $scopes {
+				$classes: $classes + "." + $scope;
+				// @for $_ from 0 to $i {
+				// 	$classes: $classes + "_";
+				// }
+				$i: $i + 1;
 			}
+			
+			$selectors: $selectors + ", ." + str-slice($classes, 2);
+			
+		}
+		
+		#{str-slice($selectors, 3)} {
+			color: $color;
 		}
 	}
+}
 
+@each $name, $colors in $syntax-highlighting {
+	@include color($name, nth($colors, 1));
+}
+
+@media (prefers-color-scheme: light) {
 	@each $name, $colors in $syntax-highlighting {
-		@include color($name, nth($colors, 1));
-	}
-
-	@media (prefers-color-scheme: light) {
-		@each $name, $colors in $syntax-highlighting {
-			@include color($name, nth($colors, 2), nth($colors, 1) != inherit);
-		}
+		@include color($name, nth($colors, 2), nth($colors, 1) != inherit);
 	}
 }

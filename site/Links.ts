@@ -1,3 +1,4 @@
+import { IMarkdownFilter } from "@util/Strings";
 
 enum Links {
 	"GitHub" = "https://github.com/ChiriCuddles",
@@ -13,3 +14,21 @@ enum Links {
 }
 
 export default Links;
+
+IMarkdownFilter.register({
+	start: "[",
+	replace (markdown, i) {
+		let linkText = "";
+		for (; i < markdown.length; i++) {
+			const char = markdown[i];
+			if (char === "]")
+				break;
+
+			linkText += char;
+		}
+
+		const link = Links[linkText as keyof typeof Links];
+		if (link !== undefined && markdown[i + 1] !== "(")
+			return { insert: `[${linkText}](${link})`, cursor: i };
+	},
+})

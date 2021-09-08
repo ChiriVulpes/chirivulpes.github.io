@@ -200,6 +200,24 @@ export default class Page extends Element {
 		}
 
 		this.alreadyCompiled = true;
-		return `<!DOCTYPE html>${indent ? "\n" : ""}${await super.compile(indent)}`;
+		return `<!DOCTYPE html>${indent ? "\n" : ""}${await super.compile(indent)}`
+			.replace(/(<pre(?:\s.*?)?>)(.*)<\/pre>/gs, (match, startTag: string, contents: string) => {
+				let minIndent = Infinity;
+				let indent = Infinity;
+				for (let i = 0; i < contents.length; i++) {
+					const char = contents[i];
+
+					if (char === "\n" || char === "\r")
+						indent = 0;
+					else if (char === "\t" && indent >= 0)
+						indent++;
+					else {
+						minIndent = Math.min(indent, minIndent);
+						indent = Infinity;
+					}
+				}
+
+				return `${startTag}${contents.unindent(minIndent)}</pre>`;
+			});
 	}
 }

@@ -22,7 +22,10 @@
 		"webp-converter": "2.3.3",
 		"tsconfig-paths": "3.9.0",
 		"marked": "2.0.0",
-		"@types/marked": "1.2.2"
+		"@types/marked": "1.2.2",
+		"prismjs": "1.24.1",
+		"@types/prismjs": "1.16.6",
+		"highlight.js": "11.2.0"
 	},
 	"devDependencies": {
 		"chokidar": "3.5.1",

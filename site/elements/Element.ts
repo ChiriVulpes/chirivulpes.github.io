@@ -1,9 +1,7 @@
 import Log from "@util/Log";
-import { HrefLocal } from "@util/Strings";
+import { compileMarkdown, HrefLocal } from "@util/Strings";
 import ansi from "ansicolor";
 import fs from "fs-extra";
-import marked from "marked";
-import Links from "site/Links";
 
 export type Initialiser<T> = (thing: T) => any;
 
@@ -494,52 +492,9 @@ export class Markdown extends Node {
 	}
 
 	public async precompile (shouldIndent: boolean) {
-		const markdown = this.markdown;
-		let replacementMarkdown = "";
-		let maxIndent = 0;
-		let indent = 0;
-		for (let i = 0; i < markdown.length; i++) {
-			let char = markdown[i];
-			replacementMarkdown += char;
-
-			if (char === "[") {
-				let linkText = "";
-				for (i++; i < markdown.length; i++) {
-					char = markdown[i];
-					replacementMarkdown += char;
-
-					if (char === "]")
-						break;
-
-					linkText += char;
-				}
-
-				const link = Links[linkText as keyof typeof Links];
-				if (link !== undefined && markdown[i + 1] !== "(")
-					replacementMarkdown += `(${link})`;
-			}
-
-			if (char === "\n")
-				indent = 0;
-			else if (char === "\t" && indent >= 0)
-				indent++;
-			else {
-				maxIndent = Math.max(indent, maxIndent);
-				indent = -1;
-			}
-		}
-
-		if (maxIndent > 0)
-			replacementMarkdown = replacementMarkdown.unindent(maxIndent);
-
-		return new Promise<void>(resolve => marked(replacementMarkdown, (err, html) => {
-			if (err)
-				this.getLog().warn("Unable to render markdown", this.getId());
-			else
-				this.text = html.trimEnd();
-
-			resolve();
-		}));
+		const markdown = await compileMarkdown(this.markdown)
+			.catch(err => this.getLog().warn("Unable to render markdown", this.getId(), err));
+		this.text = markdown ?? "";
 	}
 
 	public compile () {
