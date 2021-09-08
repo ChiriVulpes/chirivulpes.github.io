@@ -29,9 +29,10 @@ const storyDetails: ArtRecord = {
 	"earthborn-emissary": details(new Date("nov 20 2020"), "The Earthborn Emissary", "https://www.scribblehub.com/series/137161/the-earthborn-emissary/"),
 	"hunted": details(new Date("nov 30 2020"), "Hunted", "https://www.scribblehub.com/series/203224/hunted/"),
 	"leaking": details(new Date("april 15 2020"), "The Other World is Leaking!", "https://www.scribblehub.com/series/21898/the-other-world-is-leaking/"),
-	"like-a-daydream": details(new Date("february 2020"), "Like a Daydream", "https://www.scribblehub.com/series/115399/like-a-daydream/",),
-	"trolls-and-tribulations": details(new Date("jan 2021"), "Trolls and Tribulations", "https://rooibos-chai.itch.io/trolls-tribulations",),
-	"unforeseen-variables": details(new Date("feb 2021"), "Unforeseen Variables", "https://www.scribblehub.com/series/240682/unforeseen-variables/",),
+	"like-a-daydream": details(new Date("february 2020"), "Like a Daydream", "https://www.scribblehub.com/series/115399/like-a-daydream/"),
+	"trolls-and-tribulations": details(new Date("jan 2021"), "Trolls and Tribulations", "https://rooibos-chai.itch.io/trolls-tribulations"),
+	"unforeseen-variables": details(new Date("feb 2021"), "Unforeseen Variables", "https://www.scribblehub.com/series/240682/unforeseen-variables/"),
+	"plushiemancer": details(new Date("june 2021"), "The Plushiemancer"),
 };
 
 const artDetails: ArtRecord = {

@@ -7,6 +7,7 @@ export default new Story("Polyclueless")
 	.setLink("https://chirichirichiri.itch.io/polyclueless")
 	.setPrice(1)
 	.setDate("2021-01-15T13:00:00.000Z")
+	.setOrder(80)
 	.setSynopsis(`
 		Stephen was a very uncomfortable and anxious boy riddled with insecurities and fears. He was also best friends with a lesbian couple, and, strangely, they seemed to care about him, which was weird. What was the point of caring about someone with no redeeming qualities?
 		

@@ -205,7 +205,7 @@ export default class Story implements IHasCard {
 		new Element("span")
 			.class("length")
 			.text((chapters === undefined ? "" : `${chapters === 1 ? "Oneshot" : `${chapters} chapters`}, `)
-				+ `${Math.round(words / 1000)}k words.`)
+				+ `${Math.round(words / 100) / 10}k words.`)
 			.appendTo(details);
 
 		const location = this.getLocation();
