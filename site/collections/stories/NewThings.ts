@@ -3,7 +3,7 @@ import Story from "site/collections/stories/Story";
 export default new Story("New Things")
 	.setCover("new-things")
 	.setStatus("Completed")
-	.setLength(3000)
+	.setLength(3000, 1)
 	.setLink("https://www.scribblehub.com/series/283510/new-things/")
 	.setDate("2021-05-07T13:00:00.000Z")
 	.setOrder(60)

@@ -3,7 +3,7 @@ import Story from "site/collections/stories/Story";
 export default new Story("Not a Maid")
 	.setCover("not-a-maid")
 	.setStatus("Completed")
-	.setLength(3500)
+	.setLength(3500, 1)
 	.setLink("https://www.scribblehub.com/series/304207/not-a-maid/")
 	.setDate("2021-06-15T13:00:00.000Z")
 	.setOrder(70)

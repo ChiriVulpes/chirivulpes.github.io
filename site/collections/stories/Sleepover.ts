@@ -3,7 +3,7 @@ import Story from "site/collections/stories/Story";
 export default new Story("A Very Girly Sleepover to Which I Was Not Invited")
 	.setCover("sleepover")
 	.setStatus("Completed")
-	.setLength(5000)
+	.setLength(5000, 1)
 	.setLink("https://www.scribblehub.com/series/285519/a-very-girly-sleepover-to-which-i-was-not-invited/")
 	.setDate("2021-05-11T13:00:00.000Z")
 	.setOrder(100)
