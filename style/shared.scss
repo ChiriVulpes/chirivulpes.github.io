@@ -241,7 +241,8 @@ body > footer {
 }
 
 img {
-	&:not(.borderless) {
+	*:not(picture) > &:not(.borderless),
+	picture:not(.borderless) > & {
 		@include resolve(border, 2px solid var(--image-border));
 		box-sizing: border-box;
 	}

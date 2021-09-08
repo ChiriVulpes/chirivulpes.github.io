@@ -12,10 +12,15 @@
 .art {
 	position: relative;
 	
-	a {
+	> a {
 		padding: 0.25em;
 		height: 100%;
 		box-sizing: border-box;
+		display: inline-grid;
+		align-items: center;
+		grid-template-rows: 0px 1fr;
+		margin: 0;
+		vertical-align: top;
 	}
 	
 	img {
@@ -26,10 +31,10 @@
 	.heading4 {
 		position: absolute;
 		bottom: 0em;
-		width: calc(100% - 1em);
+		width: calc(100% - 1em + 2.5px);
 		padding: 0.5em 0.25em;
 		box-sizing: border-box;
-		margin: 0.5em;
+		margin: calc(0.5em - 1px);
 		text-align: center;
 		opacity: 0;
 		transition: opacity .5s ease-out;
