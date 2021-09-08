@@ -55,6 +55,12 @@
 		a {
 			pointer-events: all;
 		}
+		
+		div {
+			position: relative;
+			padding: 0.1em 0.4em;
+			margin: 0 0.2em;
+		}
 	}
 
 	&:hover, &:focus-within {

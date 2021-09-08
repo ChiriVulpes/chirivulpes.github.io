@@ -1,5 +1,5 @@
 import Article from "@element/Article";
-import Element, { Text } from "@element/Element";
+import Element from "@element/Element";
 import Heading from "@element/Heading";
 import Link from "@element/Link";
 import Thumbnail from "@element/Thumbnail";
@@ -63,7 +63,7 @@ export default new class ArtArticle extends Article {
 		return pieces
 			.map(url => {
 				const details = getDetails(url, record, resolver);
-				return [new Art("cover", url as HrefFile, details!), details?.date?.getTime() ?? 0] as const;
+				return [new Art("cover", url as HrefFile, details), details?.date?.getTime() ?? 0] as const;
 			})
 			.sort(([, dateA], [, dateB]) => dateB - dateA)
 			.map(([art]) => art);
@@ -72,7 +72,7 @@ export default new class ArtArticle extends Article {
 
 type ArtResolver = (baseFile: string, url: string) => IArtDetails | undefined;
 
-function getDetails (file: string, record: ArtRecord, resolver?: ArtResolver) {
+function getDetails (file: string, record: ArtRecord, resolver?: ArtResolver): IArtDetails {
 	const fileBase = path.basename(file, ".png");
 	const match = record[fileBase]
 		?? resolver?.(fileBase, file);
@@ -81,6 +81,7 @@ function getDetails (file: string, record: ArtRecord, resolver?: ArtResolver) {
 		return match;
 
 	Log.warn("Story cover", ansi.red(fileBase), "has no details");
+	return {};
 }
 
 class Art extends Element {
@@ -96,7 +97,7 @@ class Art extends Element {
 			return;
 
 		new Heading(4)
-			.append(details.link ? new Link(details.link).text(details.title) : new Text(details.title))
+			.append((details.link ? new Link(details.link) : new Element()).text(details.title))
 			.appendTo(this);
 	}
 }
