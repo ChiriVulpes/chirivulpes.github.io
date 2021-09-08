@@ -3,7 +3,7 @@ import Meta from "@element/Meta";
 import Script from "@element/Script";
 import Stylesheet from "@element/Stylesheet";
 import Log from "@util/Log";
-import { DateISO, HrefAbsolute } from "@util/Strings";
+import { DateISO, HrefAbsolute, HrefLocal } from "@util/Strings";
 
 export class Metadata<HOST extends Page> {
 
@@ -72,6 +72,12 @@ export default class Page extends Element {
 	public constructor () {
 		super("html");
 		this.attribute("lang", "en");
+	}
+
+	public route?: HrefLocal;
+	public setRoute (route: HrefLocal) {
+		this.route = route;
+		return this;
 	}
 
 	private pageType: Meta.OpenGraphType = "website";

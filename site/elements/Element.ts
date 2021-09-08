@@ -1,5 +1,7 @@
 import Log from "@util/Log";
+import { HrefLocal } from "@util/Strings";
 import ansi from "ansicolor";
+import fs from "fs-extra";
 import marked from "marked";
 import Links from "site/Links";
 
@@ -117,6 +119,12 @@ export abstract class NodeContainer extends Node {
 	public markdown (markdown?: string) {
 		if (markdown !== undefined)
 			new Markdown(markdown).appendTo(this);
+		return this;
+	}
+
+	public html (html?: string) {
+		if (html !== undefined)
+			new HTML(html).appendTo(this);
 		return this;
 	}
 
@@ -275,6 +283,11 @@ export default class Element extends NodeContainer {
 		return this;
 	}
 
+	public setAriaLabel (label: string) {
+		this.attribute("aria-label", label);
+		return this;
+	}
+
 	public requireStyles (...files: string[]) {
 		this.requiredStylesheets ??= [];
 		this.requiredStylesheets?.push(...files);
@@ -407,7 +420,6 @@ export default class Element extends NodeContainer {
 
 export class Text extends Node {
 
-	private id?: string;
 	public constructor (private readonly text: string) {
 		super();
 	}
@@ -420,6 +432,7 @@ export class Text extends Node {
 		return this.text;
 	}
 
+	private id?: string;
 	public getId () {
 		const id = this.id;
 		if (id !== undefined)
@@ -430,9 +443,47 @@ export class Text extends Node {
 	}
 }
 
-export class Markdown extends Node {
+export class HTML extends Node {
+
+	public static fromFile (file: HrefLocal) {
+		return new HTMLFile(file);
+	}
+
+	public constructor (protected html: string) {
+		super();
+	}
+
+	public isInline () {
+		return false;
+	}
+
+	public compile () {
+		return this.html;
+	}
 
 	private id?: string;
+	public getId () {
+		const id = this.id;
+		if (id !== undefined)
+			return id;
+
+		const html = this.html;
+		return this.id = ansi.green(`HTML(${html.length > 20 ? html.slice(0, 20) + "..." : html})`);
+	}
+}
+
+class HTMLFile extends HTML {
+	public constructor (private readonly file: HrefLocal) {
+		super("");
+	}
+
+	public async precompile () {
+		this.html = await fs.readFile(`${process.cwd()}${this.file}`, "utf8");
+	}
+}
+
+export class Markdown extends Node {
+
 	private text?: string;
 	public constructor (private readonly markdown: string) {
 		super();
@@ -498,6 +549,7 @@ export class Markdown extends Node {
 		return text ?? "";
 	}
 
+	private id?: string;
 	public getId () {
 		const id = this.id;
 		if (id !== undefined)

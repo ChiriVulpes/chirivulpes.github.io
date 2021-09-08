@@ -67,8 +67,11 @@ export default new class {
 
 		for (const { file, instance, time: loadWatch } of pages) {
 
-			const newFile = path.relative(root, file).slice(0, -3).toLowerCase();
+			let newFile = instance.route ?? path.relative(root, file).slice(0, -3).toLowerCase();
 			instance.log.setSources(ansi.cyan(newFile)); // Add page url to its log 
+
+			if (!newFile.endsWith("index"))
+				newFile += "/index";
 
 			const url = newFile.endsWith("index") ? newFile.slice(0, -5) : newFile + ".html";
 			instance.metadata.setURL(`https://${path.join(_host!, url).prettyFile()}` as const);

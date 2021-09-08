@@ -75,6 +75,11 @@ export class Header extends Element {
 			.id("home")
 			.appendTo(this));
 
+	protected _tagline = new Element("p")
+		.class("tagline")
+		.setOnlyRenderWithContent()
+		.appendTo(this);
+
 	protected _nav = new Nav()
 		.appendTo(this);
 
@@ -84,6 +89,11 @@ export class Header extends Element {
 
 	public homeLink (initialiser: Initialiser<Link>) {
 		initialiser(this._homeLink);
+		return this;
+	}
+
+	public tagline (initialiser: Initialiser<Element>) {
+		initialiser(this._tagline);
 		return this;
 	}
 
