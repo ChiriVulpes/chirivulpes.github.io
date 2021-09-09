@@ -19,7 +19,6 @@ void Blog.INSTANCE.discovered.then(async () => {
 			.map(blogPost => blogPost.createArticle())
 			.collect(Paginator.create)
 			.setRoute(`/blog/tag/${tag}`)
-			.setGenerateProxyAtRoot()
 			.generate(() => new BlogPage()))
 		.collect(promises => Promise.all(promises));
 });
