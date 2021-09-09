@@ -23,7 +23,7 @@ export default class Thumbnail extends Element {
 		this.image = image.removeFromStart("static/image/").removeFromEnd(".png");
 	}
 
-	public async precompile () {
+	protected async precompile () {
 		const newFileWeb = `static/image/thumb/${this.image}`.prettyFile();
 
 		new Element("img")
@@ -119,7 +119,7 @@ IMarkdownFilter.register({
 
 		const thumb = new Thumbnail(linkText)
 			.attribute("alt", altText);
-		await thumb.precompile();
-		return { insert: await thumb.compile(false), cursor: i };
+		await thumb.doPrecompile(false);
+		return { insert: await thumb.doCompile(false), cursor: i };
 	},
 })

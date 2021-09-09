@@ -27,7 +27,9 @@
 		"@types/prismjs": "1.16.6",
 		"highlight.js": "11.2.0",
 		"js-yaml": "4.1.0",
-		"@types/js-yaml": "4.0.3"
+		"@types/js-yaml": "4.0.3",
+		"stack-trace": "0.0.10",
+		"@types/stack-trace": "0.0.29"
 	},
 	"devDependencies": {
 		"chokidar": "3.5.1",

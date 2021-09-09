@@ -67,7 +67,8 @@ function serveStaticFixer (root: string): NextHandleFunction {
 
 			if (await hasHTMLFile(path.resolve(path.join(root, file)))) {
 				originalUrl.path = null;
-				originalUrl.pathname = collapseLeadingSlashes(`${originalUrl.pathname!}`)
+				console.log(originalUrl.pathname, collapseLeadingSlashes(`${originalUrl.pathname!.replace(/\/$/, "")}`));
+				originalUrl.pathname = collapseLeadingSlashes(`${originalUrl.pathname!.replace(/\/$/, "")}`);
 
 				// reformat the URL
 				const loc = encodeUrl(url.format(originalUrl));

@@ -2,7 +2,6 @@ import Files from "@util/Files";
 import Log from "@util/Log";
 import { HrefAbsolute } from "@util/Strings";
 import { elapsed, Stopwatch, stopwatch } from "@util/Time";
-import ansi from "ansicolor";
 import fs from "fs-extra";
 import path from "path";
 import Page from "./Page";
@@ -40,7 +39,7 @@ export default new class {
 		const staticWatch = stopwatch();
 		await fs.copy(dir, path.join(_root, dir));
 		staticWatch.stop();
-		Log.info("Copied static directory", ansi.cyan(dir), "in", staticWatch.time());
+		Log.info("Copied static directory", Files.loggify(dir), "in", staticWatch.time());
 	}
 
 	public async write (name: string, contents: string) {
@@ -49,22 +48,25 @@ export default new class {
 		return fs.writeFile(name, contents);
 	}
 
-	public async add (file: string, instance: Page, root?: string, loadWatch?: Stopwatch) {
+	public async add (instance: Page | Page.Proxy, file?: string, root?: string, loadWatch?: Stopwatch) {
 
 		let newFile: string | undefined = instance.route;
 		if (!newFile) {
 			if (!root) {
-				Log.error(`Ignoring page ${ansi.cyan(file)}, no route specified`);
+				Log.error(`Ignoring page ${Files.loggify(file!)}, no route specified`);
 				return;
 			}
 
-			newFile = path.relative(root, file).slice(0, -3).toLowerCase();
+			newFile = path.relative(root, file!).slice(0, -3).toLowerCase();
 		}
 
 		if (newFile.startsWith("/"))
 			newFile = newFile.slice(1);
 
-		instance.log.setSources(ansi.cyan(newFile)); // Add page url to its log 
+		if (instance instanceof Page.Proxy)
+			instance = instance.supplier();
+
+		instance.log.setSources(Files.loggify(newFile)); // Add page url to its log
 
 		// if (!newFile.endsWith("index"))
 		// 	newFile += "/index";
@@ -75,30 +77,33 @@ export default new class {
 		try {
 			const indent = !!process.env.indent;
 			const precompileWatch = stopwatch();
-			await instance.precompile(indent);
+			await instance.doPrecompile(indent);
 			precompileWatch.stop();
 
 			const compileWatch = stopwatch();
-			const compiled = await instance.compile(indent);
+			const compiled = await instance.doCompile(indent);
 			compileWatch.stop();
 
 			const writeWatch = stopwatch();
 			await this.write(`${newFile}.html`, compiled);
 			writeWatch.stop();
 
-			Log.info("Loaded page", ansi.cyan(file), ...loadWatch ? ["in", loadWatch?.time()] : [],
+			Log.info("Loaded page", Files.loggify(file ?? newFile), ...loadWatch ? ["in", loadWatch?.time()] : [],
 				"- compiled in", compileWatch.time(),
 				"- written", `${newFile}.html`, "in", writeWatch.time(),
 				"- total time", elapsed((loadWatch?.elapsed ?? 0) + compileWatch.elapsed + writeWatch.elapsed + precompileWatch.elapsed));
 		} catch (err) {
-			Log.error(`Ignoring page ${ansi.cyan(file)}, encountered error in compilation`, err);
+			Log.error(`Ignoring page ${Files.loggify(file ?? newFile)}, encountered error in compilation`, err);
 		}
 	}
 
 	public async addPages (root: string) {
 		const pages = await Files.discoverClasses(Page, root);
-
 		for (const { file, value, time: loadWatch } of pages)
-			await this.add(file, value, root, loadWatch);
+			await this.add(value, file, root, loadWatch);
+
+		const proxies = await Files.discoverClasses(Page.Proxy, root);
+		for (const { file, value, time: loadWatch } of proxies)
+			await this.add(value, file, root, loadWatch);
 	}
 };

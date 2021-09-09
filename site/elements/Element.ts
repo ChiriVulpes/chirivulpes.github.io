@@ -42,7 +42,6 @@ const inlineElements = new Set([
 
 export abstract class Node {
 	abstract isInline (): boolean;
-	abstract compile (indent: boolean): string | Promise<string>;
 	abstract getId (): string;
 
 	public appendTo (container: NodeContainer) {
@@ -60,7 +59,29 @@ export abstract class Node {
 		return this;
 	}
 
-	public precompile?(indent: boolean): void;
+	protected precompile?(indent: boolean): void;
+	protected abstract compile (indent: boolean): string | Promise<string>;
+
+	private precompiled?: Promise<void>;
+	public doPrecompile (indent: boolean) {
+		// eslint-disable-next-line @typescript-eslint/no-misused-promises, no-async-promise-executor
+		this.precompiled ??= new Promise<void>(async resolve => {
+			await this.precompile?.(indent);
+			resolve();
+		});
+
+		return this.precompiled;
+	}
+
+	private compiled?: Promise<string>;
+	public async doCompile (indent: boolean) {
+		// eslint-disable-next-line @typescript-eslint/no-misused-promises, no-async-promise-executor
+		this.compiled ??= new Promise<string>(async resolve => {
+			resolve(await this.compile(indent));
+		});
+
+		return this.compiled;
+	}
 
 	private _parent?: NodeContainer;
 
@@ -197,8 +218,7 @@ export abstract class NodeContainer extends Node {
 
 	public async precompileDescendants (indent: boolean) {
 		for (const child of this.children) {
-			if (child.precompile !== undefined)
-				await child.precompile(indent);
+			await child.doPrecompile(indent);
 
 			if (child instanceof NodeContainer)
 				await child.precompileDescendants(indent);
@@ -213,7 +233,7 @@ export class Fragment extends NodeContainer {
 
 	public async compile (indent: boolean) {
 		const compiledChildren = await Promise.all(this.children
-			.map(element => element.compile(indent)));
+			.map(element => element.doCompile(indent)));
 
 		const newline = indent ? "\n" : "";
 		let result = "";
@@ -345,7 +365,7 @@ export default class Element extends NodeContainer {
 		return this;
 	}
 
-	public async compile (indent: boolean) {
+	protected async compile (indent: boolean) {
 		const type = this.type;
 		const isVoid = voidElements.has(type);
 		const children = await this.compileChildren(indent && !this.noWrap, isVoid) ?? "";
@@ -399,7 +419,7 @@ export default class Element extends NodeContainer {
 			if (requiresTextChild && element instanceof Text)
 				requiresTextChild = false;
 
-			return element.compile(indent);
+			return element.doCompile(indent);
 		}));
 
 		if (requiresTextChild)
@@ -436,7 +456,7 @@ export class Text extends Node {
 		return true;
 	}
 
-	public compile () {
+	protected compile () {
 		return this.text;
 	}
 
@@ -461,7 +481,7 @@ export class HTML extends Node {
 		return false;
 	}
 
-	public compile () {
+	protected compile () {
 		return this.html;
 	}
 
@@ -510,7 +530,7 @@ export class Heading extends Element {
 	/**
 	 * Automatically prevents heading level-skipping
 	 */
-	public precompile () {
+	protected precompile () {
 		let level = this.level;
 		if (this.hasCustomType())
 			// ignore headings of different tag types
@@ -548,7 +568,7 @@ export class Markdown extends Fragment {
 		return false;
 	}
 
-	public async precompile (shouldIndent: boolean) {
+	protected async precompile (shouldIndent: boolean) {
 		const markdown = await compileMarkdown(this._markdown)
 			.catch(err => this.getLog().warn("Unable to render markdown", this.getId(), err));
 

@@ -63,7 +63,7 @@ export default class BlogPost extends BlogPage {
 							.class("tag")
 							.setSimple()
 							.text(tag))))))
-			.append(new Paginator(Blog.INSTANCE.all, this, "/blog"));
+			.append(new Paginator.Nav(Blog.INSTANCE.all, this, "/blog"));
 	}
 
 	private generateRoute () {
@@ -73,5 +73,9 @@ export default class BlogPost extends BlogPage {
 		const date = this.metadata.publishedTime.toISOString().split("T")[0];
 		const title = createID(this.metadata.title!);
 		this.route = `/blog/${date}/${title}`;
+	}
+
+	public createArticle () {
+		return new Article(this.metadata.title!, this.route);
 	}
 }

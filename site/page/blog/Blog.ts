@@ -16,6 +16,9 @@ export default class Blog {
 	private readonly _byTag = new Map<string, BlogPost[]>();
 	public get byTag () { return this._byTag as ReadonlyMap<string, readonly BlogPost[]>; }
 
+	private resolveDiscovered?: () => void;
+	public readonly discovered = new Promise<void>(resolve => this.resolveDiscovered = resolve);
+
 	public async discover () {
 		const markdownFiles = await Files.discoverFiles("site/collections/blog/**/*.md", "blog posts");
 		const blogPosts: [file: string, blogPost: BlogPost, time: Stopwatch][] = [];
@@ -40,8 +43,10 @@ export default class Blog {
 			blogPosts.push([markdownFile, blogPost, time]);
 		}
 
+		this.resolveDiscovered?.();
+
 		for (const [markdownFile, blogPost, time] of blogPosts)
-			await Site.add(markdownFile, blogPost, undefined, time);
+			await Site.add(blogPost, markdownFile, undefined, time);
 	}
 
 	private insertByDate (blogPost: BlogPost, into: BlogPost[]) {

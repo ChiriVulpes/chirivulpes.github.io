@@ -61,7 +61,7 @@ export class Metadata<HOST extends Page> {
 	}
 }
 
-export default class Page extends Element {
+class Page extends Element {
 
 	protected head = new Element("head")
 		.appendTo(this);
@@ -69,7 +69,6 @@ export default class Page extends Element {
 		.appendTo(this);
 
 	protected appendsTo = this.body;
-	private alreadyCompiled?: true;
 	public log = Log.new();
 	public metadata = new Metadata(this);
 
@@ -90,12 +89,7 @@ export default class Page extends Element {
 		return this;
 	}
 
-	public async precompile (indent: boolean) {
-		if (this.alreadyCompiled === true) {
-			Log.error("Tried to recompile a page. Pages can only be compiled once.");
-			return "";
-		}
-
+	protected async precompile (indent: boolean) {
 		////////////////////////////////////
 		// Stylesheets
 		//
@@ -201,13 +195,7 @@ export default class Page extends Element {
 		return this.metadata.title;
 	}
 
-	public async compile (indent: boolean) {
-		if (this.alreadyCompiled === true) {
-			Log.error("Tried to recompile a page. Pages can only be compiled once.");
-			return "";
-		}
-
-		this.alreadyCompiled = true;
+	protected async compile (indent: boolean) {
 		return `<!DOCTYPE html>${indent ? "\n" : ""}${await super.compile(indent)}`
 			.replace(/(<pre(?:\s.*?)?>)(.*)<\/pre>/gs, (match, startTag: string, contents: string) => {
 				let minIndent = Infinity;
@@ -229,3 +217,17 @@ export default class Page extends Element {
 			});
 	}
 }
+
+namespace Page {
+	export class Proxy<P extends Page = Page> {
+		public constructor (public readonly supplier: () => P) { }
+
+		public route?: HrefLocal;
+		public setRoute (route: HrefLocal) {
+			this.route = route;
+			return this;
+		}
+	}
+}
+
+export default Page;

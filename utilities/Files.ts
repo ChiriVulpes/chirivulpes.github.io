@@ -16,6 +16,14 @@ function getDefaultNameOfThings (glob: string) {
 
 namespace Files {
 
+	const regexForwardSlash = /\\/g;
+	export function loggify (file: string) {
+		if (path.isAbsolute(file))
+			file = path.relative(process.cwd(), file);
+
+		return ansi.cyan(file.replace(regexForwardSlash, "/"));
+	}
+
 	export interface IResult<T = string> {
 		file: string;
 		value: T;
@@ -47,12 +55,12 @@ namespace Files {
 				// eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-var-requires
 				instance = require(path.join(cwd, file))?.default;
 			} catch (err) {
-				Log.error(`Ignoring file ${ansi.cyan(file)}, encountered error`, err);
+				Log.error(`Ignoring file ${loggify(file)}, encountered error`, err);
 				continue;
 			}
 
 			if (!(instance instanceof cls)) {
-				ignored.push(ansi.cyan(file));
+				ignored.push(loggify(file));
 				continue;
 			}
 
@@ -74,7 +82,7 @@ namespace Files {
 		try {
 			contents = await fs.readFile(path.join(cwd, file), "utf8");
 		} catch (err) {
-			Log.error(`Ignoring file ${ansi.cyan(file)}, encountered error`, err);
+			Log.error(`Ignoring file ${loggify(file)}, encountered error`, err);
 			return;
 		}
 
