@@ -502,7 +502,7 @@ summary {
 .tag {
 	@include resolve(color, var(--color-tag));
 	position: relative;
-	padding-right: 0.2em;
+	padding-right: 0.5em;
 }
 
 .tag + .tag::before {
@@ -601,7 +601,7 @@ nav {
 	}
 }
 
-.posts-nav {
+.paginator {
 	margin: 2em;
 	display: grid;
 	grid-template-columns: 2fr 1fr 2fr;
@@ -614,20 +614,20 @@ nav {
 		z-index: 0;
 	}
 	
-	.posts-nav-prev {
+	.paginator-prev {
 		@include background-slide-animation($from: right, $padding: $local-link-padding);
 		@include arrow(left);
 		padding-left: 1.5em;
 	}
 
-	.posts-nav-next {
+	.paginator-next {
 		text-align: right;
 		grid-column: 3;
 		@include background-slide-animation($padding: $local-link-padding);
 		@include arrow;
 	}
 
-	.posts-nav-index {
+	.paginator-index {
 		grid-column: 2;
 		text-align: center;
 		@include background-slide-animation($from: top, $padding: $local-link-padding);

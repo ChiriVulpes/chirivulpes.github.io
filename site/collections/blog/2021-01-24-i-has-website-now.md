@@ -1,6 +1,8 @@
+---
 date: 2021-01-24T12:31:48Z
 title: I has website now!
 tags: programming, update, chiri.works
+---
 
 In the past few days I've created this website with the intent to house my portfolio — stories I've written, programming projects I've worked on and still work on, etc. It was a ton of fun to create! It involved a lot of design work which is honestly one of my favourite things to do, iterating on something until it's functional and attractive. And then I had it, I had the perfect place to house all my things, and I could link it on all the websites which previously just linked to my GitHub. That was so much nicer!
 

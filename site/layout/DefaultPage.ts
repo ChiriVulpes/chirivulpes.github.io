@@ -1,5 +1,4 @@
-import Element, { Initialiser } from "@element/Element";
-import Heading from "@element/Heading";
+import Element, { Heading, Initialiser } from "@element/Element";
 import Link from "@element/Link";
 import Meta from "@element/Meta";
 import Nav from "@element/Nav";
@@ -45,7 +44,7 @@ export default class DefaultPage extends Page {
 		new Meta.SiteIcon("/static/image/logo.png")
 			.appendTo(this.head);
 
-		this.metadata.setTitle("Chiri Vulpes &nbsp;| &nbsp;Author ∙ Designer ∙ Developer");
+		this.metadata.setTitle("Chiri Vulpes", "Author ∙ Designer ∙ Developer");
 		this.metadata.setDescription("Chiri Vulpes is a prolific creator — an author, a designer, a software developer, an artist, and even a composer! Here's some stuff she's made and ways you can get in contact with her.");
 		this.metadata.setImage(Site.getAbsolute("static/image/logo.png"));
 	}

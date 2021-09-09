@@ -5,10 +5,8 @@ function refreshDates () {
 		const date = new Date(element.dataset.date ?? 0);
 		const isToday = date.toDateString() === new Date().toDateString();
 
-		const tooltip = date.toLocaleString(undefined, {
-			hour: "numeric", minute: "numeric",
-			...isToday ? {} : { year: "numeric", month: "long", day: "numeric" },
-		});
+		const tooltip = date.toLocaleString(undefined, isToday ? { hour: "numeric", minute: "numeric" }
+			: JSON.parse(element.dataset.format!));
 
 		element.textContent = ago(date);
 		element.setAttribute("aria-label", element.title = tooltip);

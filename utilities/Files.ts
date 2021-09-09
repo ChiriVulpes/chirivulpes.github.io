@@ -2,6 +2,7 @@ import Log from "@util/Log";
 import { Stopwatch, stopwatch } from "@util/Time";
 import { Class } from "@util/Type";
 import ansi from "ansicolor";
+import fs from "fs-extra";
 import globby from "globby";
 import path from "path";
 
@@ -14,6 +15,13 @@ function getDefaultNameOfThings (glob: string) {
 }
 
 namespace Files {
+
+	export interface IResult<T = string> {
+		file: string;
+		value: T;
+		time: Stopwatch;
+	}
+
 	export async function discoverFiles (glob: string, nameOfThings = getDefaultNameOfThings(glob)) {
 		const globWatch = stopwatch();
 		const files = await globby(glob);
@@ -29,7 +37,7 @@ namespace Files {
 		const className = ansi.green(cls.name);
 		const typescriptFiles = await discoverFiles(`${directory}/**/*.ts`, `${className} instances`);
 
-		const results: { file: string, instance: T, time: Stopwatch }[] = [];
+		const results: IResult<T>[] = [];
 		const ignored: string[] = [];
 		const totalLoadWatch = stopwatch();
 		for (const file of typescriptFiles) {
@@ -49,7 +57,7 @@ namespace Files {
 			}
 
 			loadWatch.stop();
-			results.push({ file, instance, time: loadWatch });
+			results.push({ file, value: instance, time: loadWatch });
 		}
 
 		totalLoadWatch.stop();
@@ -57,6 +65,21 @@ namespace Files {
 		Log.info("Ignored:", ignored.join(", "));
 
 		return results;
+	}
+
+	export async function load (file: string): Promise<IResult | undefined> {
+		const cwd = process.cwd();
+		const loadWatch = stopwatch();
+		let contents: string | undefined;
+		try {
+			contents = await fs.readFile(path.join(cwd, file), "utf8");
+		} catch (err) {
+			Log.error(`Ignoring file ${ansi.cyan(file)}, encountered error`, err);
+			return;
+		}
+
+		loadWatch.stop();
+		return { file, value: contents, time: loadWatch };
 	}
 }
 

@@ -20,4 +20,10 @@ export default class Link extends Element {
 		if (href.startsWith("#"))
 			this.class("hash-link");
 	}
+
+	public setSimple () {
+		this.classes.delete("local-link");
+		this.classes.delete("hash-link");
+		return this;
+	}
 }

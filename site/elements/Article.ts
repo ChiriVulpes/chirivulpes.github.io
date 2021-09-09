@@ -1,6 +1,5 @@
 import Card from "@element/Card";
-import Element, { Initialiser } from "@element/Element";
-import Heading from "@element/Heading";
+import Element, { Heading, Initialiser } from "@element/Element";
 import Link from "@element/Link";
 import Nav from "@element/Nav";
 import Files from "@util/Files";
@@ -56,7 +55,7 @@ export default class Article<T extends IHasCard = IHasCard> extends Element {
 			return;
 
 		const cardSources = this.cardSources = (await Files.discoverClasses(containsCards.cls, containsCards.directory))
-			.map(source => source.instance);
+			.map(source => source.value);
 
 		const results = cardSources
 			.map(instance => ({ instance, order: instance.getOrder() }))

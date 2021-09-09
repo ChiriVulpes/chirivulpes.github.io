@@ -7,11 +7,15 @@ import { DateISO, HrefAbsolute, HrefLocal } from "@util/Strings";
 
 export class Metadata<HOST extends Page> {
 
+	public static createTitle (...title: string[]) {
+		return title.join(" &nbsp;| &nbsp;");
+	}
+
 	public constructor (private readonly host: HOST) { }
 
 	public title?: string;
-	public setTitle (title: string) {
-		this.title = title;
+	public setTitle (...title: string[]) {
+		this.title = Metadata.createTitle(...title);
 		return this.host;
 	}
 
@@ -141,7 +145,7 @@ export default class Page extends Element {
 		// Metadata
 		//
 
-		const title = this.metadata.title;
+		const title = this.getTitle();
 		if (title)
 			new Element("title")
 				.text(title)
@@ -191,6 +195,10 @@ export default class Page extends Element {
 				new Meta.OpenGraph("article:tag", ...tags)
 					.appendTo(this.head);
 		}
+	}
+
+	protected getTitle () {
+		return this.metadata.title;
 	}
 
 	public async compile (indent: boolean) {

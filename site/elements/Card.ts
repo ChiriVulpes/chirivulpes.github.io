@@ -1,5 +1,4 @@
-import Element, { Initialiser } from "@element/Element";
-import Heading from "@element/Heading";
+import Element, { Heading, Initialiser } from "@element/Element";
 import Image from "@element/Image";
 import Thumbnail from "@element/Thumbnail";
 import { HrefFile } from "@util/Strings";

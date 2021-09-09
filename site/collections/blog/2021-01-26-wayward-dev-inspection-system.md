@@ -1,6 +1,8 @@
+---
 date: 2021-01-25T14:11:09.277Z
-title: Wayward: Evolution of the inspection/tooltip system
+title: "Wayward: Evolution of the inspection/tooltip system"
 tags: wayward, programming
+---
 
 Wayward's UI has evolved a lot over the years, and in recent years most of those changes have been me redoing things. Recently — over the past two versions — I've been doing a lot of work on the inspection system, trying to make it more powerful for all the cases we need it. But I figured that there might be people interested in seeing the whole evolution of it!
 

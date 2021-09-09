@@ -235,8 +235,8 @@ export class Fragment extends NodeContainer {
 
 export default class Element extends NodeContainer {
 
-	private classes: string[] = [];
-	private _attributes: Record<string, string> = {};
+	protected readonly classes = new Set<string>();
+	protected _attributes: Record<string, string> = {};
 	private _isInline?: boolean;
 	public requiredStylesheets?: string[] = [];
 	public requiredScripts?: string[] = [];
@@ -244,6 +244,7 @@ export default class Element extends NodeContainer {
 	private isFlat?: true;
 	private _style?: Record<string, string>;
 	private onlyRenderWithContent?: true;
+	private noWrap?: true;
 
 	public constructor (public type = "div") {
 		super();
@@ -305,7 +306,8 @@ export default class Element extends NodeContainer {
 	}
 
 	public class (...classes: string[]) {
-		this.classes.push(...classes);
+		for (const cls of classes)
+			this.classes.add(cls);
 		return this;
 	}
 
@@ -338,23 +340,31 @@ export default class Element extends NodeContainer {
 		return this;
 	}
 
+	public setContentsOnly () {
+		this.noWrap = true;
+		return this;
+	}
+
 	public async compile (indent: boolean) {
 		const type = this.type;
 		const isVoid = voidElements.has(type);
+		const children = await this.compileChildren(indent && !this.noWrap, isVoid) ?? "";
+		if (this.onlyRenderWithContent === true && children.length === 0)
+			return "";
+
+		if (this.noWrap)
+			return children;
+
 		const postTag = isVoid ? "" : `</${type}>`;
 
-		const classes = this.classes.length === 0 ? "" : ` class="${this.classes.join(" ")}"`;
+		const classes = this.classes.size === 0 ? "" : ` class="${[...this.classes].join(" ")}"`;
 		const attributes = Object.entries(this._attributes)
-			.map(([name, value]) => ` ${name}="${value}"`)
+			.map(([name, value]) => ` ${name}="${value.replace(/"/g, "&quot;")}"`)
 			.join("");
 
 		const style = this._style === undefined ? "" : ' style="' + Object.entries(this._style)
 			.map(([property, value]) => `${property}:${value}`)
 			.join(";") + '"';
-
-		const children = await this.compileChildren(indent, isVoid) ?? "";
-		if (this.onlyRenderWithContent === true && children.length === 0)
-			return "";
 
 		return `<${type}${classes}${attributes}${style}${isVoid ? "/" : ""}>${children}${postTag}`
 	}
@@ -443,10 +453,6 @@ export class Text extends Node {
 
 export class HTML extends Node {
 
-	public static fromFile (file: HrefLocal) {
-		return new HTMLFile(file);
-	}
-
 	public constructor (protected html: string) {
 		super();
 	}
@@ -470,20 +476,71 @@ export class HTML extends Node {
 	}
 }
 
-class HTMLFile extends HTML {
+export class FileFragment extends Fragment {
+	private fileText?: string;
 	public constructor (private readonly file: HrefLocal) {
-		super("");
+		super();
+	}
+
+	private _onPrecompile?: (text: string, element: FileFragment) => any;
+	public onPrecompile (onPrecompile: (text: string, element: FileFragment) => any) {
+		this._onPrecompile = onPrecompile;
+		return this;
 	}
 
 	public async precompile () {
-		this.html = await fs.readFile(`${process.cwd()}${this.file}`, "utf8");
+		this.fileText = await fs.readFile(`${process.cwd()}${this.file}`, "utf8").catch(() => "");
+		if (!this._onPrecompile) {
+			this.text(this.fileText);
+			return;
+		}
+
+		this._onPrecompile(this.fileText, this);
 	}
 }
 
-export class Markdown extends Node {
+const headingLevelsByRoot = new Map<NodeContainer, Set<number>>();
 
-	private text?: string;
-	public constructor (private readonly markdown: string) {
+export class Heading extends Element {
+	public constructor (public readonly level: 1 | 2 | 3 | 4 | 5 | 6) {
+		super(`h${level}`);
+		this.class("heading", `heading${level}`);
+	}
+
+	/**
+	 * Automatically prevents heading level-skipping
+	 */
+	public precompile () {
+		let level = this.level;
+		if (this.hasCustomType())
+			// ignore headings of different tag types
+			return;
+
+		const root = this.root;
+		let headingLevels = headingLevelsByRoot.get(root);
+		if (!headingLevels) {
+			headingLevels = new Set(root.findAll((element): element is Heading => element instanceof Heading)
+				.filter(element => !element.hasCustomType())
+				.map(heading => heading.level));
+			headingLevelsByRoot.set(root, headingLevels);
+		}
+
+		for (let i = 1; i < this.level; i++)
+			if (!headingLevels.has(i))
+				level--;
+
+		this.type = `h${level}`;
+	}
+
+	private hasCustomType () {
+		return this.type !== `h${this.level}`;
+	}
+}
+
+const REGEX_HEADING = /^<h([123456])\b(?:\s+id="([^"]*?)")?\s*>(.*)<\/h[123456]>$/;
+export class Markdown extends Fragment {
+
+	public constructor (private readonly _markdown: string) {
 		super();
 	}
 
@@ -492,16 +549,64 @@ export class Markdown extends Node {
 	}
 
 	public async precompile (shouldIndent: boolean) {
-		const markdown = await compileMarkdown(this.markdown)
+		const markdown = await compileMarkdown(this._markdown)
 			.catch(err => this.getLog().warn("Unable to render markdown", this.getId(), err));
-		this.text = markdown ?? "";
+
+		this.append(...this.explode(markdown ?? ""));
 	}
 
-	public compile () {
-		const text = this.text;
-		if (text === undefined)
-			this.getLog().error("No compiled markdown text to render", this.getId());
-		return text ?? "";
+	private explode (markdown: string) {
+		const contents: Node[] = [];
+		let html = "";
+		NextTop: for (let i = 0; i < markdown.length; i++) {
+			if (markdown[i] !== "<" || markdown[i + 1] !== "h" || (markdown[i + 3] !== " " && markdown[i + 3] !== ">")) {
+				html += markdown[i];
+				continue;
+			}
+
+			const level = +markdown[i + 2];
+			if (!(level > 0 && level < 7)) {
+				html += markdown[i];
+				continue;
+			}
+
+			if (html.length)
+				contents.push(new HTML(html));
+			html = "";
+
+			for (let j = i + 3; j < markdown.length; j++) {
+				if (markdown[j] !== "<" || markdown[j + 1] !== "/" || markdown[j + 2] !== "h" || markdown[j + 3] !== `${level}` || markdown[j + 4] !== ">")
+					continue;
+
+				j += 5;
+
+				const match = REGEX_HEADING.exec(markdown.slice(i, j));
+				if (!match)
+					continue NextTop;
+
+				const nextContents = this.explode(markdown.slice(j));
+				let indexOfNextSection = nextContents.findIndex(element => element instanceof Element
+					&& element.type === "section"
+					&& (element.children[0] as Heading).level <= level);
+				if (indexOfNextSection === -1)
+					indexOfNextSection = Infinity;
+
+				const [_, , id, text] = match;
+				contents.push(new Element("section")
+					.append(new Heading(+level as 1 | 2 | 3 | 4 | 5 | 6)
+						.id(id)
+						.html(text))
+					.append(...nextContents.slice(0, indexOfNextSection)));
+				contents.push(...nextContents.slice(indexOfNextSection));
+
+				break NextTop;
+			}
+		}
+
+		if (html.length)
+			contents.push(new HTML(html));
+
+		return contents;
 	}
 
 	private id?: string;
@@ -510,7 +615,7 @@ export class Markdown extends Node {
 		if (id !== undefined)
 			return id;
 
-		const markdown = this.markdown;
+		const markdown = this._markdown;
 		return this.id = ansi.green(`Markdown(${markdown.length > 20 ? markdown.slice(0, 20) + "..." : markdown})`);
 	}
 }

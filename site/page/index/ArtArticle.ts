@@ -1,6 +1,5 @@
 import Article from "@element/Article";
-import Element from "@element/Element";
-import Heading from "@element/Heading";
+import Element, { Heading } from "@element/Element";
 import Link from "@element/Link";
 import Thumbnail from "@element/Thumbnail";
 import StoriesArticle from "@page/index/StoriesArticle";
