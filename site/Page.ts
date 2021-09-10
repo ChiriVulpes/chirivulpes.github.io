@@ -227,6 +227,12 @@ namespace Page {
 			this.route = route;
 			return this;
 		}
+
+		public promise?: Promise<any>;
+		public setAwait (promise: Promise<any>) {
+			this.promise = promise;
+			return this;
+		}
 	}
 }
 

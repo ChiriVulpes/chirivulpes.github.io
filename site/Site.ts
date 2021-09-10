@@ -63,8 +63,15 @@ export default new class {
 		if (newFile.startsWith("/"))
 			newFile = newFile.slice(1);
 
-		if (instance instanceof Page.Proxy)
-			instance = instance.supplier();
+		if (instance instanceof Page.Proxy) {
+			const proxy = instance;
+			await proxy.promise;
+			instance = proxy.supplier();
+			if (!instance) {
+				Log.error("Ignoring proxy page, no page to proxy");
+				return;
+			}
+		}
 
 		instance.log.setSources(Files.loggify(newFile)); // Add page url to its log
 
