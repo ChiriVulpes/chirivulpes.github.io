@@ -54,7 +54,7 @@ export default class Blog {
 
 		let i = 0;
 		for (; i < into.length; i++)
-			if (newBlogPostTime < (into[i].metadata.publishedTime?.getTime() ?? 0))
+			if (newBlogPostTime > (into[i].metadata.publishedTime?.getTime() ?? 0))
 				break;
 
 		into.splice(i, 0, blogPost);
