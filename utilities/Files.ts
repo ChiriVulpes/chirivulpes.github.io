@@ -89,6 +89,11 @@ namespace Files {
 		loadWatch.stop();
 		return { file, value: contents, time: loadWatch };
 	}
+
+	export async function exists (...files: string[]) {
+		return Promise.all(files.map(file => fs.pathExists(file)))
+			.then(checks => checks.every(exists => exists));
+	}
 }
 
 export default Files;

@@ -2,6 +2,7 @@
 /// <reference path="../../utilities/type/webp-converter.d.ts" />
 
 import Element from "@element/Element";
+import Files from "@util/Files";
 import Log from "@util/Log";
 import { IMarkdownFilter } from "@util/Strings";
 import { elapsed, Stopwatch, stopwatch } from "@util/Time";
@@ -43,6 +44,10 @@ export default class Thumbnail extends Element {
 
 		alreadyCreatedThumbnails.add(file);
 
+		const newFile = path.join(Site.root(), newFileWeb);
+		if (await Files.exists(newFile + ".png", newFile + ".webp"))
+			return;
+
 		const loadWatch = stopwatch();
 		const filePng = file + ".png";
 		const image = await jimp.read(filePng);
@@ -61,7 +66,6 @@ export default class Thumbnail extends Element {
 			scaleWatch.stop();
 		}
 
-		const newFile = path.join(Site.root(), newFileWeb);
 		await fs.mkdirp(path.dirname(newFile));
 
 		const writePngWatch = stopwatch();
