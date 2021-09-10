@@ -96,7 +96,7 @@ class Art extends Element {
 		if (!details.title)
 			return;
 
-		new Heading(4)
+		new Heading(5)
 			.append((details.link ? new Link(details.link) : new Element()).text(details.title))
 			.appendTo(this);
 	}

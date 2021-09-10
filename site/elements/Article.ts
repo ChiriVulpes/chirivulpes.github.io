@@ -14,7 +14,7 @@ export interface IHasCard {
 
 export default class Article<T extends IHasCard = IHasCard> extends Element {
 
-	protected heading = new Heading(2)
+	protected _heading = new Heading(3)
 		.appendTo(this);
 
 	protected _header = new ArticleHeader()
@@ -27,13 +27,18 @@ export default class Article<T extends IHasCard = IHasCard> extends Element {
 		const id = link === undefined ? createID(title) : undefined;
 		new Link(link ?? `#${id!}` as const)
 			.text(title)
-			.appendTo(this.heading.id(id));
+			.appendTo(this._heading.id(id));
 
 		this.requireScripts("article");
 	}
 
 	public header (initialiser: Initialiser<ArticleHeader>) {
 		initialiser(this._header);
+		return this;
+	}
+
+	public heading (initialiser: Initialiser<Heading>) {
+		initialiser(this._heading);
 		return this;
 	}
 
@@ -103,7 +108,7 @@ export class ArticleHeader extends Element {
 
 export class ArticleSection extends Element {
 
-	protected heading = new Heading(3)
+	protected heading = new Heading(4)
 		.appendTo(this);
 
 	public constructor (title: string) {

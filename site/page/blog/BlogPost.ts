@@ -92,6 +92,18 @@ export default class BlogPost extends BlogPage {
 					.text("Read More")));
 	}
 
+	public createLink () {
+		return new Link(this.route!)
+			.class("blog-smol", "paragraph-line-height")
+			.append(new Datetime(this.metadata.publishedTime ?? new Date(0))
+				.class("date"))
+			.append(new Element("b")
+				.text(this.metadata.title!))
+			.text(" — ")
+			.append(new Element("span")
+				.text(this.getTextPreview(128)));
+	}
+
 	public getTextPreview (idealLength: number) {
 		const description = this.preview
 			.replace(/(?<=\n|^)#+\s+/g, "")

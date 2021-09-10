@@ -1,9 +1,11 @@
 @import "gfonts";
 
+$font-default: 'Raleway', sans-serif;
+
 body {
 	@include resolve(background, var(--background));
 	@include resolve(color, var(--color));
-	font-family: 'Raleway', sans-serif;
+	font-family: $font-default;
 	margin: 0;
 	--padding-x: 4em;
 	@media (max-width: 1300px) { --padding-x: 2em; }
@@ -49,6 +51,11 @@ main {
 		margin: 2em;
 		padding-bottom: 1em;
 		@include resolve(border-bottom, 2px solid var(--background-3));
+		display: grid;
+		grid-template-columns: 1fr auto;
+		> a {
+			margin: auto;
+		}
 	}
 	
 	> footer {
@@ -259,7 +266,7 @@ iframe {
 	width: 100%;
 }
 
-.heading1, .heading2, .heading3 {
+.heading1, .heading2, .heading3, .heading4 {
 	font-family: 'Poiret One', sans-serif;
 	
 	a {
@@ -277,7 +284,15 @@ iframe {
     margin-block-end: 0.67em;
 }
 
-.heading4 {
+.heading2 {
+	font-size: 2.5em;
+	
+	@media(max-width: 700px) {
+		margin: 0;
+	}
+}
+
+.heading5 {
 	font-size: 1em;
 }
 
@@ -343,7 +358,7 @@ iframe {
 	}
 }
 
-.heading2 {
+.heading3 {
 	margin: 0;
 	display: grid;
 	grid-template-columns: auto 1fr;
@@ -371,7 +386,7 @@ iframe {
 	}
 }
 
-.heading3 {
+.heading4 {
 	font-size: 1.5em;
 }
 
@@ -464,6 +479,15 @@ iframe {
 		margin-bottom: 0.5em;
 		transition: font-size .5s ease-out;
 		font-weight: normal;
+		background: none;
+		position: relative;
+		top: auto;
+		font-family: $font-default;
+		padding: 0;
+		
+		&::after {
+			content: none;
+		}
 		
 		@media (max-width: 1000px) {
 			font-size: 1.2em;
@@ -500,16 +524,18 @@ summary {
 .tag {
 	@include resolve(color, var(--color-tag));
 	position: relative;
-	padding-right: 0.5em;
-}
-
-.tag + .tag::before {
-	position: absolute;
-	content: ",";
-	pointer-events: none;
-	@include resolve(color, var(--color-3));
-	left: -0.5em;
-	top: -0.05em;
+	
+	@at-root a#{&} {
+		padding-right: 0.5em;
+	}
+	+ .tag::before {
+		position: absolute;
+		content: ",";
+		pointer-events: none;
+		@include resolve(color, var(--color-3));
+		left: -0.5em;
+		top: -0.05em;
+	}
 }
 
 section {
@@ -518,7 +544,7 @@ section {
 	}
 }
 
-.heading3 {
+.heading4 {
 	position: sticky;
 	top: 1.9em;
 	z-index: 2;
@@ -636,7 +662,7 @@ nav {
 }
 
 .rss-link {
-	&, .heading1 &, .heading2 &, .heading3 & {
+	&, .heading1 &, .heading2 &, .heading3 &, .heading4 & {
 		grid-column: 2;
 		background: none;
 		display: inline-block;
@@ -656,5 +682,23 @@ nav {
 		width: calc(100% - 8px);
 		height: calc(100% - 8px);
 		transform: translate(-50%, -50%);
+	}
+}
+
+.blog-smol {
+    box-sizing: border-box;
+    position: relative;
+	padding: 1em;
+	margin-top: 1em;
+	padding-right: 2em;
+	
+	& + & {
+		margin-top: 0.5em;
+	}
+	
+	.date {
+		padding-right: 0.5em;
+		margin-right: 0.5em;
+		@include resolve(border-right, 1px solid var(--color-3));
 	}
 }

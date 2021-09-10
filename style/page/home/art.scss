@@ -4,7 +4,7 @@
 	width: 100%;
 	justify-content: space-around;
 	
-	.heading3 {
+	.heading4 {
 		flex-basis: 100%;
 	}
 }
@@ -28,7 +28,7 @@
 		min-height: 100px;
 	}
 	
-	.heading4 {
+	.heading5 {
 		position: absolute;
 		bottom: 0em;
 		width: calc(100% - 1em + 2.5px);
@@ -64,7 +64,7 @@
 	}
 
 	&:hover, &:focus-within {
-		.heading4 {
+		.heading5 {
 			opacity: 1;
 			transition-duration: .1s;
 		}
