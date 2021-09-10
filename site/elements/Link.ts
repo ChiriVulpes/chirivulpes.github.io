@@ -7,7 +7,18 @@ export default class Link extends Element {
 	public constructor (href: Href);
 	public constructor (href: Href | keyof typeof Links) {
 		super("a");
+		this.anchor(href as Href);
+	}
 
+	public setSimple () {
+		this.classes.delete("local-link");
+		this.classes.delete("hash-link");
+		return this;
+	}
+
+	public anchor (link: keyof typeof Links): this;
+	public anchor (href: Href): this;
+	public anchor (href: Href | keyof typeof Links) {
 		const link = Links[href as keyof typeof Links];
 		if (link !== undefined) {
 			this.text(href);
@@ -15,15 +26,16 @@ export default class Link extends Element {
 		}
 
 		this.attribute("href", href);
-		if (href.startsWith("/"))
+		if (href.startsWith("/")) {
 			this.class("local-link");
-		if (href.startsWith("#"))
-			this.class("hash-link");
-	}
+			this.classes.delete("hash-link");
+		}
 
-	public setSimple () {
-		this.classes.delete("local-link");
-		this.classes.delete("hash-link");
+		if (href.startsWith("#")) {
+			this.class("hash-link");
+			this.classes.delete("local-link");
+		}
+
 		return this;
 	}
 }

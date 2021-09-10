@@ -17,6 +17,7 @@ export default class BlogPage extends DefaultPage {
 
 		this.header(header => header
 			.homeLink(homeLink => homeLink
+				.anchor("/blog")
 				.dump()
 				.append(new Element().text(TITLE))
 				.append(new Element()
