@@ -612,6 +612,8 @@ nav {
 		border: none;
 		font-weight: normal;
 		z-index: 0;
+		display: grid !important;
+		align-content: center;
 	}
 	
 	.paginator-prev {

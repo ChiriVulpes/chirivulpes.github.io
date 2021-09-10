@@ -10,6 +10,7 @@ export default new Page.Proxy(() => pages[0])
 			.map(blogPost => blogPost.createArticle())
 			.collect(Paginator.create)
 			.setRoute("/blog")
+			.setTitle(page => page === 1 ? [BLOG_TITLE, BLOG_TAGLINE] : ["Archive", `Page ${page}`])
 			.generate(() => new BlogPage())
 			?? [];
 
@@ -18,6 +19,7 @@ export default new Page.Proxy(() => pages[0])
 				.map(blogPost => blogPost.createArticle())
 				.collect(Paginator.create)
 				.setRoute(`/blog/tag/${tag}`)
+				.setTitle(page => [`Posts tagged '${tag}'`, `Page ${page}`])
 				.generate(() => new BlogPage()))
 			.collect(promises => Promise.all(promises));
 	}));
