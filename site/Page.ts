@@ -91,38 +91,6 @@ class Page extends Element {
 
 	protected async precompile (indent: boolean) {
 		////////////////////////////////////
-		// Stylesheets
-		//
-
-		const stylesheets = new Set<string>();
-
-		const elementsWithStylesheets = this.findAllElements(descendant => descendant.requiredStylesheets?.length);
-		if (this.requiredStylesheets !== undefined)
-			elementsWithStylesheets.unshift(this);
-		for (const elementWithStylesheets of elementsWithStylesheets)
-			for (const stylesheet of elementWithStylesheets.requiredStylesheets!)
-				stylesheets.add(stylesheet);
-
-		new Stylesheet(...stylesheets)
-			.appendTo(this.head);
-
-		////////////////////////////////////
-		// Scripts
-		//
-
-		const scripts = new Set<string>();
-
-		const elementsWithScripts = this.findAllElements(descendant => descendant.requiredScripts?.length);
-		if (this.requiredScripts !== undefined)
-			elementsWithScripts.unshift(this);
-		for (const elementWithScripts of elementsWithScripts)
-			for (const script of elementWithScripts.requiredScripts!)
-				scripts.add(script);
-
-		new Script(...scripts)
-			.appendTo(this.body);
-
-		////////////////////////////////////
 		// Descendant pre-compilation
 		//
 
@@ -189,6 +157,38 @@ class Page extends Element {
 				new Meta.OpenGraph("article:tag", ...tags)
 					.appendTo(this.head);
 		}
+
+		////////////////////////////////////
+		// Stylesheets
+		//
+
+		const stylesheets = new Set<string>();
+
+		const elementsWithStylesheets = this.findAllElements(descendant => descendant.requiredStylesheets?.length);
+		if (this.requiredStylesheets !== undefined)
+			elementsWithStylesheets.unshift(this);
+		for (const elementWithStylesheets of elementsWithStylesheets)
+			for (const stylesheet of elementWithStylesheets.requiredStylesheets!)
+				stylesheets.add(stylesheet);
+
+		new Stylesheet(...stylesheets)
+			.appendTo(this.head);
+
+		////////////////////////////////////
+		// Scripts
+		//
+
+		const scripts = new Set<string>();
+
+		const elementsWithScripts = this.findAllElements(descendant => descendant.requiredScripts?.length);
+		if (this.requiredScripts !== undefined)
+			elementsWithScripts.unshift(this);
+		for (const elementWithScripts of elementsWithScripts)
+			for (const script of elementWithScripts.requiredScripts!)
+				scripts.add(script);
+
+		new Script(...scripts)
+			.appendTo(this.body);
 	}
 
 	protected getTitle () {
