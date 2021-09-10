@@ -1,9 +1,21 @@
-#blog ~ .article {
-	&:not(:first-of-type) {
-		margin-top: 0.2em;
+.blog-smol {
+    box-sizing: border-box;
+    position: relative;
+	padding: 1em;
+	margin-top: 1em;
+	padding-right: 2em;
+	
+	& + & {
+		margin-top: 0.5em;
 	}
 	
-	&:not(:last-of-type) {
-		margin-bottom: 0.2em;
+	.date {
+		padding-right: 0.5em;
+		margin-right: 0.5em;
+		border-right: 1px solid var(--color-3);
 	}
+}
+
+#blog footer {
+	padding-bottom: 0.5em;
 }

@@ -46,10 +46,7 @@ export default class BlogPost extends BlogPage {
 		}
 
 		this.preview = Markdown.preview(markdown);
-		const description = this.preview
-			.replace(/(?<=\n|^)#+\s+/g, "")
-			.trim();
-		this.metadata.setDescription(description.slice(0, description.indexOf(" ", 256)) + "...");
+		this.metadata.setDescription(this.getTextPreview(256));
 
 		this.metadata.title ??= path.basename(file);
 		this.route = this.generateRoute();
@@ -93,5 +90,12 @@ export default class BlogPost extends BlogPage {
 				.append(this.createPostDetails())
 				.append(new Link(this.route!)
 					.text("Read More")));
+	}
+
+	public getTextPreview (idealLength: number) {
+		const description = this.preview
+			.replace(/(?<=\n|^)#+\s+/g, "")
+			.trim();
+		return description.slice(0, description.indexOf(" ", idealLength - 3)) + "...";
 	}
 }

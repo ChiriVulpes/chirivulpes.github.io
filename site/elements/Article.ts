@@ -49,7 +49,7 @@ export default class Article<T extends IHasCard = IHasCard> extends Element {
 		return this;
 	}
 
-	public async precompile () {
+	protected async precompile () {
 		const containsCards = this.containsCards;
 		if (containsCards === undefined)
 			return;

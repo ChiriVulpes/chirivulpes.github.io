@@ -95,11 +95,17 @@ main {
 // 	}
 // }
 
+$line-height: 1.5em;
+
 p, li, summary {
 	letter-spacing: 0.01em;
-	line-height: 1.5em;
+	line-height: $line-height;
 	margin: 0.4em 0;
 	text-align: justify;
+}
+
+.paragraph-line-height {
+	line-height: $line-height;
 }
 
 @mixin arrow($direction: right) {
@@ -159,14 +165,6 @@ a {
 		
 		&:hover, &:focus {
 			text-decoration: underline;
-		}
-	}
-	
-	&.isnav {
-		@include arrow;
-		
-		&.card {
-			padding-right: 2em;
 		}
 	}
 }
