@@ -1,10 +1,11 @@
 import Article from "@element/Article";
 import Datetime from "@element/Date";
-import Element, { Markdown, Text } from "@element/Element";
+import Element, { MarkdownFragment, Text } from "@element/Element";
 import Link from "@element/Link";
 import BlogPage from "@layout/BlogPage";
 import Blog from "@page/blog/Blog";
-import { createID } from "@util/Strings";
+import Markdown from "@util/string/Markdown";
+import { createID, HrefLocal } from "@util/string/Strings";
 import yaml from "js-yaml";
 import path from "path";
 import Paginator from "site/Paginator";
@@ -20,6 +21,7 @@ interface IBlogPostMetadata {
 export default class BlogPost extends BlogPage {
 
 	public readonly tags: string[] = [];
+	private readonly preview: string;
 
 	public constructor (public readonly file: string, markdown: string) {
 		super();
@@ -43,39 +45,53 @@ export default class BlogPost extends BlogPage {
 				this.metadata.tags.add(tag);
 		}
 
-		this.metadata.title ??= path.basename(file);
-		this.generateRoute();
+		this.preview = Markdown.preview(markdown);
+		const description = this.preview
+			.replace(/(?<=\n|^)#+\s+/g, "")
+			.trim();
+		this.metadata.setDescription(description.slice(0, description.indexOf(" ", 256)) + "...");
 
-		this._main.append(new Article(this.metadata.title)
-			.append(new Markdown(markdown))
-			.append(new Element("footer")
-				.append(new Element("p")
-					.class("details")
-					.text("Posted ")
-					.append(new Element("span")
-						.class("date")
-						.append(this.metadata.publishedTime ? new Datetime(this.metadata.publishedTime)
-							: new Text("an unknown time ago")))
-					.append(new Element("br"))
-					.text("Tagged as ")
-					.append(...[...this.metadata.tags]
-						.map(tag => new Link(`/blog/tag/${tag}`)
-							.class("tag")
-							.setSimple()
-							.text(tag))))))
+		this.metadata.title ??= path.basename(file);
+		this.route = this.generateRoute();
+
+		this._main
+			.append(new Article(this.metadata.title)
+				.append(new MarkdownFragment(markdown))
+				.append(new Element("footer")
+					.append(this.createPostDetails())))
 			.append(new Paginator.Nav(Blog.INSTANCE.all, this, "/blog"));
 	}
 
-	private generateRoute () {
-		if (!this.metadata.publishedTime)
-			return;
-
-		const date = this.metadata.publishedTime.toISOString().split("T")[0];
+	private generateRoute (): HrefLocal {
+		const date = this.metadata.publishedTime?.toISOString().split("T")[0] ?? "unknown";
 		const title = createID(this.metadata.title!);
-		this.route = `/blog/${date}/${title}`;
+		return `/blog/${date}/${title}`;
+	}
+
+	private createPostDetails () {
+		return new Element("p")
+			.class("details")
+			.text("Posted ")
+			.append(new Element("span")
+				.class("date")
+				.append(this.metadata.publishedTime ? new Datetime(this.metadata.publishedTime)
+					: new Text("an unknown time ago")))
+			.append(new Element("br"))
+			.text("Tagged as ")
+			.append(...[...this.metadata.tags]
+				.map(tag => new Link(`/blog/tag/${tag}`)
+					.class("tag")
+					.setSimple()
+					.text(tag)));
 	}
 
 	public createArticle () {
-		return new Article(this.metadata.title!, this.route);
+		return new Article(this.metadata.title!, this.route)
+			.class("blogpost")
+			.markdown(this.preview)
+			.append(new Element("footer")
+				.append(this.createPostDetails())
+				.append(new Link(this.route!)
+					.text("Read More")));
 	}
 }

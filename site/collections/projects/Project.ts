@@ -5,7 +5,7 @@ import Image from "@element/Image";
 import Thumbnail from "@element/Thumbnail";
 import Bound from "@util/decorator/Bound";
 import Log from "@util/Log";
-import { HrefAbsolute } from "@util/Strings";
+import { HrefAbsolute } from "@util/string/Strings";
 import ansi from "ansicolor";
 
 enum Type {

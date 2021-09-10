@@ -1,6 +1,6 @@
 import Files from "@util/Files";
 import Log from "@util/Log";
-import { HrefAbsolute } from "@util/Strings";
+import { HrefAbsolute } from "@util/string/Strings";
 import { elapsed, Stopwatch, stopwatch } from "@util/Time";
 import fs from "fs-extra";
 import path from "path";
@@ -78,7 +78,7 @@ export default new class {
 		// if (!newFile.endsWith("index"))
 		// 	newFile += "/index";
 
-		const url = newFile.endsWith("index") ? newFile.slice(0, -5) : newFile + ".html";
+		const url = newFile.endsWith("index") ? newFile.slice(0, -5) : newFile;
 		instance.metadata.setURL(`https://${path.join(_host!, url).prettyFile()}` as const);
 
 		try {

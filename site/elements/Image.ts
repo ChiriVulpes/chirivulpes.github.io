@@ -1,5 +1,5 @@
 import Element from "@element/Element";
-import { HrefFile } from "@util/Strings";
+import { HrefFile } from "@util/string/Strings";
 
 export default class Image extends Element {
 	public constructor (src: HrefFile) {

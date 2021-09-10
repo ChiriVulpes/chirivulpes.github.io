@@ -3,7 +3,7 @@ import Meta from "@element/Meta";
 import Script from "@element/Script";
 import Stylesheet from "@element/Stylesheet";
 import Log from "@util/Log";
-import { DateISO, HrefAbsolute, HrefLocal } from "@util/Strings";
+import { DateISO, HrefAbsolute, HrefLocal } from "@util/string/Strings";
 
 export class Metadata<HOST extends Page> {
 

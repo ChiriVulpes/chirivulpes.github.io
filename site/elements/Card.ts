@@ -1,7 +1,7 @@
 import Element, { Heading, Initialiser } from "@element/Element";
 import Image from "@element/Image";
 import Thumbnail from "@element/Thumbnail";
-import { HrefFile } from "@util/Strings";
+import { HrefFile } from "@util/string/Strings";
 
 export default class Card extends Element {
 

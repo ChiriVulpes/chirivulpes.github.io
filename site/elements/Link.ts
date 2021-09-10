@@ -1,5 +1,5 @@
 import Element from "@element/Element";
-import { Href } from "@util/Strings";
+import { Href } from "@util/string/Strings";
 import Links from "site/Links";
 
 export default class Link extends Element {

@@ -4,7 +4,7 @@
 import Element from "@element/Element";
 import Files from "@util/Files";
 import Log from "@util/Log";
-import { IMarkdownFilter } from "@util/Strings";
+import Markdown from "@util/string/Markdown";
 import { elapsed, Stopwatch, stopwatch } from "@util/Time";
 import ansi from "ansicolor";
 import fs from "fs-extra";
@@ -92,7 +92,7 @@ export default class Thumbnail extends Element {
 	}
 }
 
-IMarkdownFilter.register({
+Markdown.registerFilter({
 	start: "![",
 	async replace (markdown, i) {
 		let char = markdown[i];

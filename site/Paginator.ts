@@ -3,7 +3,7 @@ import BaseNav from "@element/Nav";
 import DefaultPage from "@layout/DefaultPage";
 import Files from "@util/Files";
 import Log from "@util/Log";
-import { HrefLocal } from "@util/Strings";
+import { HrefLocal } from "@util/string/Strings";
 import Page from "site/Page";
 import Site from "site/Site";
 import trace from "stack-trace";

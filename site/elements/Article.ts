@@ -4,7 +4,7 @@ import Link from "@element/Link";
 import Nav from "@element/Nav";
 import Files from "@util/Files";
 import { PickValue } from "@util/Objects";
-import { createID, HrefFile } from "@util/Strings";
+import { createID, HrefFile } from "@util/string/Strings";
 import { Class } from "@util/Type";
 
 export interface IHasCard {

@@ -1,7 +1,7 @@
 import Element, { Fragment } from "@element/Element";
 import { Variadic } from "@util/Arrays";
 import { Flatten } from "@util/Objects";
-import { DateISO, HrefAbsolute, HrefFile } from "@util/Strings";
+import { DateISO, HrefAbsolute, HrefFile } from "@util/string/Strings";
 
 class Meta extends Element {
 	public constructor (type: "meta" | "link") {

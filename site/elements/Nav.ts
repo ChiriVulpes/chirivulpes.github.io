@@ -1,6 +1,6 @@
 import Element, { Initialiser, Text } from "@element/Element";
 import Link from "@element/Link";
-import { Href } from "@util/Strings";
+import { Href } from "@util/string/Strings";
 import Links from "site/Links";
 
 export default class Nav extends Element {

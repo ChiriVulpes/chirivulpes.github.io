@@ -5,7 +5,7 @@ import Thumbnail from "@element/Thumbnail";
 import StoriesArticle from "@page/index/StoriesArticle";
 import Files from "@util/Files";
 import Log from "@util/Log";
-import { HrefAbsolute, HrefFile } from "@util/Strings";
+import { HrefAbsolute, HrefFile } from "@util/string/Strings";
 import ansi from "ansicolor";
 import path from "path";
 

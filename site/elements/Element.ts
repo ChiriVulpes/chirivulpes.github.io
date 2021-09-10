@@ -1,5 +1,6 @@
 import Log from "@util/Log";
-import { compileMarkdown, HrefLocal } from "@util/Strings";
+import Markdown from "@util/string/Markdown";
+import { HrefLocal } from "@util/string/Strings";
 import ansi from "ansicolor";
 import fs from "fs-extra";
 
@@ -137,7 +138,7 @@ export abstract class NodeContainer extends Node {
 
 	public markdown (markdown?: string) {
 		if (markdown !== undefined)
-			new Markdown(markdown).appendTo(this);
+			new MarkdownFragment(markdown).appendTo(this);
 		return this;
 	}
 
@@ -558,7 +559,7 @@ export class Heading extends Element {
 }
 
 const REGEX_HEADING = /^<h([123456])\b(?:\s+id="([^"]*?)")?\s*>(.*)<\/h[123456]>$/;
-export class Markdown extends Fragment {
+export class MarkdownFragment extends Fragment {
 
 	public constructor (private readonly _markdown: string) {
 		super();
@@ -569,7 +570,7 @@ export class Markdown extends Fragment {
 	}
 
 	protected async precompile (shouldIndent: boolean) {
-		const markdown = await compileMarkdown(this._markdown)
+		const markdown = await Markdown.compile(this._markdown)
 			.catch(err => this.getLog().warn("Unable to render markdown", this.getId(), err));
 
 		this.append(...this.explode(markdown ?? ""));

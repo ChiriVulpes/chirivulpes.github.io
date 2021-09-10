@@ -4,7 +4,7 @@ import Element from "@element/Element";
 import Thumbnail from "@element/Thumbnail";
 import Bound from "@util/decorator/Bound";
 import Log from "@util/Log";
-import { DateISO, HrefAbsolute } from "@util/Strings";
+import { DateISO, HrefAbsolute } from "@util/string/Strings";
 import ansi from "ansicolor";
 import Site from "site/Site";
 

@@ -20,33 +20,35 @@ $vars: (
 	--image-border: var(--background),
 );
 
-:root {
-	color-scheme: dark;
-	
-	@each $var, $val in $vars {
-		#{$var}: $val;
-	}
-	
-	@media (prefers-color-scheme: light) {
-		color-scheme: light;
-		--background-drawer: var(--background-2);
-		--background: #fff;
-		--background-2: #f3f7ff;
-		--background-3: #e1ebff;
-		--background-4: #d4e1fb;
-		--background-5: #cdf;
-		--background-6: #c3d6fc;
-		--color: #223;
-		--color-2: #676783; // #8d8db3;
-		--color-3: #a3a3dd;
-		--color-date: #9f5800; // #a88f00;
-		--color-active: #000;
-		--link: #1465fd;
-		--link-active: #69a9fd;
-		--color-length: #7f3ef0;
-		--color-price: #0f7b00;
-		--color-tag: #be47a5;
-		// --link-active: #4586ff;
+@mixin rootVars {
+	:root {
+		color-scheme: dark;
+		
+		@each $var, $val in $vars {
+			#{$var}: $val;
+		}
+		
+		@media (prefers-color-scheme: light) {
+			color-scheme: light;
+			--background-drawer: var(--background-2);
+			--background: #fff;
+			--background-2: #f3f7ff;
+			--background-3: #e1ebff;
+			--background-4: #d4e1fb;
+			--background-5: #cdf;
+			--background-6: #c3d6fc;
+			--color: #223;
+			--color-2: #676783; // #8d8db3;
+			--color-3: #a3a3dd;
+			--color-date: #9f5800; // #a88f00;
+			--color-active: #000;
+			--link: #1465fd;
+			--link-active: #69a9fd;
+			--color-length: #7f3ef0;
+			--color-price: #0f7b00;
+			--color-tag: #be47a5;
+			// --link-active: #4586ff;
+		}
 	}
 }
 

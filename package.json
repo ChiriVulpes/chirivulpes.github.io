@@ -29,7 +29,8 @@
 		"js-yaml": "4.1.0",
 		"@types/js-yaml": "4.0.3",
 		"stack-trace": "0.0.10",
-		"@types/stack-trace": "0.0.29"
+		"@types/stack-trace": "0.0.29",
+		"striptags": "3.2.0"
 	},
 	"devDependencies": {
 		"chokidar": "3.5.1",

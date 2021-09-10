@@ -1,4 +1,4 @@
-import { IMarkdownFilter } from "@util/Strings";
+import Markdown from "@util/string/Markdown";
 
 enum Links {
 	"GitHub" = "https://github.com/ChiriCuddles",
@@ -15,7 +15,7 @@ enum Links {
 
 export default Links;
 
-IMarkdownFilter.register({
+Markdown.registerFilter({
 	start: "[",
 	replace (markdown, i) {
 		let linkText = "";

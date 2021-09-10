@@ -1,3 +1,5 @@
+@import "../vars";
+
 #home {
 	position: relative;
 	
@@ -36,6 +38,17 @@
 		margin: 1em 0;
 		line-height: 1.6em;
 		font-size: 1.1em;
+	}
+	
+	&::after {
+		content: "";
+		position: absolute;
+		left: 0;
+		bottom: 4em;
+		width: 100%;
+		height: calc(100% - 4em);
+		@include resolve(background, linear-gradient(to top, var(--background-2), transparent 100px));
+		pointer-events: none;
 	}
 }
 
