@@ -8,3 +8,36 @@
 		margin-left: 2em;
 	}
 }
+
+.no-alternating-articles .card,
+aside:nth-child(2) .card {
+	margin: 1em;
+	width: calc(100% - 2em);
+}
+
+aside:nth-child(2) .card:nth-child(2n+1) {
+	text-align: right;
+}
+
+aside:nth-child(2) .card {
+	> img, > picture > img {
+		max-height: 150px;
+	}
+}
+
+aside .no-alternating-articles .card:nth-child(2n+1) {
+	text-align: left;
+	
+	&::before {
+		right: auto;
+		left: 0;
+	}
+}
+
+.card + nav {
+	margin: 1em;
+	margin-top: -1em;
+	text-align: right;
+	padding: 0.4em 0.8em 0.6em;
+	@include resolve(background, var(--background-3));
+}

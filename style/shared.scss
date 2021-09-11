@@ -221,7 +221,7 @@ article {
 		}
 	}
 	
-	&:first-of-type:last-of-type {
+	:not(.paginated-list) > &:first-of-type:last-of-type {
 		background: none;
 		
 		> footer {
@@ -564,10 +564,15 @@ section {
 	z-index: 2;
 	padding: 0.5em 0;
 	margin: 0;
-	display: grid;
-	grid-template-columns: auto 1fr;
 	user-select: none;
 	@include resolve(background, var(--background-2));
+	
+	display: grid;
+	grid-template-columns: auto 1fr;
+	
+	.card & {
+		display: block;
+	}
 
 	&::after {
 		content: "";
@@ -578,7 +583,7 @@ section {
 		margin-left: 1em;
 	}
 	
-	article:first-of-type:last-of-type & {
+	:not(.paginated-list) > article:first-of-type:last-of-type & {
 		@include resolve(background, var(--background));
 	}
 }

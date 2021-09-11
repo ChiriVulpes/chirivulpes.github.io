@@ -1,6 +1,6 @@
 import { IHasCard } from "@element/Article";
 import Card from "@element/Card";
-import Element, { Initialiser } from "@element/Element";
+import Element, { Initialiser, NodeContainer } from "@element/Element";
 import Image from "@element/Image";
 import Thumbnail from "@element/Thumbnail";
 import Bound from "@util/decorator/Bound";
@@ -54,8 +54,10 @@ export default class Project implements IHasCard {
 	//
 
 	public image?: string;
-	public setImage (image: string) {
+	public imageInitialiser?: Initialiser<Image>;
+	public setImage (image: string, initialiser?: Initialiser<Image>) {
 		this.image = image;
+		this.imageInitialiser = initialiser;
 		return this;
 	}
 
@@ -104,18 +106,37 @@ export default class Project implements IHasCard {
 	// Card
 	//
 
-	public createCard () {
-		return new Card(this.title, this.link)
+	private cardInitialiser?: Initialiser<Card>;
+	public setCardInitialiser (initialiser: Initialiser<Card>) {
+		this.cardInitialiser = initialiser;
+		return this;
+	}
+
+	public createCard (into?: NodeContainer) {
+		const image = !this.image ? undefined
+			: this.image.startsWith("https://") ? new Image(this.image as HrefAbsolute)
+				: new Thumbnail(this.image, 200);
+		if (image && this.imageInitialiser)
+			this.imageInitialiser(image);
+		const card = new Card(this.title, this.link)
 			.class("project")
-			.setImage(!this.image ? undefined
-				: this.image.startsWith("https://") ? new Image(this.image as HrefAbsolute)
-					: new Thumbnail(`cover/${this.image}`, 200))
+			.setImage(image)
 			.details(this.createCardDetails)
 			.markdown(this.description);
+		if (into)
+			into.append(card);
+		this.cardInitialiser?.(card);
+		return card;
+	}
+
+	private order?: number;
+	public setOrder (order: number) {
+		this.order = order;
+		return this;
 	}
 
 	public getOrder () {
-		return [0];
+		return [this.order ?? 0];
 	}
 
 	@Bound private createCardDetails (details: Element) {

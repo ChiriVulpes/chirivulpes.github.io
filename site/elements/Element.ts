@@ -132,6 +132,13 @@ export abstract class NodeContainer extends Node {
 		return this;
 	}
 
+	public insertAfter (node: Node, ...children: Node[]) {
+		const index = this.children.indexOf(node);
+		if (index === -1)
+			return this.append(...children);
+		return this.insert(index + 1, ...children);
+	}
+
 	public text (text: string) {
 		return this.append(new Text(text));
 	}

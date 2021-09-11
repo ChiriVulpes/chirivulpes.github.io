@@ -39,28 +39,3 @@
 		}
 	}
 }
-
-.no-alternating-articles .article,
-aside:nth-child(2) .article {
-	margin: 1em;
-	width: calc(100% - 2em);
-}
-
-aside:nth-child(2) .article:nth-child(2n+1) {
-	text-align: right;
-}
-
-aside:nth-child(2) .article {
-	> img, > picture > img {
-		max-height: 150px;
-	}
-}
-
-aside .no-alternating-articles .article:nth-child(2n+1) {
-	text-align: left;
-	
-	&::before {
-		right: auto;
-		left: 0;
-	}
-}

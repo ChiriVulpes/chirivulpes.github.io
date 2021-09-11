@@ -1,5 +1,5 @@
 import Card from "@element/Card";
-import Element, { Heading, Initialiser } from "@element/Element";
+import Element, { Heading, Initialiser, NodeContainer } from "@element/Element";
 import Link from "@element/Link";
 import Nav from "@element/Nav";
 import Files from "@util/Files";
@@ -8,11 +8,11 @@ import { createID, HrefFile } from "@util/string/Strings";
 import { Class } from "@util/Type";
 
 export interface IHasCard {
-	createCard (): Card;
+	createCard (into: NodeContainer): Card;
 	getOrder (): number[];
 }
 
-export default class Article<T extends IHasCard = IHasCard> extends Element {
+export default class Article<T extends IHasCard = IHasCard, S extends string = string> extends Element {
 
 	protected _heading = new Heading(3)
 		.appendTo(this);
@@ -42,9 +42,11 @@ export default class Article<T extends IHasCard = IHasCard> extends Element {
 		return this;
 	}
 
-	public addSection (title: string, initialiser: Initialiser<ArticleSection>) {
+	private readonly sections: Partial<Record<S, ArticleSection | undefined>> = {};
+	public addSection (title: S, initialiser?: Initialiser<ArticleSection>) {
 		const section = new ArticleSection(title).appendTo(this);
-		initialiser(section);
+		this.sections[title] = section;
+		initialiser?.(section);
 		return this;
 	}
 
@@ -66,14 +68,15 @@ export default class Article<T extends IHasCard = IHasCard> extends Element {
 			.map(instance => ({ instance, order: instance.getOrder() }))
 			.sort(sortByOrder);
 
-		const sections: Record<string, ArticleSection | undefined> = {};
 		for (const { instance } of results) {
-			const property = (instance as any as Record<string, string>)[containsCards.sectionProperty];
-			let section = sections[property];
+			const property = (instance as any as Record<string, string>)[containsCards.sectionProperty] as S;
+			let section = this.sections[property];
 			if (section === undefined)
-				this.addSection(property, s => sections[property] = section = s);
+				this.addSection(property, s => this.sections[property] = section = s);
 
-			section!.append(instance.createCard());
+			const card = instance.createCard(section!);
+			if (!section!.children.includes(card))
+				section!.append(card);
 		}
 	}
 }

@@ -54,6 +54,7 @@ class Paginator<E extends Element> {
 
 			pages.push(page
 				.main(main => main
+					.class("paginated-list")
 					.append(...content)
 					.append(new Paginator.Nav(pages, page)
 						.setUsePageNumbers()))
