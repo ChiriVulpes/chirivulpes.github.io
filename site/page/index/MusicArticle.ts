@@ -19,7 +19,7 @@ export default new Article("Music")
 			.link("SoundCloud")
 			.link("Bandcamp"))
 		.markdown(`
-			I used to make music a lot, but not too much anymore. Generally I only make music at this point when I need it for something, like a game. Here's a selection of some of my favourite songs I made, though:`)
+			I used to make music a lot, but not too much anymore. Generally I only make music at this point when I need it for something, like a game. Here's a selection of some favourites and recent songs, though:`)
 		.append(new Soundcloud("661307534", "Moore's Law"))
 		.append(new Soundcloud("1058446651", "Dig Dig Dig"))
 		.append(new Soundcloud("1058450002", "Insufficient Sleep"))
