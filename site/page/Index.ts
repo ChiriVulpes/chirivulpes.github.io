@@ -1,4 +1,4 @@
-import Element, { Fragment } from "@element/Element";
+import { Fragment } from "@element/Element";
 import Link from "@element/Link";
 import Masonry from "@element/Masonry";
 import DefaultPage from "@layout/DefaultPage";
@@ -13,12 +13,7 @@ export default new DefaultPage()
 	.header(header => header
 		.homeLink(homeLink => homeLink
 			.dump()
-			.text("Chiri")
-			.append(new Element("span").class("names")
-				.append(new Element("span").text("&nbsp;Vulpes"))
-				.append(new Element("span").text("chirichiri").setAriaHidden())
-				.append(new Element("span").text("&nbsp;Mystere").setAriaHidden())
-				.append(new Element("span").text("Cuddles").setAriaHidden())))
+			.text("Chiri Vulpes"))
 		.nav(nav => nav
 			.prepend(new Link("/blog").text("Blog"))))
 	.main(main => main
