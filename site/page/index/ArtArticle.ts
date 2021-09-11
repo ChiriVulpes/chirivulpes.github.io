@@ -32,6 +32,7 @@ const storyDetails: ArtRecord = {
 	"trolls-and-tribulations": details(new Date("jan 2021"), "Trolls and Tribulations", "https://rooibos-chai.itch.io/trolls-tribulations"),
 	"unforeseen-variables": details(new Date("feb 2021"), "Unforeseen Variables", "https://www.scribblehub.com/series/240682/unforeseen-variables/"),
 	"plushiemancer": details(new Date("june 2021"), "The Plushiemancer"),
+	"heart-stops": details(new Date("may 2021"), "And If Your Heart Stops Beating", "https://www.scribblehub.com/series/225037/and-if-your-heart-stops-beating/"),
 };
 
 const artDetails: ArtRecord = {
