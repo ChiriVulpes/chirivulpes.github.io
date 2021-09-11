@@ -1,16 +1,26 @@
 import Article from "@element/Article";
+import Element from "@element/Element";
 import Iframe from "@element/Iframe";
 
+class Soundcloud extends Element {
+	public constructor (track: string, title: string) {
+		super();
+		this.class("soundcloud");
+		this.append(new Iframe(`https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/${track}&color=%23387eff&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true&visual=true`)
+			.setTitle(`${title} — Chiri Vulpes`)
+			.setHeight(145));
+	}
+}
+
 export default new Article("Music")
-	.class("inactive")
+	.class()
 	.header(header => header
 		.setNav(nav => nav
 			.link("SoundCloud")
 			.link("Bandcamp"))
 		.markdown(`
-			I used to make music a lot, but not too much anymore. It never really clicked for me like other things that I do, it was always a struggle to make anything. I could never produce the sound I wanted to, even if I knew exactly what I wanted, and that just made it a struggle. Maybe someday I'll pick it up again and figure things out further.
-
-			For what it's worth, here's the song I'm proudest of:`)
-		.append(new Iframe("https://w.soundcloud.com/player/?url=https%3A//api.soundcloud.com/tracks/661307534&color=%23387eff&auto_play=false&hide_related=false&show_comments=true&show_user=true&show_reposts=false&show_teaser=true")
-			.setTitle("Moore's Law — Chirichirichiri")
-			.setHeight(166)));
+			I used to make music a lot, but not too much anymore. Generally I only make music at this point when I need it for something, like a game. Here's a selection of some of my favourite songs I made, though:`)
+		.append(new Soundcloud("661307534", "Moore's Law"))
+		.append(new Soundcloud("1058446651", "Dig Dig Dig"))
+		.append(new Soundcloud("1058450002", "Insufficient Sleep"))
+		.append(new Soundcloud("586701027", "Blink and You'll Miss It")));
