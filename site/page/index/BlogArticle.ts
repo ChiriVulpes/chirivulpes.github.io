@@ -1,6 +1,6 @@
 import Article from "@element/Article";
 import Element from "@element/Element";
-import Link from "@element/Link";
+import Nav from "@element/Nav";
 import Blog from "@page/blog/Blog";
 
 export default new class extends Article {
@@ -20,11 +20,9 @@ export default new class extends Article {
 
 		new Element("footer")
 			.append(new Element())
-			.append(new Element()
-				.append(new Link("/blog")
-					.text(`See All ${Blog.INSTANCE.all.length} Posts`))
-				.append(new Link("/blog/tags")
-					.text("Search Posts by Tag")))
+			.append(new Nav()
+				.link(`See All ${Blog.INSTANCE.all.length} Posts`, "/blog")
+				.link("Search Posts by Tag", "/blog/tags"))
 			.appendTo(this);
 	}
 }

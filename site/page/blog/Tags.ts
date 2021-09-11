@@ -1,6 +1,7 @@
 import Article from "@element/Article";
 import Element, { Heading } from "@element/Element";
 import Link from "@element/Link";
+import Nav from "@element/Nav";
 import BlogPage from "@layout/BlogPage";
 import Blog from "@page/blog/Blog";
 import Page from "site/Page";
@@ -30,6 +31,6 @@ export default new Page.Proxy(() => pages[0])
 				.append(new Element("header")
 					.append(new Heading(2)
 						.text(`All Tags: Page ${page}`))
-					.append(new Link("/blog")
-						.text("Blog Archive")))))
+					.append(new Nav()
+						.link("Blog Archive", "/blog")))))
 		?? []));

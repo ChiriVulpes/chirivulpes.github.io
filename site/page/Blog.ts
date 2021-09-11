@@ -1,5 +1,5 @@
 import Element, { Heading } from "@element/Element";
-import Link from "@element/Link";
+import Nav from "@element/Nav";
 import BlogPage, { BLOG_TAGLINE, BLOG_TITLE } from "@layout/BlogPage";
 import Blog from "@page/blog/Blog";
 import Page from "site/Page";
@@ -18,8 +18,8 @@ export default new Page.Proxy(() => pages[0])
 					.append(new Element("header")
 						.append(new Heading(2)
 							.text(`Blog Archive: Page ${page}`))
-						.append(new Link("/blog/tags")
-							.text("Search By Tag")))))
+						.append(new Nav()
+							.link("Search By Tag", "/blog/tags")))))
 			?? [];
 
 		await [...Blog.INSTANCE.byTag.entries()]
@@ -37,7 +37,7 @@ export default new Page.Proxy(() => pages[0])
 									.class("tag")
 									.text(tag))
 								.text(`': Page ${page}`))
-							.append(new Link("/blog/tags")
-								.text("All Tags"))))))
+							.append(new Nav()
+								.link("All Tags", "/blog/tags"))))))
 			.collect(promises => Promise.all(promises));
 	}));

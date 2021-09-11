@@ -12,7 +12,7 @@ body {
 	@media (max-width: 700px) { --padding-x: 0em; }
 	--padding-b: 2em;
 	padding: 0 var(--padding-x) var(--padding-b);
-	transition: padding .3s ease-in-out;
+	@include transition(.3s, padding);
 	position: relative;
 	display: flex;
 	flex-direction: column;
@@ -53,8 +53,19 @@ main {
 		@include resolve(border-bottom, 2px solid var(--background-3));
 		display: grid;
 		grid-template-columns: 1fr auto;
-		> a {
+		> nav {
 			margin: auto;
+		}
+		
+		@media (max-width: 600px) {
+			margin-left: 0;
+			padding-left: 1em;
+			grid-template-columns: initial;
+			grid-template-rows: auto auto;
+			> nav {
+				padding-top: 1em;
+				width: 100%;
+			}
 		}
 	}
 	
@@ -131,8 +142,7 @@ p, li, summary {
 			transform: translateY(-50%);
 			border: 0.5em solid transparent;
 			@include resolve(border-#{$other-direction}-color, var(--background-5));
-			transition: all .5s ease-out;
-			transition-property: #{$direction}, border-#{$other-direction}-color;
+			@include transition(.5s, $direction, border-#{$other-direction}-color);
 		}
 	}
 	
@@ -185,7 +195,8 @@ article {
 	display: inline-block;
 	box-sizing: border-box;
 	position: relative;
-	transition: margin .5s ease-out;
+	@include transition(.5s, margin, width);
+	transition-timing-function: ease-out;
 
 	@media (max-width: 700px) {
 		margin: 2em 0;
@@ -197,6 +208,8 @@ article {
 		grid-template-columns: 1fr auto;
 		column-gap: 1em;
 		margin-bottom: -0.7em;
+		position: relative;
+		z-index: 1;
 		
 		// &, & p {
 		// 	text-align: right;
@@ -230,6 +243,7 @@ body > footer {
 	padding: 3em calc(var(--padding-x) + 2em) var(--padding-b);
 	text-align: right;
 	@include resolve(background, var(--background-drawer));
+	@include transition(.3s, margin, padding);
 	
 	p {
 		text-align: right;
@@ -490,7 +504,7 @@ iframe {
 		}
 		
 		@media (max-width: 1000px) {
-			font-size: 1.2em;
+			font-size: 1.6em;
 		}
 	}
 }
@@ -572,11 +586,15 @@ section {
 $local-link-padding: 0.5em 1.5em 0.6em 0.6em;
 
 .local-link, .hash-link {
+    vertical-align: middle;
 	border-radius: 0;
 	border: none;
 	font-weight: normal;
 	z-index: 0;
 	@include background-slide-animation($padding: $local-link-padding, $display: inline-block);
+	@media (max-width: 700px) {
+		overflow: hidden;
+	}
 }
 
 .local-link {
@@ -584,6 +602,9 @@ $local-link-padding: 0.5em 1.5em 0.6em 0.6em;
 }
 
 nav {
+    line-height: 1.2em;
+	@include transition(.3s, line-height);
+	
 	a + a:not(.local-link) {
 		margin-left: 0.45em;
 	}

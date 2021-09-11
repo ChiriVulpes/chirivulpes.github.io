@@ -1,6 +1,6 @@
 @mixin transition($duration, $transition-properties...) {
 	@if (length($transition-properties) > 0) {
-		transition: all $duration ease-in-out;
+		transition: all $duration ease-out;
 		transition-property: $transition-properties;
 	}
 
