@@ -4,6 +4,7 @@ import ansi from "ansicolor";
 import { TaskFunction } from "./Task";
 
 export interface ITaskApi {
+	lastError?: Error;
 	series (...tasks: TaskFunction<any>[]): Promise<void>;
 	run<T> (task: TaskFunction<T>): T;
 	debounce<T> (task: TaskFunction<T>): void;
@@ -17,6 +18,7 @@ interface IDebouncedTask {
 const debouncedTasks = new Map<TaskFunction<any>, IDebouncedTask>();
 
 const taskApi: ITaskApi = {
+	lastError: undefined,
 	async series (...tasks) {
 		for (const task of tasks)
 			await this.run(task);
@@ -34,12 +36,13 @@ const taskApi: ITaskApi = {
 			result = task(this);
 		} catch (caught: any) {
 			err = caught;
+			this.lastError = caught;
 		}
 
 		function logResult () {
 			const time = watch.time();
 			if (err)
-				Log.error(`Task ${taskName} errored after ${time}`, err);
+				Log.error(`Task ${taskName} errored after ${time}:`, err);
 			else
 				Log.info(`Finished ${taskName} in ${time}`);
 		}
@@ -48,7 +51,12 @@ const taskApi: ITaskApi = {
 			result = result.then(r2 => {
 				logResult();
 				return r2;
-			});
+			})
+				.catch(caught => {
+					this.lastError = caught;
+					err = caught;
+					logResult();
+				});
 		} else {
 			logResult();
 		}
@@ -82,6 +90,7 @@ const taskApi: ITaskApi = {
 
 const [, , ...tasks] = process.argv;
 void (async () => {
+	let errors = false;
 	for (const task of tasks) {
 		try {
 			// eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-var-requires
@@ -93,6 +102,10 @@ void (async () => {
 
 		} catch (err) {
 			Log.error(err);
+			errors = true;
 		}
 	}
+
+	if (errors || taskApi.lastError)
+		process.exit(1);
 })();

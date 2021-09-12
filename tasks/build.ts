@@ -6,5 +6,8 @@ export default Task("build", () => new Promise<void>((resolve, reject) => {
 	const childProcess = spawn(path.resolve("node_modules/.bin/ts-node.cmd"), ["-r", "tsconfig-paths/register", "site/main.ts"],
 		{ stdio: [process.stdin, process.stdout, process.stderr] });
 	childProcess.on("error", reject);
-	childProcess.on("exit", resolve);
+	childProcess.on("exit", code => {
+		if (code === 1) reject("Error code 1");
+		else resolve();
+	});
 }));
