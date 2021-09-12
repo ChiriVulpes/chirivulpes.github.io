@@ -22,7 +22,7 @@ jobs:
       - name: Install dependencies
         run: npm install
         
-      - name: Run a one-line script
+      - name: Build
         run: npm run build
       
       - name: Deploy to GitHub Pages
@@ -30,4 +30,5 @@ jobs:
         uses: crazy-max/ghaction-github-pages@v2
         with:
           target_branch: build
-          build_dir: build
+          build_dir: docs
+          jekyll: false
