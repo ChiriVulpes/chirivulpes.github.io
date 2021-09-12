@@ -36,7 +36,7 @@ export default class Link extends Element {
 			this.classes.delete("local-link");
 		}
 
-		if (href.endsWith("/rss.xml")) {
+		if (href.endsWith(".xml")) {
 			this.setAriaLabel("RSS Feed")
 				.class("rss-link")
 				.append(new FileFragment("/static/image/rss.svg")

@@ -38,7 +38,7 @@ export default new Page.Proxy(() => pages[0])
 				.map(blogPost => blogPost.createArticle())
 				.collect(Paginator.create)
 				.setRoute(`/blog/tag/${tag}`)
-				.setTitle(page => [`Posts tagged '${tag}'`, ...page === undefined ? [] : [`Page ${page}`]])
+				.setTitle(page => [`Posts tagged '${tag}'`, ...page === undefined ? [] : [`Page ${page}`], BLOG_TITLE])
 				.setRSS()
 				.generate((content, page) => new BlogPage()
 					.main(main => main
