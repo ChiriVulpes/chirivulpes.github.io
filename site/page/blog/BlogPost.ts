@@ -53,6 +53,7 @@ export default class BlogPost extends BlogPage {
 
 		this._main
 			.append(new Article(this.metadata.title)
+				.class("blogpost")
 				.append(new MarkdownFragment(markdown))
 				.append(new Element("footer")
 					.append(this.createPostDetails())))
@@ -84,7 +85,7 @@ export default class BlogPost extends BlogPage {
 
 	public createArticle () {
 		return new Article(this.metadata.title!, this.route)
-			.class("blogpost")
+			.class("blogpost", "preview")
 			.setPublishedTime(this.metadata.publishedTime)
 			.markdown(this.preview)
 			.append(new Element("footer")

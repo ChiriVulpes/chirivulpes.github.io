@@ -40,7 +40,7 @@
 		font-size: 1.1em;
 	}
 	
-	&::after {
+	&.preview::after {
 		content: "";
 		position: absolute;
 		left: 0;
