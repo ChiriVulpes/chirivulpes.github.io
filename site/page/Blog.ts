@@ -3,6 +3,8 @@ import Link from "@element/Link";
 import Nav from "@element/Nav";
 import BlogPage, { BLOG_TAGLINE, BLOG_TITLE } from "@layout/BlogPage";
 import Blog from "@page/blog/Blog";
+import Files from "@util/Files";
+import Project from "site/collections/projects/Project";
 import Page from "site/Page";
 import Paginator from "site/Paginator";
 
@@ -28,6 +30,9 @@ export default new Page.Proxy(() => pages[0])
 							.link("Search By Tag", "/blog/tags")))))
 			?? [];
 
+		const cardSources = (await Files.discoverClasses(Project, "site/collections"))
+			.map(source => source.value);
+
 		await [...Blog.INSTANCE.byTag.entries()]
 			.map(([tag, blogPosts]) => blogPosts
 				.map(blogPost => blogPost.createArticle())
@@ -50,6 +55,8 @@ export default new Page.Proxy(() => pages[0])
 								.append(new Element("span")
 									.class("details")
 									.text(`Page ${page}`))
-								.link("All Tags", "/blog/tags"))))))
+								.link("All Tags", "/blog/tags"))
+							.append(...cardSources.filter(source => source.associatedTag === tag)
+								.map(source => source.createCard()))))))
 			.collect(promises => Promise.all(promises));
 	}));

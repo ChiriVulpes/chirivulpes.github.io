@@ -139,6 +139,12 @@ export default class Project implements IHasCard {
 		return [this.order ?? 0];
 	}
 
+	public associatedTag?: string;
+	public setAssociatedTag (tag: string) {
+		this.associatedTag = tag;
+		return this;
+	}
+
 	@Bound private createCardDetails (details: Element) {
 		this.details?.(details);
 	}

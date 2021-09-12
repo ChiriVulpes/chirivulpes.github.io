@@ -67,6 +67,11 @@ main {
 				width: 100%;
 			}
 		}
+		
+		.card {
+			grid-column: 1/3;
+			margin-left: 1em !important;
+		}
 	}
 	
 	> footer {
