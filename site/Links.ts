@@ -1,16 +1,16 @@
 import Markdown from "@util/string/Markdown";
 
 enum Links {
-	"GitHub" = "https://github.com/ChiriCuddles",
-	"Twitter" = "https://twitter.com/ChiriMystere",
+	"GitHub" = "https://github.com/ChiriVulpes",
+	"Twitter" = "https://twitter.com/ChiriVulpes",
 	"Discord" = "https://discord.gg/XPPvW9F",
-	"Scribble Hub" = "https://www.scribblehub.com/profile/12063/chirichirichiri/",
-	"itch.io" = "https://chirichirichiri.itch.io/",
-	"Patreon" = "https://www.patreon.com/chirichirichiri",
+	"Scribble Hub" = "https://www.scribblehub.com/profile/12063/chirivulpes/",
+	"itch.io" = "https://chirivulpes.itch.io/",
+	"Patreon" = "https://www.patreon.com/chirivulpes",
 	"YouTube" = "https://www.youtube.com/channel/UCePEUnShLHdvPfsjkEH5dDA",
-	"Twitch" = "https://www.twitch.tv/chirichirichiri",
-	"SoundCloud" = "https://soundcloud.com/chirichirichiri",
-	"Bandcamp" = "https://chirichirichiri.bandcamp.com/",
+	"Twitch" = "https://www.twitch.tv/chirivulpes",
+	"SoundCloud" = "https://soundcloud.com/chirivulpes",
+	"Bandcamp" = "https://chirivulpes.bandcamp.com/",
 }
 
 export default Links;
