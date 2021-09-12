@@ -2,6 +2,7 @@ import Element from "@element/Element";
 import Project from "site/collections/projects/Project";
 
 export default new Project("goodstream")
+	.setOrder(1)
 	.setType("Utilities, Other")
 	.setLink("https://github.com/WaywardGame/goodstream")
 	.setDetails(details => details

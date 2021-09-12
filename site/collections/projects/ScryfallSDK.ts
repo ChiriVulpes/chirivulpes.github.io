@@ -2,7 +2,7 @@ import Element from "@element/Element";
 import Project from "site/collections/projects/Project";
 
 export default new Project("scryfall-sdk")
-	.setOrder(3)
+	.setOrder(4)
 	.setType("Utilities, Other")
 	.setLink("https://github.com/ChiriVulpes/scryfall-sdk")
 	.setDetails(details => details

@@ -2,7 +2,7 @@ import Element from "@element/Element";
 import Project from "site/collections/projects/Project";
 
 export default new Project("excevent")
-	.setOrder(2)
+	.setOrder(3)
 	.setType("Utilities, Other")
 	.setLink("https://github.com/WaywardGame/excevent")
 	.setDetails(details => details
