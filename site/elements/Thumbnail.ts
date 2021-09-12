@@ -57,7 +57,7 @@ export default class Thumbnail extends Element {
 		const size = this.size;
 
 		let scaleWatch: Stopwatch | undefined;
-		if (size !== undefined) {
+		if (size !== undefined && (size < image.getWidth() || size < image.getHeight())) {
 			const width = axis === "x" ? size : Infinity;
 			const height = axis === "y" ? size : Infinity;
 
