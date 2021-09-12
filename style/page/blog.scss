@@ -3,7 +3,7 @@
 #home {
 	position: relative;
 	
-	> div {
+	> div, > span {
 		position: absolute;
 		top: 0;
 		display: grid;
@@ -11,7 +11,7 @@
 		pointer-events: none;
 	}
 	
-	span {
+	> div > span {
 		opacity: 0;
 		user-select: none;
 	}
@@ -50,6 +50,13 @@
 		@include resolve(background, linear-gradient(to top, var(--background-2), transparent 100px));
 		pointer-events: none;
 	}
+}
+
+.readmore > span {
+	pointer-events: none;
+	user-select: none;
+	position: absolute;
+	left: -999999999px;
 }
 
 @import "../code";

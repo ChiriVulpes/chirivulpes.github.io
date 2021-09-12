@@ -5,7 +5,7 @@ import { HrefFile } from "@util/string/Strings";
 
 export default class Card extends Element {
 
-	protected readonly header: CardHeader;
+	public readonly header: CardHeader;
 
 	public constructor (title: string, link?: HrefFile) {
 		super();

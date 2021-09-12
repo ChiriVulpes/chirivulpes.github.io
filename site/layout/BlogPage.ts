@@ -19,8 +19,9 @@ export default class BlogPage extends DefaultPage {
 			.homeLink(homeLink => homeLink
 				.anchor("/blog")
 				.dump()
-				.append(new Element().text(BLOG_TITLE))
-				.append(new Element()
+				.append(new Element("span").text(BLOG_TITLE))
+				.parent
+				?.append(new Element()
 					.append(new Element("span").setAriaHidden().text(BLOG_TITLE))
 					.append(new Link("/blog/rss.xml"))))
 			.tagline(tagline => tagline

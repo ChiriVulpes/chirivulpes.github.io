@@ -16,6 +16,11 @@ export default new Project("Wayward")
 		I've been a member of the Wayward team since December 2016. Originally my changes were small, but quickly I got into redesigning and reimplementing the UI, and since then I've been active in all aspects of the game, from UI/UX redesign to rewriting systems to improving the modder experience.
 		
 		I'm not completely happy with Wayward overall yet, but I'm still actively working on it and often adding things that I'm super proud of!`)
-	.setCardInitialiser(card => card.parent
-		?.insertAfter(card, new Nav()
-			.link("Blog", "/blog/tag/wayward")));
+	.setCardInitialiser(card => {
+		card.parent?.insertAfter(card, new Element())
+			.insertAfter(card, new Nav()
+				.link("Blog", "/blog/tag/wayward"));
+
+		if (!card.parent)
+			card.header.title.setActualLevel(2);
+	});

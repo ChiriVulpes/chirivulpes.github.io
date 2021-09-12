@@ -191,7 +191,9 @@ export default class Story implements IHasCard {
 	public createCard () {
 		return new Card(this.title, this.link)
 			.class("story")
-			.setImage(this.cover ? new Thumbnail(`cover/${this.cover}`, 200) : undefined)
+			.setImage(!this.cover ? undefined
+				: new Thumbnail(`cover/${this.cover}`, 200)
+					.attribute("alt", `${this.title} cover image`))
 			.details(this.createCardDetails)
 			.markdown(this.synopsis);
 	}

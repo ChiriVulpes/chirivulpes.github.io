@@ -90,7 +90,12 @@ export default class BlogPost extends BlogPage {
 			.append(new Element("footer")
 				.append(this.createPostDetails())
 				.append(new Link(this.route!)
-					.text("Read More")));
+					.class("readmore")
+					.text("Read More")
+					.append(new Element("span")
+						.setAriaHidden()
+						.text(`of the article '${this.metadata.title!}'`))
+					.setAriaLabel(`read more of the article '${this.metadata.title!}'`)));
 	}
 
 	public createLink () {

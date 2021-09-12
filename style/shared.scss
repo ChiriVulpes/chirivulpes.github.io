@@ -89,10 +89,17 @@ main {
 }
 
 .eoc {
-	font-weight: bold;
-	text-align: inherit;
-	font-size: 0.9em;
-	@include resolve(color, var(--color-3));
+	// font-weight: bold;
+	// text-align: inherit;
+	// font-size: 0.9em;
+	// @include resolve(color, var(--color-3));
+	
+	text-align: center;
+	> img {
+		max-height: 3em;
+		filter: grayscale(0.2);
+		opacity: 0.2;
+	}
 }
 
 // body::before {
@@ -701,6 +708,7 @@ nav {
 .rss-link {
 	padding: 0;
 	vertical-align: initial;
+    top: 4px;
 	
 	&, .heading1 &, .heading2 &, .heading3 &, .heading4 & {
 		grid-column: 2;
@@ -710,9 +718,7 @@ nav {
 		height: 1em;
 		box-sizing: border-box;
 		position: relative;
-		top: 50%;
 		margin-left: 0.25em;
-		transform: translateY(-50%);
 	}
 	
 	> svg {

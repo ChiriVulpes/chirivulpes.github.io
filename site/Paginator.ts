@@ -1,5 +1,6 @@
 import Article from "@element/Article";
 import Element, { Initialiser } from "@element/Element";
+import Image from "@element/Image";
 import BaseNav from "@element/Nav";
 import { BLOG_AUTHOR } from "@layout/BlogPage";
 import DefaultPage from "@layout/DefaultPage";
@@ -151,7 +152,8 @@ namespace Paginator {
 				this.classes.delete("paginator");
 				this.append(new Element("p")
 					.class("eoc")
-					.text("You've reached the end of the content! Such a travesty..."));
+					.append(new Image("/static/image/logo.png")
+						.attribute("alt", "there is no more content")));
 			}
 		}
 	}

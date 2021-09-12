@@ -14,10 +14,11 @@ interface IArtDetails {
 	link?: HrefAbsolute | "/";
 	date?: Date;
 	transparent?: true;
+	alt?: string;
 }
 
-function details (date: Date, title?: string, link?: HrefAbsolute, transparent?: true): IArtDetails {
-	return { title, link, date, transparent };
+function details (date: Date, title?: string, link?: HrefAbsolute, transparent?: true, alt?: string): IArtDetails {
+	return { title, link, date, transparent, alt };
 }
 
 type ArtRecord = Record<string, IArtDetails | undefined>;
@@ -36,8 +37,8 @@ const storyDetails: ArtRecord = {
 };
 
 const artDetails: ArtRecord = {
-	"chiri-peek": details(new Date("dec 2020"), undefined, undefined, true),
-	"trolls-and-tribulations-fanart": details(new Date("jan 2021")),
+	"chiri-peek": details(new Date("dec 2020"), undefined, undefined, true, "Chiri Peeking Over the Edge of the Pic"),
+	"trolls-and-tribulations-fanart": details(new Date("jan 2021"), undefined, undefined, undefined, "Trolls and Tribulations Fanart"),
 };
 
 export default new class ArtArticle extends Article {
@@ -89,10 +90,13 @@ class Art extends Element {
 	public constructor (type: "cover" | "art", file: HrefFile, details: IArtDetails) {
 		super();
 		this.class("art");
-		new Thumbnail(file, 200)
+		const image = new Thumbnail(file, 200)
 			.class(...details.transparent ? ["borderless"] : [])
 			.appendTo(new Link(file)
 				.appendTo(this));
+
+		if (details.alt)
+			image.attribute("alt", details.alt);
 
 		if (!details.title)
 			return;
@@ -100,5 +104,8 @@ class Art extends Element {
 		new Heading(5)
 			.append((details.link ? new Link(details.link) : new Element()).text(details.title))
 			.appendTo(this);
+
+		if (!details.alt)
+			image.attribute("alt", `${details.title} cover`)
 	}
 }

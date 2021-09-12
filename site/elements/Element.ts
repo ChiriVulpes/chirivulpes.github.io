@@ -549,13 +549,21 @@ export class Heading extends Element {
 	public constructor (public readonly level: 1 | 2 | 3 | 4 | 5 | 6) {
 		super(`h${level}`);
 		this.class("heading", `heading${level}`);
+		this.actualLevel = level;
+	}
+
+	private actualLevel: number;
+	public setActualLevel (level: 1 | 2 | 3 | 4 | 5 | 6) {
+		this.actualLevel = level;
+		this.type = `h${level}`;
+		return this;
 	}
 
 	/**
 	 * Automatically prevents heading level-skipping
 	 */
 	protected precompile () {
-		let level = this.level;
+		let level = this.actualLevel;
 		if (this.hasCustomType())
 			// ignore headings of different tag types
 			return;

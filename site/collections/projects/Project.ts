@@ -116,15 +116,19 @@ export default class Project implements IHasCard {
 		const image = !this.image ? undefined
 			: this.image.startsWith("https://") ? new Image(this.image as HrefAbsolute)
 				: new Thumbnail(this.image, 200);
+		image?.attribute("alt", `${this.title} cover image`);
 		if (image && this.imageInitialiser)
 			this.imageInitialiser(image);
+
 		const card = new Card(this.title, this.link)
 			.class("project")
 			.setImage(image)
 			.details(this.createCardDetails)
 			.markdown(this.description);
+
 		if (into)
 			into.append(card);
+
 		this.cardInitialiser?.(card);
 		return card;
 	}
