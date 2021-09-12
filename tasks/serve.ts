@@ -14,7 +14,7 @@ import Task from "./utilities/Task";
 
 export default Task("serve", () => {
 	const app = connect();
-	const root = "build";
+	const root = "docs";
 
 	app.use((req, res, next) => {
 		Log.info(ansi.darkGray(`${req.method!}`), ansi.cyan(`${req.url!}`), req.headers["user-agent"]);
