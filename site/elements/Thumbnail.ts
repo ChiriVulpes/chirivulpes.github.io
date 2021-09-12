@@ -72,13 +72,13 @@ export default class Thumbnail extends Element {
 		await image.writeAsync(newFile + ".png");
 		writePngWatch.stop();
 
+		// ensure temp folder exists cuz module dum
+		await fs.mkdirp("node_modules/webp-converter/temp");
+
 		const webpWatch = stopwatch();
 		const buffer = await image.getBufferAsync(jimp.MIME_PNG)
 			.then(buffer => webp.buffer2webpbuffer(buffer, "png", "-q 80"));
 		webpWatch.stop();
-
-		// ensure temp folder exists cuz module dum
-		await fs.mkdirp("node_modules/webp-converter/temp");
 
 		const writeWebpWatch = stopwatch();
 		await fs.writeFile(newFile + ".webp", buffer);
