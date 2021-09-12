@@ -169,32 +169,107 @@ p, li, summary {
 	}
 }
 
+
+
+@mixin background-slide-animation(
+	$background: var(--background-3), 
+	$background-hover: var(--background-4), 
+	$color: inherit,
+	$color-hover: var(--color-active),
+	$display: block,
+	$padding: 0.1em 0.3em 0.2em,
+	$from: left,
+	$side: before,
+	$duration-in: .1s,
+	$duration-out: .5s) {
+
+	@include resolve(color, $color);
+	@include resolve(display, $display);
+	@include resolve(padding, $padding);
+	@include resolve(background, $background);
+	transition: color $duration-out ease-out;
+	
+	&::#{$side} {
+		content: "";
+		display: block;
+		position: absolute;
+		top: 0;
+		left: 0;
+		@include resolve(background, $background-hover);
+		transition: all $duration-out ease-out;
+		transition-property: width, height;
+		z-index: -1;
+		
+		@if $from == right {
+			left: auto;
+			right: 0;
+		}
+		@if $from == bottom {
+			top: auto;
+			bottom: 0;
+		}
+		
+		@if $from == top or $from == bottom {
+			height: 0%;
+		} @else {
+			height: 100%;
+		}
+		@if $from == left or $from == right {
+			width: 0%;
+		} @else {
+			width: 100%;
+		}
+	}
+	
+	&:hover, &:focus {
+		transition-duration: $duration-in;
+		@include resolve(color, $color-hover);
+		
+		&::#{$side} {
+			transition-duration: $duration-in;
+			@if $from == left or $from == right {
+				width: 100%;
+			} @else {
+				height: 100%;
+			}
+		}
+	}
+}
+
 a {
 	font-weight: bold;
 	@include resolve(color, var(--link));
-	padding: 0.1em 0.4em;
 	text-decoration: none;
-	border-radius: 3px;
-	border: 1px solid transparent;
-	display: inline-block;
 	user-select: none;
 	position: relative;
 	margin: 0 0.2em;
+	$display: inline-block;
+	display: $display;
+	$padding: 0.1em 0.4em;
+	padding: $padding;
+	z-index: 1;
 	
-	&:hover, &:focus {
-		@include resolve(color, var(--link-active));
-		border-color: currentColor;
+	&:not([class]) {
+		@include background-slide-animation(
+			$color: var(--link),
+			$color-hover: var(--link-active),
+			$background: none,
+			$background-hover: var(--link), 
+			$side: after, 
+			$display: $display, 
+			$padding: $padding,
+			$duration-in: .05s,
+			$duration-out: .25s);
+		&::after {
+			opacity: 0.2;
+		}
 	}
 	
+	
 	p & {
-		border: none;
-		padding: 0;
-		margin: 0;
-		display: inline;
-		
-		&:hover, &:focus {
-			text-decoration: underline;
-		}
+		border: none !important;
+		padding: 0 !important;
+		margin: 0 !important;
 	}
 }
 
@@ -320,68 +395,6 @@ iframe {
 
 .heading5 {
 	font-size: 1em;
-}
-
-@mixin background-slide-animation(
-	$background: var(--background-3), 
-	$background-hover: var(--background-4), 
-	$color: inherit,
-	$color-hover: var(--color-active),
-	$display: block,
-	$padding: 0.1em 0.3em 0.2em,
-	$from: left) {
-
-	@include resolve(color, $color);
-	@include resolve(display, $display);
-	@include resolve(padding, $padding);
-	@include resolve(background, $background);
-	transition: color .5s ease-out;
-	
-	&::before {
-		content: "";
-		display: block;
-		position: absolute;
-		top: 0;
-		left: 0;
-		@include resolve(background, $background-hover);
-		transition: all .5s ease-out;
-		transition-property: width, height;
-		z-index: -1;
-		
-		@if $from == right {
-			left: auto;
-			right: 0;
-		}
-		@if $from == bottom {
-			top: auto;
-			bottom: 0;
-		}
-		
-		@if $from == top or $from == bottom {
-			height: 0%;
-		} @else {
-			height: 100%;
-		}
-		@if $from == left or $from == right {
-			width: 0%;
-		} @else {
-			width: 100%;
-		}
-	}
-	
-	&:hover, &:focus {
-		transition-duration: .1s;
-		@include resolve(color, var(--color-active));
-		
-		&::before {
-			transition-duration: .1s;
-			@if $from == left or $from == right {
-				width: 100%;
-			} @else {
-				height: 100%;
-			}
-		}
-	}
 }
 
 .heading3 {
@@ -549,12 +562,24 @@ summary {
 
 .tag {
 	@include resolve(color, var(--color-tag));
-	position: relative;
 	
 	@at-root a#{&} {
-		padding-right: 0.5em;
+		padding-right: 0.5em !important;
+		@include background-slide-animation(
+			$color: var(--color-tag),
+			$color-hover: var(--color-tag-active),
+			$background: none,
+			$background-hover: var(--color-tag), 
+			$side: after, 
+			$display: inline-block,
+			$duration-in: .05s,
+			$duration-out: .25s);
+			
+		&::after {
+			opacity: 0.2;
+		}
 	}
-	+ .tag::before {
+	+ a.tag::before {
 		position: absolute;
 		content: ",";
 		pointer-events: none;

@@ -15,6 +15,7 @@ $vars: (
 	--color-length: #af87f8, // #9573d3;
 	--color-date: #bda51e,
 	--color-tag: #cb66b6,
+	--color-tag-active: #f58ee0,
 	--link: #3196ff, // #387eff;
 	--link-active: #5db4ff,
 	--image-border: var(--background),
@@ -57,6 +58,7 @@ $vars: (
 		$value: unquote("#{$value}");
 	}
 	
+	$novar-value: "";
 	$fixed-value: "";
 	$skip-till: 0;
 	@for $i from 1 through str-length($value) {
@@ -68,7 +70,8 @@ $vars: (
 					@if $break == false {
 						$char: str-slice($value, $j, $j);
 						@if $char == ")" {
-							$fixed-value: $fixed-value + map-get($vars, $variable-name);
+							$novar-value: $novar-value + map-get($vars, $variable-name);
+							$fixed-value: $fixed-value + "var(" + $variable-name + "," + map-get($vars, $variable-name) + ")";
 							$break: true;
 							$skip-till: $j;
 						} @else {
@@ -77,14 +80,15 @@ $vars: (
 					}
 				}
 			} @else {
+				$novar-value: $novar-value + str-slice($value, $i, $i);
 				$fixed-value: $fixed-value + str-slice($value, $i, $i);
 			}
 		}
 	}
 	
-	@if unquote($fixed-value) != $value {
-		#{$property}: unquote($fixed-value);
+	@if unquote($novar-value) != $value {
+		#{$property}: unquote($novar-value);
 	}
 	
-	#{$property}: $value;
+	#{$property}: unquote($fixed-value);
 }
