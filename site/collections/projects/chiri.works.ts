@@ -2,7 +2,7 @@ import Element from "@element/Element";
 import Project from "site/collections/projects/Project";
 
 export default new Project("chiri.works")
-	.setOrder(1)
+	.setOrder(2)
 	.setType("Websites")
 	.setImage("logo", image => image
 		.class("borderless"))

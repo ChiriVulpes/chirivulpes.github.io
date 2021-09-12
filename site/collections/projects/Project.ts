@@ -5,7 +5,7 @@ import Image from "@element/Image";
 import Thumbnail from "@element/Thumbnail";
 import Bound from "@util/decorator/Bound";
 import Log from "@util/Log";
-import { HrefAbsolute } from "@util/string/Strings";
+import { HrefAbsolute, HrefLocal } from "@util/string/Strings";
 import ansi from "ansicolor";
 
 enum Type {
@@ -65,7 +65,7 @@ export default class Project implements IHasCard {
 	// Link
 	//
 
-	private _link?: HrefAbsolute;
+	private _link?: HrefAbsolute | HrefLocal;
 	public get link () {
 		if (this._link !== undefined)
 			return this._link;
@@ -74,7 +74,7 @@ export default class Project implements IHasCard {
 		return "/";
 	}
 
-	public setLink (link: HrefAbsolute) {
+	public setLink (link: HrefAbsolute | HrefLocal) {
 		this._link = link;
 		return this;
 	}

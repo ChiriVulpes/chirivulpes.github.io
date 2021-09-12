@@ -98,6 +98,11 @@ export abstract class Node {
 	protected getLog () {
 		return Log.get(this.root);
 	}
+
+	public init (initialiser?: Initialiser<this>) {
+		initialiser?.(this);
+		return this;
+	}
 }
 
 

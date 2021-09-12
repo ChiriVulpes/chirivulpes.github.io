@@ -3,7 +3,7 @@ import Nav from "@element/Nav";
 import Project from "site/collections/projects/Project";
 
 export default new Project("Wayward")
-	.setOrder(1)
+	.setOrder(2)
 	.setType("Games")
 	.setImage("https://cdn.cloudflare.steamstatic.com/steam/apps/379210/header.jpg")
 	.setLink("https://www.waywardgame.com")
