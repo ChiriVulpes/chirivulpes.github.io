@@ -57,7 +57,8 @@ export default class BlogPost extends BlogPage {
 				.append(new MarkdownFragment(markdown))
 				.append(new Element("footer")
 					.append(this.createPostDetails())))
-			.append(new Paginator.Nav(Blog.INSTANCE.all, this, "/blog"));
+			.append(new Paginator.Nav(Blog.INSTANCE.all, this, "/blog")
+				.setReversed());
 	}
 
 	private generateRoute (): HrefLocal {

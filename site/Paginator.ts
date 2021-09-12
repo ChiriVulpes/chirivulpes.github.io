@@ -115,10 +115,33 @@ namespace Paginator {
 			return this;
 		}
 
+		private reversed?: true;
+		public setReversed () {
+			this.reversed = true;
+			return this;
+		}
+
 		public precompile () {
+			let prev: P | undefined;
+			let next: P | undefined;
+
 			const index = this.over.indexOf(this.current);
 			if (index > 0) {
-				const prev = this.over[index - 1];
+				prev = this.over[index - 1];
+			}
+
+			if (index < this.over.length - 1) {
+				next = this.over[index + 1];
+			}
+
+			if (this.reversed)
+				[prev, next] = [next, prev];
+
+			////////////////////////////////////
+			// Actually create the buttons
+			//
+
+			if (prev) {
 				const title = this.usePageNumbers ? `Page ${index}`
 					: prev.metadata.title ?? "Previous";
 				const linkText = new Element("span")
@@ -134,8 +157,7 @@ namespace Paginator {
 				this.link("All", this.paginationIndex, link => link
 					.class("paginator-index"));
 
-			if (index < this.over.length - 1) {
-				const next = this.over[index + 1];
+			if (next) {
 				const title = this.usePageNumbers ? `Page ${index + 2}`
 					: next.metadata.title ?? "Next";
 				const linkText = new Element("span")
@@ -146,6 +168,10 @@ namespace Paginator {
 				this.link(linkText, next.route ?? "/", link => link
 					.class("paginator-next"));
 			}
+
+			////////////////////////////////////
+			// create eoc icon if no more content
+			//
 
 			if (!this.children.length) {
 				this.type = "footer";
