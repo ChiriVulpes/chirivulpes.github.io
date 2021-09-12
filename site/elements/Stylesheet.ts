@@ -5,7 +5,7 @@ import ansi from "ansicolor";
 import path from "path";
 import sass, { Options, Result } from "sass";
 
-const compiledStylesheets = new Map<string, string>();
+const compiledStylesheets = new Map<string, string | Promise<string>>();
 
 async function compileStylesheet (file: string, indent?: boolean) {
 	const resolvedFile = path.resolve(`style/${file}.scss`);
@@ -13,6 +13,8 @@ async function compileStylesheet (file: string, indent?: boolean) {
 	if (compiled !== undefined)
 		return compiled;
 
+	let resolveStylesheet!: (stylesheet: string) => any;
+	compiledStylesheets.set(resolvedFile, new Promise<string>(resolve => resolveStylesheet = resolve))
 	const relativeFile = path.relative(process.cwd(), resolvedFile);
 
 	const compileWatch = stopwatch();
@@ -48,6 +50,7 @@ async function compileStylesheet (file: string, indent?: boolean) {
 		if (indent)
 			compiled = compiled.indent();
 		compiledStylesheets.set(resolvedFile, compiled);
+		resolveStylesheet(compiled);
 	}
 
 	return compiled ?? "";

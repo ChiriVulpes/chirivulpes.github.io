@@ -7,16 +7,18 @@ import fs from "fs-extra";
 import path from "path";
 import typescript, { TranspileOptions } from "typescript";
 
-const compiledStylesheets = new Map<string, string>();
+const compiledScripts = new Map<string, string | Promise<string>>();
 
 const REG_WS = /\r?\n( {4})*/g;
 
 async function compileScript (file: string, indent?: boolean) {
 	const resolvedFile = path.resolve(`client/${file}.ts`);
-	let compiled = compiledStylesheets.get(resolvedFile);
+	let compiled = compiledScripts.get(resolvedFile);
 	if (compiled !== undefined)
 		return compiled;
 
+	let resolveScript!: (script: string) => any;
+	compiledScripts.set(resolvedFile, new Promise<string>(resolve => resolveScript = resolve))
 	const relativeFile = path.relative(process.cwd(), resolvedFile);
 
 	const compileWatch = stopwatch();
@@ -33,9 +35,12 @@ async function compileScript (file: string, indent?: boolean) {
 	compiled = `/* ${prettyFile} */` + (indent ? "\n" : "") + compiled;
 	if (indent)
 		compiled = compiled.indent();
-	compiledStylesheets.set(resolvedFile, compiled);
+	compiledScripts.set(resolvedFile, compiled);
 
-	return compiled ?? "";
+	compiled ??= "";
+	resolveScript(compiled);
+
+	return compiled;
 }
 
 export default class Script extends Element {
