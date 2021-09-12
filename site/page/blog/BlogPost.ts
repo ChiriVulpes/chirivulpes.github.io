@@ -85,6 +85,7 @@ export default class BlogPost extends BlogPage {
 	public createArticle () {
 		return new Article(this.metadata.title!, this.route)
 			.class("blogpost")
+			.setPublishedTime(this.metadata.publishedTime)
 			.markdown(this.preview)
 			.append(new Element("footer")
 				.append(this.createPostDetails())

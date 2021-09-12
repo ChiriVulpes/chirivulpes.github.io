@@ -1,4 +1,5 @@
 import Element, { Heading } from "@element/Element";
+import Link from "@element/Link";
 import Nav from "@element/Nav";
 import BlogPage, { BLOG_TAGLINE, BLOG_TITLE } from "@layout/BlogPage";
 import Blog from "@page/blog/Blog";
@@ -12,13 +13,18 @@ export default new Page.Proxy(() => pages[0])
 			.map(blogPost => blogPost.createArticle())
 			.collect(Paginator.create)
 			.setRoute("/blog")
-			.setTitle(page => page === 1 ? [BLOG_TITLE, BLOG_TAGLINE] : ["Archive", `Page ${page}`])
+			.setTitle(page => page === undefined ? ["Archive", BLOG_TITLE]
+				: page === 1 ? [BLOG_TITLE, BLOG_TAGLINE] : ["Archive", `Page ${page}`])
+			.setRSS()
 			.generate((content, page) => new BlogPage()
 				.main(main => main
 					.append(new Element("header")
 						.append(new Heading(2)
-							.text(`Blog Archive: Page ${page}`))
+							.text("Blog Archive"))
 						.append(new Nav()
+							.append(new Element("span")
+								.class("details")
+								.text(`Page ${page}`))
 							.link("Search By Tag", "/blog/tags")))))
 			?? [];
 
@@ -27,17 +33,23 @@ export default new Page.Proxy(() => pages[0])
 				.map(blogPost => blogPost.createArticle())
 				.collect(Paginator.create)
 				.setRoute(`/blog/tag/${tag}`)
-				.setTitle(page => [`Posts tagged '${tag}'`, `Page ${page}`])
+				.setTitle(page => [`Posts tagged '${tag}'`, ...page === undefined ? [] : [`Page ${page}`]])
+				.setRSS()
 				.generate((content, page) => new BlogPage()
 					.main(main => main
 						.append(new Element("header")
 							.append(new Heading(2)
-								.text("Posts tagged '")
 								.append(new Element("span")
-									.class("tag")
-									.text(tag))
-								.text(`': Page ${page}`))
+									.text("Posts tagged '")
+									.append(new Element("span")
+										.class("tag")
+										.text(tag))
+									.text("'"))
+								.append(new Link(`/blog/tag/${tag}/rss.xml`)))
 							.append(new Nav()
+								.append(new Element("span")
+									.class("details")
+									.text(`Page ${page}`))
 								.link("All Tags", "/blog/tags"))))))
 			.collect(promises => Promise.all(promises));
 	}));

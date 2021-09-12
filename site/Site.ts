@@ -52,12 +52,12 @@ export default new class {
 
 		let newFile: string | undefined = instance.route;
 		if (!newFile) {
-			if (!root) {
-				Log.error(`Ignoring page ${Files.loggify(file!)}, no route specified`);
+			if (!root || !file) {
+				Log.error(`Ignoring page ${file ? Files.loggify(file) : (instance as Page)?.getId()}, no route specified`);
 				return;
 			}
 
-			newFile = path.relative(root, file!).slice(0, -3).toLowerCase();
+			newFile = path.relative(root, file).slice(0, -3).toLowerCase();
 		}
 
 		if (newFile.startsWith("/"))
@@ -92,12 +92,14 @@ export default new class {
 			compileWatch.stop();
 
 			const writeWatch = stopwatch();
-			await this.write(`${newFile}.html`, compiled);
+			const writeFile = newFile.endsWith(".html") || newFile.endsWith(".xml") ? newFile
+				: `${newFile}.html`;
+			await this.write(writeFile, compiled);
 			writeWatch.stop();
 
 			Log.info("Loaded page", Files.loggify(file ?? newFile), ...loadWatch ? ["in", loadWatch?.time()] : [],
 				"- compiled in", compileWatch.time(),
-				"- written", `${newFile}.html`, "in", writeWatch.time(),
+				"- written", writeFile, "in", writeWatch.time(),
 				"- total time", elapsed((loadWatch?.elapsed ?? 0) + compileWatch.elapsed + writeWatch.elapsed + precompileWatch.elapsed));
 		} catch (err) {
 			Log.error(`Ignoring page ${Files.loggify(file ?? newFile)}, encountered error in compilation`, err);

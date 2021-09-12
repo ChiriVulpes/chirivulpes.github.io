@@ -299,7 +299,7 @@ iframe {
 }
 
 .heading2 {
-	font-size: 2.5em;
+	font-size: 2.2em;
 	
 	@media(max-width: 700px) {
 		margin: 0;
@@ -626,6 +626,12 @@ nav {
 	@media (max-width: 700px) {
 		line-height: 2em;
 	}
+	
+	.details {
+		font-size: 1em;
+		padding: 0.5em;
+		vertical-align: middle;
+	}
 }
 
 .hash-link {
@@ -688,6 +694,9 @@ nav {
 }
 
 .rss-link {
+	padding: 0;
+	vertical-align: initial;
+	
 	&, .heading1 &, .heading2 &, .heading3 &, .heading4 & {
 		grid-column: 2;
 		background: none;
@@ -708,6 +717,10 @@ nav {
 		width: calc(100% - 8px);
 		height: calc(100% - 8px);
 		transform: translate(-50%, -50%);
+	}
+	
+	&::after {
+		content: none;
 	}
 }
 

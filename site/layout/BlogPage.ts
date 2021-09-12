@@ -1,10 +1,11 @@
-import Element, { FileFragment } from "@element/Element";
+import Element from "@element/Element";
 import Link from "@element/Link";
 import DefaultPage from "@layout/DefaultPage";
 import { Metadata } from "site/Page";
 
 export const BLOG_TITLE = "Chiri's Blog";
 export const BLOG_TAGLINE = "Where a fox goes to ramble!";
+export const BLOG_AUTHOR = "Chiri Vulpes";
 
 export default class BlogPage extends DefaultPage {
 	public constructor () {
@@ -21,11 +22,7 @@ export default class BlogPage extends DefaultPage {
 				.append(new Element().text(BLOG_TITLE))
 				.append(new Element()
 					.append(new Element("span").setAriaHidden().text(BLOG_TITLE))
-					.append(new Link("/rss/blog.xml")
-						.setAriaLabel("RSS Feed")
-						.class("rss-link")
-						.append(new FileFragment("/static/image/rss.svg")
-							.onPrecompile((svg, element) => element.html(svg))))))
+					.append(new Link("/blog/rss.xml"))))
 			.tagline(tagline => tagline
 				.text(BLOG_TAGLINE))
 			.nav(nav => nav

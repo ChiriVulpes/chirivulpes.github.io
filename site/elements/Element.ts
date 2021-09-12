@@ -4,7 +4,7 @@ import { HrefLocal } from "@util/string/Strings";
 import ansi from "ansicolor";
 import fs from "fs-extra";
 
-export type Initialiser<T> = (thing: T) => any;
+export type Initialiser<T, A extends any[] = []> = (thing: T, ...args: A) => any;
 
 const voidElements = new Set([
 	"area",
@@ -99,8 +99,8 @@ export abstract class Node {
 		return Log.get(this.root);
 	}
 
-	public init (initialiser?: Initialiser<this>) {
-		initialiser?.(this);
+	public init<A extends any[]> (initialiser?: Initialiser<this, A>, ...args: A) {
+		initialiser?.(this, ...args);
 		return this;
 	}
 }
@@ -144,8 +144,9 @@ export abstract class NodeContainer extends Node {
 		return this.insert(index + 1, ...children);
 	}
 
-	public text (text: string) {
-		return this.append(new Text(text));
+	public text (text: string, cdata = false) {
+		return this.append(new Text(text)
+			.setCDATA(cdata));
 	}
 
 	public markdown (markdown?: string) {
@@ -355,6 +356,10 @@ export default class Element extends NodeContainer {
 		return this;
 	}
 
+	public getAttribute (name: string): string | undefined {
+		return this._attributes[name];
+	}
+
 	public style (rule: string, value: string) {
 		if (this._style === undefined)
 			this._style = {};
@@ -465,12 +470,18 @@ export class Text extends Node {
 		super();
 	}
 
+	private cdata?: boolean;
+	public setCDATA (cdata?: boolean) {
+		this.cdata = cdata ?? true;
+		return this;
+	}
+
 	public isInline () {
 		return true;
 	}
 
 	protected compile () {
-		return this.text;
+		return this.cdata ? `<![CDATA[${this.text}]]>` : this.text;
 	}
 
 	private id?: string;

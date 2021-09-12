@@ -1,4 +1,4 @@
-import Element from "@element/Element";
+import Element, { FileFragment } from "@element/Element";
 import { Href } from "@util/string/Strings";
 import Links from "site/Links";
 
@@ -34,6 +34,13 @@ export default class Link extends Element {
 		if (href.startsWith("#")) {
 			this.class("hash-link");
 			this.classes.delete("local-link");
+		}
+
+		if (href.endsWith("/rss.xml")) {
+			this.setAriaLabel("RSS Feed")
+				.class("rss-link")
+				.append(new FileFragment("/static/image/rss.svg")
+					.onPrecompile((svg, element) => element.html(svg)));
 		}
 
 		return this;

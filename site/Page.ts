@@ -196,7 +196,7 @@ class Page extends Element {
 	}
 
 	protected async compile (indent: boolean) {
-		return `<!DOCTYPE html>${indent ? "\n" : ""}${await super.compile(indent)}`
+		return `${this.getDocType()}${indent ? "\n" : ""}${await super.compile(indent)}`
 			.replace(/(<pre(?:\s.*?)?>)(.*)<\/pre>/gs, (match, startTag: string, contents: string) => {
 				let minIndent = Infinity;
 				let indent = Infinity;
@@ -215,6 +215,10 @@ class Page extends Element {
 
 				return `${startTag}${contents.unindent(minIndent)}</pre>`;
 			});
+	}
+
+	protected getDocType () {
+		return "<!DOCTYPE html>";
 	}
 }
 

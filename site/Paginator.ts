@@ -1,6 +1,9 @@
-import Element from "@element/Element";
+import Article from "@element/Article";
+import Element, { Initialiser } from "@element/Element";
 import BaseNav from "@element/Nav";
+import { BLOG_AUTHOR } from "@layout/BlogPage";
 import DefaultPage from "@layout/DefaultPage";
+import RSSPage from "@layout/RSSPage";
 import Files from "@util/Files";
 import Log from "@util/Log";
 import { HrefLocal } from "@util/string/Strings";
@@ -29,9 +32,15 @@ class Paginator<E extends Element> {
 		return this;
 	}
 
-	private title?: (index: number) => string[] | undefined;
-	public setTitle (titleSupplier: (index: number) => string[] | undefined) {
+	private title?: (index?: number) => string[] | undefined;
+	public setTitle (titleSupplier: (index?: number) => string[] | undefined) {
 		this.title = titleSupplier;
+		return this;
+	}
+
+	private rss?: true | Initialiser<RSSPage, [readonly E[]]>;
+	public setRSS (initialiser?: Initialiser<RSSPage, [readonly E[]]>) {
+		this.rss = initialiser ?? true;
 		return this;
 	}
 
@@ -63,6 +72,27 @@ class Paginator<E extends Element> {
 
 		for (const page of pages)
 			await Site.add(page);
+
+		if (this.rss) {
+			const page = new RSSPage()
+				.setLink(this.route)
+				.setAuthor(BLOG_AUTHOR)
+				.setRoute(`${this.route}/rss.xml`)
+				.metadata.setTitle(...this.title?.() ?? []);
+
+			if (this.rss === true)
+				page.addAll(this.content, (entry, element) => {
+					if (!(element instanceof Article))
+						return;
+
+					const article = element;
+					entry.setTitle(article.title)
+						.setLink(article.link as HrefLocal)
+						.setPublishedTime(article.publishedTime);
+				});
+
+			await Site.add(page.init(this.rss === true ? undefined : this.rss, this.content));
+		}
 
 		return pages;
 	}

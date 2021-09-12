@@ -22,7 +22,7 @@ export default class Article<T extends IHasCard = IHasCard, S extends string = s
 
 	public cardSources: T[] = [];
 
-	public constructor (title: string, link?: HrefFile) {
+	public constructor (public readonly title: string, public readonly link?: HrefFile) {
 		super("article");
 		const id = link === undefined ? createID(title) : undefined;
 		new Link(link ?? `#${id!}` as const)
@@ -39,6 +39,12 @@ export default class Article<T extends IHasCard = IHasCard, S extends string = s
 
 	public heading (initialiser: Initialiser<Heading>) {
 		initialiser(this._heading);
+		return this;
+	}
+
+	public publishedTime?: Date;
+	public setPublishedTime (publishedTime?: Date) {
+		this.publishedTime = publishedTime;
 		return this;
 	}
 
