@@ -7,7 +7,7 @@ dotenv.config();
 ApplyStringPrototypes();
 ApplyArrayPrototypes();
 
-Site.root("build");
+Site.root("docs");
 Site.host("chiri.works");
 
 void Site.static("static")
