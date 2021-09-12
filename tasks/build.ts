@@ -3,7 +3,6 @@ import path from "path";
 import Task from "./utilities/Task";
 
 export default Task("build", () => new Promise<void>((resolve, reject) => {
-	console.log(process.platform);
 	const ext = process.platform === "win32" ? ".cmd" : "";
 	const childProcess = spawn(path.resolve("node_modules/.bin/ts-node" + ext), ["-r", "tsconfig-paths/register", "site/main.ts"],
 		{ stdio: [process.stdin, process.stdout, process.stderr] });
