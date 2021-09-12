@@ -27,7 +27,7 @@
 			height: 100%;
 		}
 		
-		&:hover::before {
+		&:hover::before, &:focus::before {
 			width: 100%;
 		}
 	}
