@@ -1,6 +1,6 @@
 ---
 date: 2021-09-28T06:23:34.683Z
-title: "No, Shattered Realm is Not Good, Actually"
+title: "Destiny 2: No, Shattered Realm is Not Good, Actually"
 tags: destiny 2
 ---
 
