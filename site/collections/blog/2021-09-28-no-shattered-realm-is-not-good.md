@@ -1,6 +1,6 @@
 ---
-date: 2021-09-28T14:10:09.277Z
-title: "No, Shattered Realm is Not good, actually"
+date: 2021-09-28T06:23:34.683Z
+title: "No, Shattered Realm is Not Good, Actually"
 tags: destiny 2
 ---
 
@@ -10,29 +10,29 @@ First, some background details, for those not in the know: _Shattered Realm_ is 
 
 As the season has gone on, we've unlocked more and more abilities with our Wayfinder's Compass — the seasonal artefact — which allows us to get through additional barriers, or spot new secrets in the _Shattered Realm_. They're called "mysteries," from trivial to ascendant. Basically, it's just a bunch of chests all over the place, each one giving a triumph.
 
-# What Went Wrong
+#### What Went Wrong
 
 So, why am I not a fan? There's sizable regions to explore, there's encounters, there's secrets everywhere... Well, there's a few reasons for that:
 
-## The Encounters are Painfully Boring
+##### The Encounters are Painfully Boring
 
 It's trivial to solo these encounters. It's not even necessary to have champion mods, the enemies don't have enough health to be any semblance of a threat. And they go on for _so. long._
 
 And, like... Bungie knows how to do encounter design. Look at all of the strikes they've done. Dungeons. I'm obviously not going to hold seasonal content to the same bar as those, but you'd think they could design something slightly more interesting to overcome than like 20 waves of easy enemies in a row.
 
-## The "Mysteries" Feel Incredibly Samey
+##### The "Mysteries" Feel Incredibly Samey
 
 If you've done a trivial mystery once, you've done them all. It's literally just a chest, generally hidden behind a Barrier Breach barrier. Some of the mid-tier mysteries are chests that require True Sight, and walking on the ascendant platforms that appear. And there's waaaaay too many of them. It's not my idea of a good time to track down like 12 chests for each rotation, that all just give a triumph and some seasonal currency.
 
 The highest tier of mysteries — ascendant mysteries, I'm pretty sure — are better, but it leaves me wondering why the lower tier ones exist at all. Rather than a bunch of hints leading towards a couple actually interesting "mysteries," it's a whole bunch of filler mysteries distracting you from the interesting ones.
 
-## The Three Rotations are _Also_ Incredibly Samey
+##### The Three Rotations are _Also_ Incredibly Samey
 
 The three regions of _Shattered Realm_ may _look_ different, and have different enemy types but they all function basically identically. In each, it's two defense encounters, a boss, and doing it all again to collect all the secrets. And once you've done it... is there even a point anymore besides the weekly pinnacle? I have literally zero interest in running _Shattered Realm_ again, and that's even _before_ I've gotten all of the secrets. 
 
 Clearly, something has gone very wrong here. Why would you make content that isn't fun? Why would you make content that forces the player back in, rather than making the player _want_ to go back in?
 
-# Backseat Game Designer Advice Time
+#### Backseat Game Designer Advice Time
 
 Okay, maybe this is less advice and more just... a vision for _Shattered Realm_ that _I_ would have enjoyed. Because I do love the aesthetic of solving mysteries in the ascendant plane. That's rad.
 
@@ -45,7 +45,7 @@ Are you seeing what I'm seeing here?
 
 So here's what I would've done:
 
-## Shattered Realm: Forest of Echoes
+##### Shattered Realm: Forest of Echoes
 
 You enter the _Shattered Realm_. Your first task: Getting through this parkour section. Dev time is saved by copy-pasting stuff out of one of the ascendant challenges in the Dreaming City. Those haven't been relevant in a while, so you don't really mind going through bits of them again.
 
@@ -55,7 +55,7 @@ You finally arrive at the beacon, and align it. A boss spawns. It's a Taken Tech
 
 You've cleared the Realm, and Aligned the Beacon... but there are still mysteries to solve. And by that barrier you could not overcome, in the centre of that gauntlet... Next time, you'll know just where to look.
 
-## Shattered Realm: Debris of Dreams
+##### Shattered Realm: Debris of Dreams
 
 You enter the _Shattered Realm_. Like last expedition, your entry point is not your destination. First, you must make your way through the short parkour section.
 
@@ -71,7 +71,7 @@ You survive. You win.
 
 You've cleared the Realm, and Aligned the Beacon... but there are still mysteries to solve. And by the things you saw in the sky, high above the arena... Next time, you'll know just where to look.
 
-## Shattered Realm: Ruins of Wrath
+##### Shattered Realm: Ruins of Wrath
 
 You enter the _Shattered Realm_. Like last expedition, and the expedition before, your entry point is not your destination. Parkour, and then arrival.
 
@@ -87,15 +87,15 @@ It's a fight, but one you've seen before. One you've mastered before. You're a G
 
 You've cleared the Realm, and Aligned the Beacon... but there are still mysteries to solve. And by the corruption here, just past the shrieker, the barrier, and the vague outline of things in the distance... Next time, you'll know just where to look.
 
-## Shattered Realm: Forest of Echoes Part 2
+##### Shattered Realm: Forest of Echoes Part 2
 
 You go back in, this time with an upgrade to your Wayfinder's Compass. You've gained a new ability, the ability to breach barriers. You make it halfway through the gauntlet again, finding a wall that you previously could not access. In here is a chest, and a cliff. Far off the cliff, in the distance... You see something. You don't know what it is, but... you will remember it.
 
-## Shattered Realm: Debris of Dreams Part 2
+##### Shattered Realm: Debris of Dreams Part 2
 
 You go back in, this time with an upgrade to your Wayfinder's Compass. You've gained a new ability, the ability to see the unseen, to touch the untouchable. This time, you see platforms, high in the air, spiralling out of sight. You climb one, and find a chest. You cannot climb the rest, as that same, strange corruption keeps you trapped on the ground, unable to make full use of the light. You don't know where that pathway goes, but... you will remember it.
 
-## Shattered Realm: Ruins of Wrath Part 2
+##### Shattered Realm: Ruins of Wrath Part 2
 
 You go back in, this time with an upgrade to your Wayfinder's Compass. You've gained a new ability, the ability to ward off that corruption. Your light is stronger now, strong enough to surpass anything that the _Shattered Realm_ can throw at you. Past the Knight, past the Ogre. You Breach the Barrier, you See the Unseen, and you Ward off the Darkness. You follow the pathway, and find... 
 
@@ -111,7 +111,7 @@ The key. No... a fragment of the key.
 
 And soon, you will have the third.
 
-## Shattered Realm: Debris of Dreams Part 3
+##### Shattered Realm: Debris of Dreams Part 3
 
 You Ward off the Darkness, you See the Unseen, and you Breach the Barrier. You follow the pathway, and find...
 
@@ -121,7 +121,7 @@ But to what? A key to _what?_ Why are these things happening? Who is controlling
 
 Whose side is Savathun really on?
 
-## Shattered Realm: Week 9
+##### Shattered Realm: Week 9
 
 You enter the _Shattered Realm_. The same as every expedition before, your entry point is not your destination. But... where _is_ your destination? Where is _any_ of this going? Parkour the same, and then arrival. 
 
