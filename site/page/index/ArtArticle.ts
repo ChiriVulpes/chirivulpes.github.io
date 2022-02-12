@@ -34,6 +34,7 @@ const storyDetails: ArtRecord = {
 	"unforeseen-variables": details(new Date("feb 2021"), "Unforeseen Variables", "https://www.scribblehub.com/series/240682/unforeseen-variables/"),
 	"plushiemancer": details(new Date("june 2021"), "The Plushiemancer"),
 	"heart-stops": details(new Date("may 2021"), "And If Your Heart Stops Beating", "https://www.scribblehub.com/series/225037/and-if-your-heart-stops-beating/"),
+	"fox-and-the-fight": details(new Date("oct 2021"), "The Fox and the Fight", "https://rooibos-chai.itch.io/the-fox-and-the-fight"),
 };
 
 const artDetails: ArtRecord = {
