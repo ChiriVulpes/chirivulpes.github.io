@@ -4,7 +4,7 @@ enum Links {
 	"GitHub" = "https://github.com/ChiriVulpes",
 	"Twitter" = "https://twitter.com/ChiriVulpes",
 	"Discord" = "https://discord.gg/XPPvW9F",
-	"Scribble Hub" = "https://www.scribblehub.com/profile/12063/chirivulpes/",
+	"Scribble Hub" = "https://www.scribblehub.com/profile/12063/chirivulpes/?sp=1",
 	"itch.io" = "https://chirivulpes.itch.io/",
 	"Patreon" = "https://www.patreon.com/chirivulpes",
 	"YouTube" = "https://www.youtube.com/channel/UCePEUnShLHdvPfsjkEH5dDA",
