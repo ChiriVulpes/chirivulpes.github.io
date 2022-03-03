@@ -18,6 +18,9 @@ The Witch Queen allows you to play on normal difficulty or legendary difficulty.
 
 The campaign is also extremely long, compared to prior campaigns, and didn't even pad itself out with a bunch of random grindy stuff in the middle as previous campaigns have done, or with a bunch of post-campaign content to unlock everything. They focused solely on the story with a series of what felt like mini-nightfall strikes. It was wonderful.
 
+##### Parasitic Pilgrimage — 9/10
+This is a really fun and silly exotic quest that I don't want to spoil anything about. It's a one-time thing. Enjoy it!
+
 ##### PsiOps Battleground: EDZ — 8/10
 The perfect strike. Every encounter is fun, lots of enemies, not too many guardians, a huge boss arena with multiple phases. It's also really, really pretty. I hope to see this enter the strike playlist next year.
 
