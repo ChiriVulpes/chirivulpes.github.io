@@ -35,6 +35,9 @@ const storyDetails: ArtRecord = {
 	"plushiemancer": details(new Date("june 2021"), "The Plushiemancer"),
 	"heart-stops": details(new Date("may 2021"), "And If Your Heart Stops Beating", "https://www.scribblehub.com/series/225037/and-if-your-heart-stops-beating/"),
 	"fox-and-the-fight": details(new Date("oct 2021"), "The Fox and the Fight", "https://rooibos-chai.itch.io/the-fox-and-the-fight"),
+	"santas-secret-transfic-anthology-vol-2": details(new Date("april 2022"), "Santa's Secret Transfic Anthology Vol. 2", "https://www.scribblehub.com/series/460482/santas-secret-transfic-anthology-vol-/"),
+	"secret-transfic-autumn-anthology": details(new Date("sep 2022"), "Secret Transfic Autumn Anthology", "https://www.scribblehub.com/series/558979/secret-transfic-autumn-anthology/"),
+	"maid-of-love": details(new Date("oct 2 2022"), "Maid of Love", "https://www.scribblehub.com/series/378277/maid-of-love/"),
 };
 
 const artDetails: ArtRecord = {
