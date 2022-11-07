@@ -4,7 +4,7 @@ import Element from "@element/Element";
 import Thumbnail from "@element/Thumbnail";
 import Bound from "@util/decorator/Bound";
 import Log from "@util/Log";
-import { DateISO, HrefAbsolute } from "@util/string/Strings";
+import { DateISO, DateString, HrefAbsolute } from "@util/string/Strings";
 import ansi from "ansicolor";
 import Site from "site/Site";
 
@@ -169,7 +169,7 @@ export default class Story implements IHasCard {
 	//
 
 	public date?: Date;
-	public setDate (date: DateISO) {
+	public setDate (date: Date | DateISO | DateString) {
 		this.date = new Date(date);
 		return this;
 	}
