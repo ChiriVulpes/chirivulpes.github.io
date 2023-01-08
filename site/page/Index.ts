@@ -29,8 +29,6 @@ export default new DefaultPage()
 			.markdown(`
 				Thanks for checking out my work!
 
-				If you'd like to commission story chapters, consider checking out my [Patreon].
-
-				If you'd like to commission a story cover, stay tuned. I'll find some way to sell commissions for these soon!
+				If you'd like my stories, consider checking out my [Patreon].
 
 				Just wanna talk? Join my [Discord]!`)));
