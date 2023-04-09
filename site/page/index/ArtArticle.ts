@@ -26,6 +26,8 @@ type ArtRecord = Record<string, IArtDetails | undefined>;
 const storyDetails: ArtRecord = {
 	"dissonant-1": details(new Date("april 2020"), "Dissonant (Cover 1)", "https://www.scribblehub.com/series/169785/dissonant/"),
 	"dissonant-2": details(new Date("nov 23 2020"), "Dissonant (Cover 2)", "https://www.scribblehub.com/series/169785/dissonant/"),
+	"dissonant-3": details(new Date("april 06 2023"), "Dissonant (Cover 3)", "https://www.scribblehub.com/series/169785/dissonant/"),
+	"resonant-1": details(new Date("april 07 2023"), "Resonant (Coming Soon)"),
 	"earthborn-emissary": details(new Date("nov 20 2020"), "The Earthborn Emissary", "https://www.scribblehub.com/series/137161/the-earthborn-emissary/"),
 	"hunted": details(new Date("nov 30 2020"), "Hunted", "https://www.scribblehub.com/series/203224/hunted/"),
 	"leaking": details(new Date("april 15 2020"), "The Other World is Leaking!", "https://www.scribblehub.com/series/21898/the-other-world-is-leaking/"),
