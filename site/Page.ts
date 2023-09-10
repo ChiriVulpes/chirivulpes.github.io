@@ -3,6 +3,7 @@ import Meta from "@element/Meta";
 import Script from "@element/Script";
 import Stylesheet from "@element/Stylesheet";
 import Log from "@util/Log";
+import { PromiseOr } from "@util/Type";
 import { DateISO, HrefAbsolute, HrefLocal } from "@util/string/Strings";
 
 export class Metadata<HOST extends Page> {
@@ -19,8 +20,8 @@ export class Metadata<HOST extends Page> {
 		return this.host;
 	}
 
-	public description?: string;
-	public setDescription (description: string) {
+	public description?: PromiseOr<string>;
+	public setDescription (description: PromiseOr<string>) {
 		this.description = description;
 		return this.host;
 	}
@@ -115,7 +116,7 @@ class Page extends Element {
 		else
 			this.log.warn("Missing title");
 
-		const description = this.metadata.description;
+		const description = await this.metadata.description;
 		if (description)
 			new Meta.Description(description)
 				.appendTo(this.head);

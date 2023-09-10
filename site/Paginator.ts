@@ -15,11 +15,11 @@ import trace from "stack-trace";
 
 class Paginator<E extends Element> {
 
-	public static create<E extends Element> (content: readonly E[]) {
+	public static create<E extends Element> (content: readonly PromiseOr<E>[]) {
 		return new Paginator(content);
 	}
 
-	public constructor (private readonly content: readonly E[]) {
+	public constructor (private content: readonly PromiseOr<E>[]) {
 	}
 
 	private pageSize = 5;
@@ -52,12 +52,14 @@ class Paginator<E extends Element> {
 			return;
 		}
 
+		const content: E[] = (this.content = await Promise.all(this.content));
+
 		let cursor = 0;
-		let content: E[];
+		let contentSlice: E[];
 		const pages: Page[] = [];
-		while ((content = this.content.slice(cursor, cursor += this.pageSize)).length) {
+		while ((contentSlice = content.slice(cursor, cursor += this.pageSize)).length) {
 			const pageIndex = cursor / this.pageSize;
-			const page = await generator(content, pageIndex);
+			const page = await generator(contentSlice, pageIndex);
 
 			const title = this.title?.(pageIndex);
 			if (title)
@@ -66,7 +68,7 @@ class Paginator<E extends Element> {
 			pages.push(page
 				.main(main => main
 					.class("paginated-list")
-					.append(...content)
+					.append(...contentSlice)
 					.append(new Paginator.Nav(pages, page)
 						.setUsePageNumbers()))
 				.setRoute(`${this.route}${pageIndex <= 1 ? "" : `/${pageIndex}`}`));
@@ -83,7 +85,7 @@ class Paginator<E extends Element> {
 				.metadata.setTitle(...this.title?.() ?? []);
 
 			if (this.rss === true)
-				page.addAll(this.content, (entry, element) => {
+				page.addAll(content, (entry, element) => {
 					if (!(element instanceof Article))
 						return;
 
@@ -93,7 +95,7 @@ class Paginator<E extends Element> {
 						.setPublishedTime(article.publishedTime);
 				});
 
-			await Site.add(page.init(this.rss === true ? undefined : this.rss, this.content));
+			await Site.add(page.init(this.rss === true ? undefined : this.rss, content));
 		}
 
 		return pages;

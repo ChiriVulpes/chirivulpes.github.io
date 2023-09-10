@@ -14,8 +14,8 @@ export default new class extends Article {
 		await Blog.INSTANCE.discovered;
 		const articles = Math.min(Blog.INSTANCE.all.length, 4);
 		for (let i = 0; i < articles; i++)
-			Blog.INSTANCE.all[i]
-				.createLink()
+			(await Blog.INSTANCE.all[i]
+				.createLink())
 				.appendTo(this);
 
 		new Element("footer")

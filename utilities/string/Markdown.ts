@@ -30,8 +30,9 @@ marked.setOptions({
 
 namespace Markdown {
 
-	export function preview (markdown: string) {
-		return striptags(markdown)
+	export async function preview (markdown: string) {
+		const html = await compile(markdown);
+		return striptags(html)
 			.split("\n")
 			.reduce((prev, curr) => {
 				prev.textLength ??= 0;
@@ -115,12 +116,8 @@ namespace Markdown {
 		if (minIndent > 0 && minIndent < Infinity)
 			replacementMarkdown = replacementMarkdown.unindent(minIndent);
 
-		return new Promise<string>((resolve, reject) => marked(replacementMarkdown, (err, html) => {
-			if (err)
-				reject(err);
-			else
-				resolve(html.trimEnd().replace(/ {4}/g, "\t"));
-		}));
+		const html = marked(replacementMarkdown);
+		return html.trimEnd().replace(/ {4}/g, "\t");
 	}
 
 }

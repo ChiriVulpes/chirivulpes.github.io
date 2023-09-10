@@ -5,7 +5,7 @@ import Link from "@element/Link";
 import BlogPage from "@layout/BlogPage";
 import Blog from "@page/blog/Blog";
 import Markdown from "@util/string/Markdown";
-import { createID, HrefLocal } from "@util/string/Strings";
+import { HrefLocal, createID } from "@util/string/Strings";
 import yaml from "js-yaml";
 import path from "path";
 import Paginator from "site/Paginator";
@@ -21,7 +21,7 @@ interface IBlogPostMetadata {
 export default class BlogPost extends BlogPage {
 
 	public readonly tags: string[] = [];
-	private readonly preview: string;
+	private readonly preview: Promise<string>;
 
 	public constructor (public readonly file: string, markdown: string) {
 		super();
@@ -84,11 +84,11 @@ export default class BlogPost extends BlogPage {
 					.text(tag)));
 	}
 
-	public createArticle () {
+	public async createArticle () {
 		return new Article(this.metadata.title!, this.route)
 			.class("blogpost", "preview")
 			.setPublishedTime(this.metadata.publishedTime)
-			.markdown(this.preview)
+			.markdown(await this.preview)
 			.append(new Element("footer")
 				.append(this.createPostDetails())
 				.append(new Link(this.route!)
@@ -100,7 +100,7 @@ export default class BlogPost extends BlogPage {
 					.setAriaLabel(`read more of the article '${this.metadata.title!}'`)));
 	}
 
-	public createLink () {
+	public async createLink () {
 		return new Link(this.route!)
 			.class("blog-smol", "paragraph-line-height")
 			.append(new Datetime(this.metadata.publishedTime ?? new Date(0))
@@ -109,11 +109,11 @@ export default class BlogPost extends BlogPage {
 				.text(this.metadata.title!))
 			.text(" — ")
 			.append(new Element("span")
-				.text(this.getTextPreview(128)));
+				.text(await this.getTextPreview(128)));
 	}
 
-	public getTextPreview (idealLength: number) {
-		const description = this.preview
+	public async getTextPreview (idealLength: number) {
+		const description = (await this.preview)
 			.replace(/(?<=\n|^)#+\s+/g, "")
 			.trim();
 		return description.slice(0, description.indexOf(" ", idealLength - 3)) + "...";
